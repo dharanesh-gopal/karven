@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:13
+    container_name: karvensen_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: karvensendb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - karvensen-network
+
+networks:
+  karvensen-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

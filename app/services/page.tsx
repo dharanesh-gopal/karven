@@ -1,9 +1,11 @@
 import type { Metadata } from "next"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Cpu, Plane, BookOpen, Server, Cloud, GraduationCap, CheckCircle2, ArrowRight } from "lucide-react"
+import * as Icons from "lucide-react" // Import all icons
+import { CheckCircle2, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { client } from "@/sanity/lib/client"
 
 export const metadata: Metadata = {
   title: "Services | Karvensen",
@@ -11,10 +13,11 @@ export const metadata: Metadata = {
     "Explore Karvensen's comprehensive technology services - AI Software Development, Agricultural Drones, LMS, ERP, Cloud Solutions, and Educational Programs.",
 }
 
-const services = [
+// Fallback data
+const mockServices = [
   {
     id: "ai-software",
-    icon: Cpu,
+    iconName: "Cpu",
     title: "AI Software Development",
     tagline: "Intelligent Solutions for Modern Challenges",
     description:
@@ -31,7 +34,7 @@ const services = [
   },
   {
     id: "drone-technology",
-    icon: Plane,
+    iconName: "Plane",
     title: "Agricultural Drone Technology",
     tagline: "Empowering Farmers with Smart Technology",
     description:
@@ -48,7 +51,7 @@ const services = [
   },
   {
     id: "lms",
-    icon: BookOpen,
+    iconName: "BookOpen",
     title: "Learning Management Systems",
     tagline: "Modern Education Platforms",
     description:
@@ -65,7 +68,7 @@ const services = [
   },
   {
     id: "erp",
-    icon: Server,
+    iconName: "Server",
     title: "ERP Systems",
     tagline: "Streamline Your Operations",
     description:
@@ -82,7 +85,7 @@ const services = [
   },
   {
     id: "cloud",
-    icon: Cloud,
+    iconName: "Cloud",
     title: "Cloud Infrastructure",
     tagline: "Scalable & Secure Cloud Solutions",
     description:
@@ -99,7 +102,7 @@ const services = [
   },
   {
     id: "training",
-    icon: GraduationCap,
+    iconName: "GraduationCap",
     title: "Educational Programs",
     tagline: "Awareness & Skill Development",
     description:
@@ -116,7 +119,39 @@ const services = [
   },
 ]
 
-export default function ServicesPage() {
+async function getServices() {
+  try {
+    const query = `*[_type == "service"] | order(order asc) {
+      "id": _id,
+      title,
+      "tagline": category, 
+        // Note: 'category' in schema is an enum value (ai, drone, etc). 
+        // For now, we'll map or use it directly. Ideally schema should have a display name.
+      "description": excerpt,
+      features,
+      "iconName": icon
+    }`
+    const services = await client.fetch(query)
+
+    if (!services || services.length === 0) {
+      return mockServices
+    }
+
+    return services.map((service: any) => ({
+      ...service,
+      tagline: service.tagline || "Professional Service", // Fallback for tagline
+      applications: [], // Schema doesn't support applications list yet
+      features: service.features || []
+    }))
+  } catch (error) {
+    console.warn("Failed to fetch services from Sanity, using mock data:", error)
+    return mockServices
+  }
+}
+
+export default async function ServicesPage() {
+  const services = await getServices()
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -127,7 +162,7 @@ export default function ServicesPage() {
               Our <span className="text-primary">Services</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Comprehensive technology solutions spanning AI development, drone systems, enterprise software, cloud infrastructure, 
+              Comprehensive technology solutions spanning AI development, drone systems, enterprise software, cloud infrastructure,
               and educational programs. Built for impact, designed for excellence.
             </p>
           </div>
@@ -138,55 +173,62 @@ export default function ServicesPage() {
       <section className="py-24">
         <div className="container mx-auto px-4">
           <div className="space-y-24">
-            {services.map((service, index) => (
-              <div key={service.id} id={service.id} className="scroll-mt-20">
-                <Card className="overflow-hidden border-2 hover:border-primary/50 transition-colors">
-                  <div className="grid md:grid-cols-2">
-                    <div className="p-8 md:p-12 bg-muted/30">
-                      <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
-                        <service.icon className="h-7 w-7 text-primary" />
-                      </div>
-                      <Badge variant="secondary" className="mb-4">
-                        {service.tagline}
-                      </Badge>
-                      <h2 className="text-3xl font-bold mb-4">{service.title}</h2>
-                      <p className="text-muted-foreground leading-relaxed mb-6">{service.description}</p>
-                      <Button asChild className="group">
-                        <Link href="/contact">
-                          Get Started
-                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                      </Button>
-                    </div>
+            {services.map((service, index) => {
+              // Dynamic Icon Resolution
+              const IconComponent = (Icons as any)[service.iconName] || Icons.Cpu
 
-                    <div className="p-8 md:p-12">
-                      <div className="mb-8">
-                        <h3 className="font-semibold text-lg mb-4">Key Features</h3>
-                        <div className="space-y-3">
-                          {service.features.map((feature) => (
-                            <div key={feature} className="flex items-start gap-3">
-                              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                              <span className="text-sm text-muted-foreground">{feature}</span>
+              return (
+                <div key={service.id} id={service.id} className="scroll-mt-20">
+                  <Card className="overflow-hidden border-2 hover:border-primary/50 transition-colors">
+                    <div className="grid md:grid-cols-2">
+                      <div className="p-8 md:p-12 bg-muted/30">
+                        <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
+                          <IconComponent className="h-7 w-7 text-primary" />
+                        </div>
+                        <Badge variant="secondary" className="mb-4">
+                          {service.tagline}
+                        </Badge>
+                        <h2 className="text-3xl font-bold mb-4">{service.title}</h2>
+                        <p className="text-muted-foreground leading-relaxed mb-6">{service.description}</p>
+                        <Button asChild className="group">
+                          <Link href="/contact">
+                            Get Started
+                            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                          </Link>
+                        </Button>
+                      </div>
+
+                      <div className="p-8 md:p-12">
+                        <div className="mb-8">
+                          <h3 className="font-semibold text-lg mb-4">Key Features</h3>
+                          <div className="space-y-3">
+                            {service.features.map((feature: any) => (
+                              <div key={feature} className="flex items-start gap-3">
+                                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                                <span className="text-sm text-muted-foreground">{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {service.applications && service.applications.length > 0 && (
+                          <div>
+                            <h3 className="font-semibold text-lg mb-3">Use Cases</h3>
+                            <div className="flex flex-wrap gap-2">
+                              {service.applications.map((app: any) => (
+                                <Badge key={app} variant="outline">
+                                  {app}
+                                </Badge>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 className="font-semibold text-lg mb-3">Use Cases</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {service.applications.map((app) => (
-                            <Badge key={app} variant="outline">
-                              {app}
-                            </Badge>
-                          ))}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                </Card>
-              </div>
-            ))}
+                  </Card>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>

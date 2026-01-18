@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, ArrowRight, BookOpen } from "lucide-react"
 import Link from "next/link"
+import { client } from "@/sanity/lib/client"
 
 export const metadata: Metadata = {
   title: "Blog | Karvensen",
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
     "Insights on AI, drone technology, enterprise solutions, and digital transformation. Expert perspectives from the Karvensen team.",
 }
 
-// Sample blog posts - Replace with CMS data later
-const blogPosts = [
+// Sample blog posts - Fallback data
+const mockBlogPosts = [
   {
     id: "ai-agriculture",
     title: "How AI is Revolutionizing Agriculture in India",
@@ -77,7 +78,37 @@ const blogPosts = [
 
 const categories = ["All", "AI & Agriculture", "Drone Technology", "Enterprise Solutions", "Innovation", "Cloud & Security", "Education"]
 
-export default function BlogPage() {
+async function getBlogPosts() {
+  try {
+    const query = `*[_type == "blog"] | order(publishedAt desc) {
+      "id": _id,
+      title,
+      "excerpt": excerpt,
+      "category": coalesce(categories[0]->title, "Uncategorized"),
+      "date": publishedAt,
+      "author": author->name
+    }`
+    const posts = await client.fetch(query)
+
+    if (!posts || posts.length === 0) {
+      return mockBlogPosts
+    }
+
+    return posts.map((post: any) => ({
+      ...post,
+      readTime: "5 min read", // Placeholder until added to schema
+      category: post.category || "Uncategorized",
+      author: post.author || "Karvensen Team"
+    }))
+  } catch (error) {
+    console.warn("Failed to fetch blog posts from Sanity, using mock data:", error)
+    return mockBlogPosts
+  }
+}
+
+export default async function BlogPage() {
+  const blogPosts = await getBlogPosts()
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -92,7 +123,7 @@ export default function BlogPage() {
               The Karvensen <span className="text-primary">Blog</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Explore the latest insights on AI, drone technology, enterprise solutions, and digital transformation. 
+              Explore the latest insights on AI, drone technology, enterprise solutions, and digital transformation.
               Expert perspectives from our team.
             </p>
           </div>
@@ -155,7 +186,7 @@ export default function BlogPage() {
           <div className="text-center mt-16 p-8 bg-muted/30 rounded-lg border max-w-2xl mx-auto">
             <h3 className="text-xl font-semibold mb-3">More Content Coming Soon</h3>
             <p className="text-muted-foreground mb-6">
-              We're working on publishing more in-depth articles, case studies, and technical guides. 
+              We're working on publishing more in-depth articles, case studies, and technical guides.
               Check back regularly for updates!
             </p>
             <Button asChild variant="outline">
