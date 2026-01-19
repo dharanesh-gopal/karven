@@ -7,4 +7,7 @@ import { defineCliConfig } from 'sanity/cli'
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '8hjbioqe'
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
-export default defineCliConfig({ api: { projectId, dataset } })
+export default defineCliConfig({
+    api: { projectId, dataset },
+    studioHost: 'karvensen-studio-2026'
+})
