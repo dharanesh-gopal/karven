@@ -21,7 +21,14 @@
             "@/*": [
                 "src/*"
             ]
-        }
+        },
+        "types": [
+            "node",
+            "express",
+            "bcrypt",
+            "passport-jwt",
+            "passport-local"
+        ]
     },
     "include": [
         "src/**/*"

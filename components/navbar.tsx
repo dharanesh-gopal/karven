@@ -28,32 +28,32 @@ const services = [
     description: "Agricultural drone systems for farmers",
     icon: Plane,
   },
-  { 
-    title: "LMS Solutions", 
-    href: "/services#lms", 
-    description: "Modern learning management systems", 
-    icon: BookOpen 
+  {
+    title: "LMS Solutions",
+    href: "/services#lms",
+    description: "Modern learning management systems",
+    icon: BookOpen
   },
-  { 
-    title: "ERP Systems", 
-    href: "/services#erp", 
-    description: "Enterprise resource planning solutions", 
-    icon: Server 
+  {
+    title: "ERP Systems",
+    href: "/services#erp",
+    description: "Enterprise resource planning solutions",
+    icon: Server
   },
-  { 
-    title: "Cloud Infrastructure", 
-    href: "/services#cloud", 
-    description: "Scalable cloud and DevOps solutions", 
-    icon: Cloud 
+  {
+    title: "Cloud Infrastructure",
+    href: "/services#cloud",
+    description: "Scalable cloud and DevOps solutions",
+    icon: Cloud
   },
 ]
 
 const training = [
-  { 
-    title: "Farmer Programs", 
-    href: "/training#farmers", 
-    description: "Drone awareness for agriculture", 
-    icon: Plane 
+  {
+    title: "Farmer Programs",
+    href: "/training#farmers",
+    description: "Drone awareness for agriculture",
+    icon: Plane
   },
   {
     title: "School Workshops",
@@ -192,8 +192,11 @@ export function Navbar() {
             <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
+          <Button variant="ghost" asChild className="hidden sm:inline-flex">
+            <Link href="/auth/login">Login</Link>
+          </Button>
           <Button asChild className="hidden sm:inline-flex">
-            <Link href="/contact">Book a Demo</Link>
+            <Link href="/auth/register">Get Started</Link>
           </Button>
 
           {/* Mobile Navigation */}
@@ -260,9 +263,14 @@ export function Navbar() {
                     <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                     <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                   </Button>
+                  <Button variant="ghost" asChild className="flex-1">
+                    <Link href="/auth/login" onClick={() => setOpen(false)}>
+                      Login
+                    </Link>
+                  </Button>
                   <Button asChild className="flex-1">
-                    <Link href="/contact" onClick={() => setOpen(false)}>
-                      Book a Demo
+                    <Link href="/auth/register" onClick={() => setOpen(false)}>
+                      Get Started
                     </Link>
                   </Button>
                 </div>

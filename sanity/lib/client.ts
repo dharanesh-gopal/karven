@@ -2,9 +2,30 @@ import { createClient } from 'next-sanity'
 
 import { apiVersion, dataset, projectId } from '../env'
 
-export const client = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
-})
+let clientInstance;
+
+try {
+  const isConfigValid = projectId && dataset && projectId !== 'missing_env_var' && projectId !== 'replace_me' && projectId !== '12345678';
+
+  if (isConfigValid) {
+    clientInstance = createClient({
+      projectId,
+      dataset,
+      apiVersion,
+      useCdn: true,
+    })
+  } else {
+    throw new Error("Invalid config")
+  }
+} catch (e) {
+  console.warn("Initializing Sanity client failed or config invalid, using mock.", e);
+  clientInstance = {
+    fetch: async () => {
+      console.warn('Sanity client not configured. Returning empty data.');
+      return [];
+    }
+  }
+}
+
+export const client = clientInstance;
+
