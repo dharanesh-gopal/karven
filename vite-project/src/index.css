@@ -18,8 +18,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @apply bg-white dark:bg-black text-black dark:text-white;
 }
 
+/* Animation utilities */
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -31,8 +33,34 @@ body {
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .animate-fade-up {
   animation: fade-up 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+  opacity: 0;
 }
 
 .animation-delay-100 {
@@ -53,4 +81,37 @@ body {
 
 .animation-delay-500 {
   animation-delay: 0.5s;
+}
+
+/* Component utilities */
+.btn-primary {
+  @apply inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent text-white font-semibold transition-all duration-300 hover:bg-accent-dark hover:shadow-md-blue disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-700 font-semibold transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center px-4 py-2 font-medium transition-all duration-300 hover:text-accent;
+}
+
+.card {
+  @apply rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 transition-all duration-300 hover:shadow-md-blue;
+}
+
+.section-container {
+  @apply py-16 md:py-24 lg:py-32;
+}
+
+.heading-lg {
+  @apply text-3xl md:text-4xl lg:text-5xl font-bold leading-tight;
+}
+
+.heading {
+  @apply text-2xl md:text-3xl font-bold leading-snug;
+}
+
+.text-muted {
+  @apply text-gray-600 dark:text-gray-400;
 }
