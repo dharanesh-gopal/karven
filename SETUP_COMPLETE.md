@@ -1,6 +1,6 @@
 # Karvensen Website - Setup Complete! 🎉
 
-## What's Been Done
+## What's Been Done -
 
 ### 1. **Sanity CMS Setup** ✅
 Complete content management system with the following schemas:
