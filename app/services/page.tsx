@@ -32,7 +32,7 @@ const services = [
   {
     id: "drone-technology",
     icon: Plane,
-    title: "Agricultural Drone Technology",
+    title: "Drone Technology",
     tagline: "Empowering Farmers with Smart Technology",
     description:
       "Advanced drone systems for agricultural monitoring and crop management. Make in India initiative with quality components from trusted sources, assembled locally.",
@@ -64,40 +64,6 @@ const services = [
     applications: ["Corporate Training", "Academic Courses", "Skill Development", "Compliance Training"],
   },
   {
-    id: "erp",
-    icon: Server,
-    title: "ERP Systems",
-    tagline: "Streamline Your Operations",
-    description:
-      "Robust enterprise resource planning solutions that integrate all your business processes. Improve efficiency, reduce costs, and gain real-time visibility.",
-    features: [
-      "Financial Management",
-      "Inventory & Supply Chain",
-      "Human Resource Management",
-      "Customer Relationship Management",
-      "Business Intelligence & Reporting",
-      "Workflow Automation",
-    ],
-    applications: ["Manufacturing", "Retail & Distribution", "Service Industries", "Healthcare"],
-  },
-  {
-    id: "cloud",
-    icon: Cloud,
-    title: "Cloud Infrastructure",
-    tagline: "Scalable & Secure Cloud Solutions",
-    description:
-      "Modern cloud infrastructure design, migration, and management. Build scalable, secure, and cost-effective cloud environments for your applications.",
-    features: [
-      "Cloud Architecture Design",
-      "Migration & Modernization",
-      "DevOps & CI/CD Pipelines",
-      "Container Orchestration",
-      "Cloud Security & Compliance",
-      "Cost Optimization",
-    ],
-    applications: ["Cloud Migration", "Microservices", "Auto-Scaling Apps", "Disaster Recovery"],
-  },
-  {
     id: "training",
     icon: GraduationCap,
     title: "Educational Programs",
@@ -120,14 +86,14 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-24 border-b bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      <section className="relative py-20 border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl mb-6">
-              Our <span className="text-primary">Services</span>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl mb-6">
+              Our <span className="text-gray-900">Services</span>
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Comprehensive technology solutions spanning AI development, drone systems, enterprise software, cloud infrastructure, 
+            <p className="text-lg text-gray-600 leading-relaxed">
+              Comprehensive technology solutions spanning AI development, drone systems, enterprise software, 
               and educational programs. Built for impact, designed for excellence.
             </p>
           </div>
@@ -135,23 +101,23 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-24">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="space-y-24">
+          <div className="space-y-16">
             {services.map((service, index) => (
               <div key={service.id} id={service.id} className="scroll-mt-20">
-                <Card className="overflow-hidden border-2 hover:border-primary/50 transition-colors">
+                <div className="overflow-hidden border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-lg transition-all">
                   <div className="grid md:grid-cols-2">
-                    <div className="p-8 md:p-12 bg-muted/30">
-                      <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
-                        <service.icon className="h-7 w-7 text-primary" />
+                    <div className="p-8 md:p-12 bg-gray-50">
+                      <div className="mb-8 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gray-700">
+                        <service.icon className="h-7 w-7 text-white" />
                       </div>
-                      <Badge variant="secondary" className="mb-4">
+                      <div className="mb-4 inline-block px-3 py-1 bg-gray-200 text-gray-900 text-sm font-medium rounded-full">
                         {service.tagline}
-                      </Badge>
-                      <h2 className="text-3xl font-bold mb-4">{service.title}</h2>
-                      <p className="text-muted-foreground leading-relaxed mb-6">{service.description}</p>
-                      <Button asChild className="group">
+                      </div>
+                      <h2 className="text-3xl font-bold text-gray-900 mb-4">{service.title}</h2>
+                      <p className="text-gray-600 leading-relaxed mb-6">{service.description}</p>
+                      <Button asChild className="group bg-gray-700 hover:bg-gray-800 text-white">
                         <Link href="/contact">
                           Get Started
                           <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -159,32 +125,32 @@ export default function ServicesPage() {
                       </Button>
                     </div>
 
-                    <div className="p-8 md:p-12">
+                    <div className="p-8 md:p-12 bg-white">
                       <div className="mb-8">
-                        <h3 className="font-semibold text-lg mb-4">Key Features</h3>
+                        <h3 className="font-semibold text-lg text-gray-900 mb-4">Key Features</h3>
                         <div className="space-y-3">
                           {service.features.map((feature) => (
                             <div key={feature} className="flex items-start gap-3">
-                              <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                              <span className="text-sm text-muted-foreground">{feature}</span>
+                              <CheckCircle2 className="h-5 w-5 text-gray-700 mt-0.5 flex-shrink-0" />
+                              <span className="text-sm text-gray-600">{feature}</span>
                             </div>
                           ))}
                         </div>
                       </div>
 
                       <div>
-                        <h3 className="font-semibold text-lg mb-3">Use Cases</h3>
+                        <h3 className="font-semibold text-lg text-gray-900 mb-3">Use Cases</h3>
                         <div className="flex flex-wrap gap-2">
                           {service.applications.map((app) => (
-                            <Badge key={app} variant="outline">
+                            <span key={app} className="px-3 py-1 bg-gray-100 border border-gray-300 text-gray-700 text-sm rounded-md">
                               {app}
-                            </Badge>
+                            </span>
                           ))}
                         </div>
                       </div>
                     </div>
                   </div>
-                </Card>
+                </div>
               </div>
             ))}
           </div>
@@ -192,16 +158,16 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-primary text-primary-foreground relative overflow-hidden">
+      <section className="py-20 bg-gray-700 relative overflow-hidden border-t border-gray-600">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:32px_32px]" />
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-4">
             Ready to Transform Your Business?
           </h2>
-          <p className="text-primary-foreground/90 max-w-2xl mx-auto text-lg mb-8">
+          <p className="text-gray-300 max-w-2xl mx-auto text-lg mb-8">
             Let's discuss how our services can help you achieve your goals.
           </p>
-          <Button asChild size="lg" variant="secondary" className="group">
+          <Button asChild size="lg" className="group bg-white text-gray-900 hover:bg-gray-100">
             <Link href="/contact">
               Schedule a Consultation
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />

@@ -1,8 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Tractor, GraduationCap, Award, Users, CheckCircle, ArrowRight, Clock, MapPin, Calendar } from "lucide-react"
 
@@ -109,18 +106,18 @@ const faqs = [
 
 export default function TrainingPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative py-24 bg-gradient-to-b from-primary/5 to-transparent">
+      <section className="relative py-20 border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="secondary" className="mb-4">
+            <div className="mb-4 inline-block px-3 py-1 bg-gray-200 text-gray-900 text-sm font-medium rounded-full">
               Training Programs
-            </Badge>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-6">
-              Drone Awareness & <span className="text-primary">Technical Training</span>
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-6">
+              Drone Awareness & <span className="text-gray-900">Technical Training</span>
             </h1>
-            <p className="text-lg text-muted-foreground text-pretty">
+            <p className="text-lg text-gray-600">
               Empowering communities with knowledge and skills in AI and drone technology. From farmers to students to
               professionals, we have programs designed for everyone.
             </p>
@@ -129,13 +126,13 @@ export default function TrainingPage() {
       </section>
 
       {/* Stats */}
-      <section className="py-12 border-b border-border">
+      <section className="py-12 border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-3xl font-bold text-primary sm:text-4xl">{stat.value}</div>
-                <div className="mt-1 text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-3xl font-bold text-gray-900 sm:text-4xl">{stat.value}</div>
+                <div className="mt-1 text-sm text-gray-600">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -143,27 +140,27 @@ export default function TrainingPage() {
       </section>
 
       {/* Programs */}
-      <section className="py-24">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="space-y-16">
+          <div className="space-y-12">
             {programs.map((program, index) => (
               <div key={program.id} id={program.id} className="scroll-mt-24">
-                <Card className="overflow-hidden bg-card">
+                <div className="overflow-hidden bg-white border border-gray-200 rounded-lg hover:shadow-lg hover:border-gray-400 transition-all">
                   <div className={`grid lg:grid-cols-2 ${index % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
                     {/* Program Image/Visual */}
                     <div
-                      className={`relative bg-muted/50 p-8 flex items-center justify-center min-h-[300px] ${index % 2 === 1 ? "lg:order-2" : ""}`}
+                      className={`relative bg-gray-50 p-8 flex items-center justify-center min-h-[300px] ${index % 2 === 1 ? "lg:order-2" : ""}`}
                     >
                       <div className="text-center">
-                        <div className="mb-6 mx-auto inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10">
-                          <program.icon className="h-10 w-10 text-primary" />
+                        <div className="mb-6 mx-auto inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-gray-700">
+                          <program.icon className="h-10 w-10 text-white" />
                         </div>
                         <div className="flex flex-wrap justify-center gap-4 text-sm">
-                          <div className="flex items-center gap-2 text-muted-foreground">
+                          <div className="flex items-center gap-2 text-gray-600">
                             <Clock className="h-4 w-4" />
                             {program.duration}
                           </div>
-                          <div className="flex items-center gap-2 text-muted-foreground">
+                          <div className="flex items-center gap-2 text-gray-600">
                             <MapPin className="h-4 w-4" />
                             {program.format}
                           </div>
@@ -173,19 +170,19 @@ export default function TrainingPage() {
 
                     {/* Program Details */}
                     <div className={`p-8 ${index % 2 === 1 ? "lg:order-1" : ""}`}>
-                      <CardHeader className="p-0 mb-6">
-                        <CardTitle className="text-2xl">{program.title}</CardTitle>
-                        <CardDescription className="text-base mt-2">{program.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="p-0">
+                      <div className="mb-6">
+                        <h2 className="text-2xl font-bold text-gray-900">{program.title}</h2>
+                        <p className="text-base text-gray-600 mt-2">{program.description}</p>
+                      </div>
+                      <div>
                         {/* Features */}
                         <div className="mb-6">
-                          <h4 className="font-semibold mb-3">What You'll Learn</h4>
+                          <h4 className="font-semibold text-gray-900 mb-3">What You'll Learn</h4>
                           <ul className="grid sm:grid-cols-2 gap-2">
                             {program.features.map((feature) => (
                               <li key={feature} className="flex items-start gap-2 text-sm">
-                                <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span className="text-muted-foreground">{feature}</span>
+                                <CheckCircle className="h-4 w-4 text-gray-700 mt-0.5 flex-shrink-0" />
+                                <span className="text-gray-600">{feature}</span>
                               </li>
                             ))}
                           </ul>
@@ -194,24 +191,22 @@ export default function TrainingPage() {
                         {/* Meta Info */}
                         <div className="flex flex-wrap gap-4 mb-6 text-sm">
                           <div className="flex items-center gap-2">
-                            <Award className="h-4 w-4 text-primary" />
-                            <span className="text-muted-foreground">{program.certification}</span>
+                            <Award className="h-4 w-4 text-gray-700" />
+                            <span className="text-gray-600">{program.certification}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4 text-primary" />
-                            <span className="text-muted-foreground">{program.audience}</span>
+                            <Users className="h-4 w-4 text-gray-700" />
+                            <span className="text-gray-600">{program.audience}</span>
                           </div>
                         </div>
 
-                        <Button asChild>
-                          <Link href="/contact">
-                            Enroll Now <ArrowRight className="ml-2 h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </CardContent>
+                        <Link href="/contact" className="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded transition-colors">
+                          Enroll Now <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </Card>
+                </div>
               </div>
             ))}
           </div>
@@ -219,11 +214,11 @@ export default function TrainingPage() {
       </section>
 
       {/* Upcoming Programs */}
-      <section className="py-24 bg-muted/30">
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Upcoming Programs</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">Upcoming Programs</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
               Register for our upcoming training sessions and workshops
             </p>
           </div>
@@ -248,50 +243,48 @@ export default function TrainingPage() {
                 spots: "Open registration",
               },
             ].map((event) => (
-              <Card key={event.title} className="bg-card">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                      <Calendar className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-1">{event.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">{event.location}</p>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary" className="text-xs">
-                          {event.date}
-                        </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          {event.spots}
-                        </Badge>
-                      </div>
+              <div key={event.title} className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-700">
+                    <Calendar className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">{event.title}</h3>
+                    <p className="text-sm text-gray-600 mb-2">{event.location}</p>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-2 py-1 bg-gray-200 text-gray-900 text-xs rounded">
+                        {event.date}
+                      </span>
+                      <span className="px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded">
+                        {event.spots}
+                      </span>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
           <div className="text-center mt-8">
-            <Button asChild variant="outline">
-              <Link href="/contact">Request Custom Training</Link>
-            </Button>
+            <Link href="/contact" className="inline-flex items-center px-6 py-3 bg-white text-gray-900 border border-gray-300 rounded hover:bg-gray-100 transition-colors font-medium">
+              Request Custom Training
+            </Link>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Frequently Asked Questions</h2>
-              <p className="text-muted-foreground">Common questions about our training programs</p>
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">Frequently Asked Questions</h2>
+              <p className="text-gray-600">Common questions about our training programs</p>
             </div>
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
+                  <AccordionTrigger className="text-left text-gray-900">{faq.question}</AccordionTrigger>
+                  <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
@@ -300,27 +293,20 @@ export default function TrainingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-primary text-primary-foreground">
+      <section className="py-20 bg-gray-700 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Ready to Empower Your Community?</h2>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg mb-8">
+          <p className="text-white/80 max-w-2xl mx-auto text-lg mb-8">
             Partner with us to bring AI and drone awareness programs to your organization, school, or community
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/contact">
-                Get in Touch
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 bg-transparent"
-            >
-              <Link href="/about">About KarVenSen</Link>
-            </Button>
+            <Link href="/contact" className="inline-flex items-center px-6 py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+              Get in Touch
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+            <Link href="/about" className="inline-flex items-center px-6 py-3 border border-white/20 text-white rounded-lg hover:bg-white/10 transition-colors font-medium bg-transparent">
+              About KarVenSen
+            </Link>
           </div>
         </div>
       </section>

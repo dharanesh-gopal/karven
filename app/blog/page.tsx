@@ -1,7 +1,4 @@
 import type { Metadata } from "next"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Calendar, Clock, ArrowRight, BookOpen } from "lucide-react"
 import Link from "next/link"
 
@@ -79,19 +76,19 @@ const categories = ["All", "AI & Agriculture", "Drone Technology", "Enterprise S
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative py-24 border-b bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      <section className="relative py-20 border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border bg-card px-4 py-1.5 text-sm font-medium shadow-sm mb-6">
-              <BookOpen className="h-4 w-4 text-primary" />
-              <span>Insights & Updates</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-1.5 text-sm font-medium shadow-sm mb-6">
+              <BookOpen className="h-4 w-4 text-gray-700" />
+              <span className="text-gray-900">Insights & Updates</span>
             </div>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl mb-6">
-              The Karvensen <span className="text-primary">Blog</span>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl mb-6">
+              The Karvensen <span className="text-gray-900">Blog</span>
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-gray-600 leading-relaxed">
               Explore the latest insights on AI, drone technology, enterprise solutions, and digital transformation. 
               Expert perspectives from our team.
             </p>
@@ -100,41 +97,38 @@ export default function BlogPage() {
       </section>
 
       {/* Categories */}
-      <section className="py-8 border-b bg-muted/30">
+      <section className="py-8 border-b border-gray-200 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-2 justify-center">
             {categories.map((category) => (
-              <Badge
+              <span
                 key={category}
-                variant={category === "All" ? "default" : "outline"}
-                className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                className="cursor-pointer px-3 py-1 rounded text-sm transition-colors bg-white border border-gray-300 text-gray-700 hover:bg-gray-700 hover:text-white"
               >
                 {category}
-              </Badge>
+              </span>
             ))}
           </div>
         </div>
       </section>
 
       {/* Blog Grid */}
-      <section className="py-24">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
             {blogPosts.map((post) => (
-              <Card key={post.id} className="flex flex-col hover:shadow-lg transition-shadow group">
-                <CardHeader>
+              <div key={post.id} className="flex flex-col bg-white border border-gray-200 rounded-lg hover:shadow-lg hover:border-gray-400 transition-all group">
+                <div className="p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Badge variant="secondary">{post.category}</Badge>
+                    <span className="inline-block px-3 py-1 rounded bg-gray-200 text-gray-900 text-sm">{post.category}</span>
                   </div>
-                  <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-semibold group-hover:text-gray-700 transition-colors text-gray-900 mb-4">
                     {post.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col">
-                  <CardDescription className="mb-4 leading-relaxed flex-1">
+                  </h3>
+                  <p className="mb-4 leading-relaxed flex-1 text-gray-600">
                     {post.excerpt}
-                  </CardDescription>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground pt-4 border-t">
+                  </p>
+                  <div className="flex items-center justify-between text-sm text-gray-600 pt-4 border-t border-gray-200">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3.5 w-3.5" />
@@ -146,24 +140,9 @@ export default function BlogPage() {
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
-          </div>
-
-          {/* Coming Soon Message */}
-          <div className="text-center mt-16 p-8 bg-muted/30 rounded-lg border max-w-2xl mx-auto">
-            <h3 className="text-xl font-semibold mb-3">More Content Coming Soon</h3>
-            <p className="text-muted-foreground mb-6">
-              We're working on publishing more in-depth articles, case studies, and technical guides. 
-              Check back regularly for updates!
-            </p>
-            <Button asChild variant="outline">
-              <Link href="/contact">
-                Subscribe to Updates
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
           </div>
         </div>
       </section>

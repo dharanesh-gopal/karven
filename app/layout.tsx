@@ -5,8 +5,6 @@ import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { SplashCursor } from "@/components/splash-cursor"
-import { ParticlesBackground } from "@/components/particles-background"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -27,12 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <ParticlesBackground />
-          <SplashCursor />
+      <body className={`font-sans antialiased bg-white`}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen bg-white">{children}</main>
           <Footer />
         </ThemeProvider>
         <Analytics />
