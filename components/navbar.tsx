@@ -95,14 +95,14 @@ export function Navbar() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                <Link href="/" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
                   Home
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/about" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                <Link href="/about" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
                   About
                 </Link>
               </NavigationMenuLink>
@@ -116,7 +116,7 @@ export function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href={service.href}
-                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors focus:bg-accent focus:text-accent-foreground"
                         >
                           <service.icon className="h-5 w-5 text-primary" />
                           <div>
@@ -141,7 +141,7 @@ export function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href={item.href}
-                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors focus:bg-accent focus:text-accent-foreground"
                         >
                           <item.icon className="h-5 w-5 text-primary" />
                           <div>
@@ -159,21 +159,21 @@ export function Navbar() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/blog" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                <Link href="/blog" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
                   Blog
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/careers" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                <Link href="/careers" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
                   Careers
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/contact" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                <Link href="/contact" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
                   Contact
                 </Link>
               </NavigationMenuLink>
@@ -192,12 +192,7 @@ export function Navbar() {
             <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
-          <Button variant="ghost" asChild className="hidden sm:inline-flex">
-            <Link href="/auth/login">Login</Link>
-          </Button>
-          <Button asChild className="hidden sm:inline-flex">
-            <Link href="/auth/register">Get Started</Link>
-          </Button>
+
 
           {/* Mobile Navigation */}
           <Sheet open={open} onOpenChange={setOpen}>
@@ -262,16 +257,6 @@ export function Navbar() {
                   <Button variant="outline" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
                     <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                     <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                  </Button>
-                  <Button variant="ghost" asChild className="flex-1">
-                    <Link href="/auth/login" onClick={() => setOpen(false)}>
-                      Login
-                    </Link>
-                  </Button>
-                  <Button asChild className="flex-1">
-                    <Link href="/auth/register" onClick={() => setOpen(false)}>
-                      Get Started
-                    </Link>
                   </Button>
                 </div>
               </nav>
