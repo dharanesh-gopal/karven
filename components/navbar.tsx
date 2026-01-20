@@ -116,7 +116,7 @@ export function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href={service.href}
-                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors focus:bg-accent focus:text-accent-foreground"
+                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors text-foreground hover:text-primary"
                         >
                           <service.icon className="h-5 w-5 text-primary" />
                           <div>
@@ -141,7 +141,7 @@ export function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href={item.href}
-                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors text-foreground hover:text-primary"
                         >
                           <item.icon className="h-5 w-5 text-primary" />
                           <div>

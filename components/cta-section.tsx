@@ -4,7 +4,7 @@ import { ArrowRight, MessageSquare } from "lucide-react"
 
 export function CTASection() {
   return (
-    <section className="py-32 bg-primary text-primary-foreground relative overflow-hidden md:py-40 lg:py-48">
+    <section className="py-40 bg-primary text-primary-foreground relative overflow-hidden md:py-48 lg:py-56">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:32px_32px]" />
       <div className="container mx-auto px-4 text-center relative z-10">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6">

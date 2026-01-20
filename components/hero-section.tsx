@@ -10,10 +10,10 @@ export function HeroSection() {
     <section className="relative overflow-hidden min-h-[90vh] flex items-center border-b">
       <ParticlesBackground />
       {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-background to-accent/3" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 
-      <div className="container relative z-10 mx-auto px-4 py-24 sm:py-32 lg:py-40 xl:py-48">
+      <div className="container relative z-10 mx-auto px-4 py-28 sm:py-36 lg:py-44 xl:py-56">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border bg-card px-4 py-1.5 text-sm font-medium shadow-sm animate-fade-up">

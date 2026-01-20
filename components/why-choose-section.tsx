@@ -37,7 +37,7 @@ const highlights = [
 
 export function WhyChooseSection() {
   return (
-    <section className="py-32 bg-muted/30 border-b md:py-40 lg:py-48">
+    <section className="py-40 bg-muted/30 border-b md:py-48 lg:py-56">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
