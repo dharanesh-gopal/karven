@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, Cpu, Plane, BookOpen, Cloud, Server, GraduationCap } from "lucide-react"
+import Image from "next/image"
 
 const services = [
   {
@@ -76,14 +77,16 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 group">
           <div className="flex items-center gap-2">
-            <div className="relative">
-              <div className="relative h-8 w-8 bg-gray-700 dark:bg-blue-600 rounded-lg flex items-center justify-center transition-colors">
-                <span className="text-white font-bold text-lg">K</span>
-              </div>
-            </div>
-            <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white transition-colors">
+            <Image 
+              src="/logo karven.png" 
+              alt="Karvensen Logo" 
+              width={80} 
+              height={80}
+              className="h-35 w-35 object-contain"
+            />
+            {/* <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white transition-colors">
               Karvensen
-            </span>
+            </span> */}
           </div>
         </Link>
 

@@ -1,13 +1,9 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Tractor, GraduationCap, Award, Users, CheckCircle, ArrowRight, Clock, MapPin, Calendar } from "lucide-react"
+"use client"
 
-export const metadata: Metadata = {
-  title: "Training & Awareness Programs | KarVenSen",
-  description:
-    "Explore our drone awareness programs for farmers, technical workshops for schools and colleges, and professional skill development certifications.",
-}
+import Link from "next/link"
+import { useState, useEffect, useRef } from "react"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Tractor, GraduationCap, Award, Users, CheckCircle, ArrowRight, Clock, MapPin, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 
 const programs = [
   {
@@ -105,19 +101,88 @@ const faqs = [
 ]
 
 export default function TrainingPage() {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  
+  const mediaItems = [
+    {
+      type: 'image',
+      src: '/training-image.png',
+      caption: 'Setting the Benchmark as India\'s First Make-in-India Drone Company with Dual DGCA Certifications'
+    },
+    {
+      type: 'image',
+      src: '/training-image2.png',
+      caption: 'Hands-on Training Sessions with Agricultural Drones'
+    },
+    {
+      type: 'image',
+      src: '/edu%20drone.png',
+      caption: 'Educational Workshops for Students'
+    },
+    {
+      type: 'video',
+      src: '/drone video 2.mp4',
+      caption: 'Live Drone Demonstration'
+    },
+  ]
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % mediaItems.length)
+  }
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + mediaItems.length) % mediaItems.length)
+  }
+// Auto-scroll animation for partners
+  useEffect(() => {
+    const scrollContainer = scrollRef.current
+    if (!scrollContainer) return
+
+    let animationId: number
+    let scrollPosition = 0
+
+    const scroll = () => {
+      scrollPosition += 0.5
+      if (scrollContainer) {
+        scrollContainer.scrollLeft = scrollPosition
+        
+        // Reset to start when reaching halfway (because we duplicated the logos)
+        if (scrollPosition >= scrollContainer.scrollWidth / 2) {
+          scrollPosition = 0
+        }
+      }
+      animationId = requestAnimationFrame(scroll)
+    }
+
+    animationId = requestAnimationFrame(scroll)
+
+    return () => cancelAnimationFrame(animationId)
+  }, [])
+
+  
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative py-20 border-b border-gray-200 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="relative overflow-hidden min-h-[90vh] flex items-center border-b border-gray-200">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/training-image.png')" }}
+        />
+        
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/50"></div>
+        
+        <div className="relative container mx-auto px-4 py-20 z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="mb-4 inline-block px-3 py-1 bg-gray-200 text-gray-900 text-sm font-medium rounded-full">
+            <div className="mb-4 inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
               Training Programs
             </div>
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-6">
-              Drone Awareness & <span className="text-gray-900">Technical Training</span>
+            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl mb-6">
+              Drone Awareness & <span className="text-white">Technical Training</span>
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white/90">
               Empowering communities with knowledge and skills in AI and drone technology. From farmers to students to
               professionals, we have programs designed for everyone.
             </p>
@@ -125,88 +190,253 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-12 border-b border-gray-200 bg-white">
+      {/* On-Field Action Section */}
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-3xl font-bold text-gray-900 sm:text-4xl">{stat.value}</div>
-                <div className="mt-1 text-sm text-gray-600">{stat.label}</div>
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">On-Field Action</h2>
+          
+          <div className="max-w-5xl mx-auto">
+            <div className="relative bg-white rounded-lg overflow-hidden shadow-xl">
+              {/* Media Container */}
+              <div className="relative aspect-video bg-gray-900">
+                {mediaItems[currentSlide].type === 'image' ? (
+                  <img
+                    src={mediaItems[currentSlide].src}
+                    alt={mediaItems[currentSlide].caption}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <video
+                    src={mediaItems[currentSlide].src}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                )}
+
+                {/* Navigation Arrows */}
+                <button
+                  onClick={prevSlide}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-800 text-white p-3 rounded-lg transition-colors"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-800 text-white p-3 rounded-lg transition-colors"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
               </div>
-            ))}
+
+              {/* Pagination Dots */}
+              <div className="flex justify-center gap-2 py-4 bg-white">
+                {mediaItems.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      currentSlide === index ? 'bg-blue-600' : 'bg-gray-300'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Programs */}
-      <section className="py-20 bg-white">
+      {/* Courses Section */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="space-y-12">
-            {programs.map((program, index) => (
-              <div key={program.id} id={program.id} className="scroll-mt-24">
-                <div className="overflow-hidden bg-white border border-gray-200 rounded-lg hover:shadow-lg hover:border-gray-400 transition-all">
-                  <div className={`grid lg:grid-cols-2 ${index % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
-                    {/* Program Image/Visual */}
-                    <div
-                      className={`relative bg-gray-50 p-8 flex items-center justify-center min-h-[300px] ${index % 2 === 1 ? "lg:order-2" : ""}`}
-                    >
-                      <div className="text-center">
-                        <div className="mb-6 mx-auto inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-gray-700">
-                          <program.icon className="h-10 w-10 text-white" />
-                        </div>
-                        <div className="flex flex-wrap justify-center gap-4 text-sm">
-                          <div className="flex items-center gap-2 text-gray-600">
-                            <Clock className="h-4 w-4" />
-                            {program.duration}
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-600">
-                            <MapPin className="h-4 w-4" />
-                            {program.format}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Program Details */}
-                    <div className={`p-8 ${index % 2 === 1 ? "lg:order-1" : ""}`}>
-                      <div className="mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900">{program.title}</h2>
-                        <p className="text-base text-gray-600 mt-2">{program.description}</p>
-                      </div>
-                      <div>
-                        {/* Features */}
-                        <div className="mb-6">
-                          <h4 className="font-semibold text-gray-900 mb-3">What You'll Learn</h4>
-                          <ul className="grid sm:grid-cols-2 gap-2">
-                            {program.features.map((feature) => (
-                              <li key={feature} className="flex items-start gap-2 text-sm">
-                                <CheckCircle className="h-4 w-4 text-gray-700 mt-0.5 flex-shrink-0" />
-                                <span className="text-gray-600">{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {/* Meta Info */}
-                        <div className="flex flex-wrap gap-4 mb-6 text-sm">
-                          <div className="flex items-center gap-2">
-                            <Award className="h-4 w-4 text-gray-700" />
-                            <span className="text-gray-600">{program.certification}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4 text-gray-700" />
-                            <span className="text-gray-600">{program.audience}</span>
-                          </div>
-                        </div>
-
-                        <Link href="/contact" className="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded transition-colors">
-                          Enroll Now <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Our Training Courses</h2>
+          
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+            {/* Course A */}
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src="/training-image.png"
+                  alt="Small Class Drone Pilot Training"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Course A | Small Class Drone Pilot Training
+                </h3>
+                <p className="text-lg font-medium text-gray-700 mb-3">Introduction to Drone Flying</p>
+                <p className="text-gray-600 mb-4">
+                  A comprehensive program designed to offer a blend of theoretical education and hands-on practical experience.
+                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Duration:</span> 8 Days
+                  </p>
+                  <Link 
+                    href="/contact"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
+                  >
+                    Learn More
+                  </Link>
                 </div>
+              </div>
+            </div>
+
+            {/* Course B */}
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src="/training-image2.png"
+                  alt="Small and Medium Class Drone Training"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Course B | Small and Medium Class Drone Training
+                </h3>
+                <p className="text-lg font-medium text-gray-700 mb-3">Mastery in Drone Flying</p>
+                <p className="text-gray-600 mb-4">
+                  For those looking to master both small and medium drones, this course offers in-depth training in both theory and practice.
+                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Duration:</span> 13 days
+                  </p>
+                  <Link 
+                    href="/contact"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
+                  >
+                    Learn More
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Course C */}
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src="/edu%20drone.png"
+                  alt="Educational Drone Workshop"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Course C | Educational Drone Workshop
+                </h3>
+                <p className="text-lg font-medium text-gray-700 mb-3">STEM & Robotics for Students</p>
+                <p className="text-gray-600 mb-4">
+                  Designed for schools and colleges, this workshop introduces students to drone technology, coding, and practical applications.
+                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Duration:</span> 3-5 Days
+                  </p>
+                  <Link 
+                    href="/contact"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
+                  >
+                    Learn More
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Course D */}
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src="/dron%20in%20agri%20land.png"
+                  alt="Agricultural Drone Training"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Course D | Agricultural Drone Operations
+                </h3>
+                <p className="text-lg font-medium text-gray-700 mb-3">Precision Agriculture Training</p>
+                <p className="text-gray-600 mb-4">
+                  Specialized training for farmers and agriculture professionals on using drones for crop monitoring, spraying, and field analysis.
+                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Duration:</span> 6 Days
+                  </p>
+                  <Link 
+                    href="/contact"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
+                  >
+                    Learn More
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted Partners Section */}
+      <section className="py-20 bg-white border-t border-b border-gray-200 overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Trusted by Leading Organizations</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Our training programs are recognized and trusted by top companies and institutions across India</p>
+          </div>
+          
+          <div 
+            ref={scrollRef}
+            className="flex gap-16 overflow-x-hidden py-8"
+            style={{ scrollBehavior: 'auto' }}
+          >
+            {/* First set of logos */}
+            {[
+              { name: 'TCS' },
+              { name: 'Infosys' },
+              { name: 'Wipro' },
+              { name: 'Cognizant' },
+              { name: 'Tech Mahindra' },
+              { name: 'HCL Technologies' },
+              { name: 'Microsoft' },
+              { name: 'Google' },
+              { name: 'Amazon' },
+              { name: 'IBM' },
+            ].map((partner, index) => (
+              <div
+                key={`partner-1-${index}`}
+                className="flex-shrink-0 w-48 h-24 bg-gray-50 rounded-xl border-2 border-gray-200 p-6 flex items-center justify-center hover:border-blue-500 hover:shadow-lg transition-all duration-300"
+              >
+                <span className="text-gray-700 font-bold text-lg">{partner.name}</span>
+              </div>
+            ))}
+            
+            {/* Duplicate set for seamless loop */}
+            {[
+              { name: 'TCS' },
+              { name: 'Infosys' },
+              { name: 'Wipro' },
+              { name: 'Cognizant' },
+              { name: 'Tech Mahindra' },
+              { name: 'HCL Technologies' },
+              { name: 'Microsoft' },
+              { name: 'Google' },
+              { name: 'Amazon' },
+              { name: 'IBM' },
+            ].map((partner, index) => (
+              <div
+                key={`partner-2-${index}`}
+                className="flex-shrink-0 w-48 h-24 bg-gray-50 rounded-xl border-2 border-gray-200 p-6 flex items-center justify-center hover:border-blue-500 hover:shadow-lg transition-all duration-300"
+              >
+                <span className="text-gray-700 font-bold text-lg">{partner.name}</span>
               </div>
             ))}
           </div>
