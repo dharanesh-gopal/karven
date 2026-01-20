@@ -1,13 +1,9 @@
-import type { Metadata } from "next"
+"use client"
+
+import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Target, Eye, Award, Users, Plane, Lightbulb, Shield, TrendingUp } from "lucide-react"
 import Image from "next/image"
-
-export const metadata: Metadata = {
-  title: "About Us | Karvensen",
-  description:
-    "Learn about Karvensen - Founded in 2023 by Karthika Venkatesan, pioneering AI software development, agricultural drone technology, and educational programs across India.",
-}
 
 const values = [
   {
@@ -49,6 +45,19 @@ const impactStats = [
 ]
 
 export default function AboutPage() {
+  const [playAnimation, setPlayAnimation] = useState(false)
+
+  useEffect(() => {
+    // Trigger animation on page load
+    const timer = setTimeout(() => {
+      setPlayAnimation(true)
+      // Reset after animation completes
+      setTimeout(() => setPlayAnimation(false), 1000)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -65,10 +74,10 @@ export default function AboutPage() {
             </h1>
             {/* Desktop: Animated text */}
             <h1 className="hidden md:block text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl mb-6">
-              <span className="relative inline-block text-transparent group">
-                <span className="absolute top-0 left-0 text-gray-900 transition-transform duration-500 group-hover:-translate-y-[18px]" style={{clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)'}}>About</span>
-                <span className="absolute top-0 left-0 text-gray-900 transition-transform duration-500 group-hover:translate-y-[18px]" style={{clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)'}}>About</span>
-                <span className="absolute top-1/2 left-0 -translate-y-1/2 scale-y-0 w-full bg-yellow-400 text-gray-900 text-sm sm:text-base font-medium tracking-[0.3em] text-center px-2 transition-transform duration-500 group-hover:scale-y-100">Karvensen</span>
+              <span className={`relative inline-block text-transparent group ${playAnimation ? 'animate-active' : ''}`}>
+                <span className="absolute top-0 left-0 text-gray-900 transition-transform duration-500 group-hover:-translate-y-[18px] group-[.animate-active]:-translate-y-[18px]" style={{clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)'}}>About</span>
+                <span className="absolute top-0 left-0 text-gray-900 transition-transform duration-500 group-hover:translate-y-[18px] group-[.animate-active]:translate-y-[18px]" style={{clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)'}}>About</span>
+                <span className="absolute top-1/2 left-0 -translate-y-1/2 scale-y-0 w-full bg-yellow-400 text-gray-900 text-sm sm:text-base font-medium tracking-[0.3em] text-center px-2 transition-transform duration-500 group-hover:scale-y-100 group-[.animate-active]:scale-y-100">Karvensen</span>
                 <span className="invisible">About</span>
               </span>
             </h1>
