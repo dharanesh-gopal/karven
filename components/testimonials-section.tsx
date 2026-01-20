@@ -28,9 +28,9 @@ const testimonials = [
 
 export function TestimonialsSection() {
   return (
-    <section className="py-24 border-b">
+    <section className="py-32 border-b md:py-40 lg:py-48">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <div className="text-center mb-20 max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Trusted by Organizations Nationwide</h2>
           <p className="text-muted-foreground text-lg">
             Real results from real clients - see how Karvensen is making an impact across industries.
@@ -40,10 +40,10 @@ export function TestimonialsSection() {
         <div className="grid gap-8 md:grid-cols-3 max-w-6xl mx-auto">
           {testimonials.map((testimonial) => (
             <Card key={testimonial.author} className="relative hover:shadow-lg transition-shadow">
-              <CardContent className="pt-8">
+              <CardContent className="pt-8 pb-8">
                 <Quote className="absolute top-6 left-6 h-8 w-8 text-primary/20" />
                 <p className="mb-6 text-muted-foreground relative z-10 pl-4 leading-relaxed">{testimonial.quote}</p>
-                <div className="flex items-center gap-3 border-t pt-4">
+                <div className="flex items-center gap-3 border-t pt-6">
                   <Avatar className="h-10 w-10">
                     <AvatarImage src={testimonial.avatar} alt={testimonial.author} />
                     <AvatarFallback className="bg-primary/10 text-primary">{testimonial.author[0]}</AvatarFallback>

@@ -1,22 +1,33 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Geist_Mono } from "next/font/google"
+import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { SplashCursor } from "@/components/splash-cursor"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "KarVenSen | AI-Driven Drone & Software Solutions",
+  title: "Karvensen | Enterprise AI & Drone Solutions",
   description:
-    "KarVenSen is an AI-first IT software services company specializing in Artificial Intelligence, Drone-based solutions, LMS, ERP, Cloud services, and technical awareness programs.",
-  keywords: ["AI", "Drone Technology", "Software Development", "LMS", "ERP", "Cloud Services", "Machine Learning"],
-  generator: 'v0.app'
+    "Karvensen is a leading enterprise technology company specializing in AI software development, drone technology, LMS solutions, ERP systems, cloud infrastructure, and professional training programs.",
+  keywords: [
+    "AI",
+    "Drone Technology",
+    "Software Development",
+    "LMS",
+    "ERP",
+    "Cloud Services",
+    "Enterprise Solutions",
+    "Machine Learning",
+    "Digital Transformation",
+  ],
+  authors: [{ name: "Karvensen" }],
+  creator: "Karvensen",
+  publisher: "Karvensen",
+  robots: "index, follow",
 }
 
 export default function RootLayout({
@@ -26,14 +37,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <SplashCursor />
+      <body className={`${inter.className} font-sans antialiased bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen">
+            {children}
+          </main>
           <Footer />
+          <Analytics />
         </ThemeProvider>
-        <Analytics />
       </body>
     </html>
   )

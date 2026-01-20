@@ -90,25 +90,25 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <NavigationMenu className="hidden lg:flex">
+        {/* Desktop Navigation - Aligned to Right */}
+        <NavigationMenu className="hidden lg:flex ml-auto">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
+                <Link href="/" className="inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   Home
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/about" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
+                <Link href="/about" className="inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   About
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Services</NavigationMenuTrigger>
+              <NavigationMenuTrigger className="text-foreground hover:text-primary">Services</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[500px] gap-3 p-4 md:grid-cols-2">
                   {services.map((service) => (
@@ -133,7 +133,7 @@ export function Navbar() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Training</NavigationMenuTrigger>
+              <NavigationMenuTrigger className="text-foreground hover:text-primary">Training</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4">
                   {training.map((item) => (
@@ -141,7 +141,7 @@ export function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href={item.href}
-                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors focus:bg-accent focus:text-accent-foreground"
+                          className="flex items-start gap-3 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
                         >
                           <item.icon className="h-5 w-5 text-primary" />
                           <div>
@@ -159,21 +159,21 @@ export function Navbar() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/blog" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
+                <Link href="/blog" className="inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   Blog
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/careers" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
+                <Link href="/careers" className="inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   Careers
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/contact" className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors focus:bg-accent focus:text-accent-foreground">
+                <Link href="/contact" className="inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   Contact
                 </Link>
               </NavigationMenuLink>

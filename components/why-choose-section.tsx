@@ -37,9 +37,9 @@ const highlights = [
 
 export function WhyChooseSection() {
   return (
-    <section className="py-24 bg-muted/30 border-b">
+    <section className="py-32 bg-muted/30 border-b md:py-40 lg:py-48">
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6">
               Why Choose Karvensen?
@@ -50,7 +50,7 @@ export function WhyChooseSection() {
               that scale.
             </p>
             
-            <div className="space-y-3 mb-8">
+            <div className="space-y-4 mb-8">
               {highlights.map((highlight) => (
                 <div key={highlight} className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -63,7 +63,7 @@ export function WhyChooseSection() {
           <div className="grid sm:grid-cols-2 gap-6">
             {values.map((value, index) => (
               <Card key={value.title} className="border-2 hover:border-primary/50 transition-colors">
-                <CardContent className="pt-6">
+                <CardContent className="pt-8 pb-6">
                   <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                     <value.icon className="h-5 w-5 text-primary" />
                   </div>

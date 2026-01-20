@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Cpu, Plane, BookOpen, Server, Cloud, GraduationCap } from "lucide-react"
+import { Cpu, Plane, BookOpen, GraduationCap } from "lucide-react"
 import Link from "next/link"
 
 const features = [
@@ -24,18 +24,6 @@ const features = [
     href: "/services",
   },
   {
-    icon: Server,
-    title: "ERP Systems",
-    description: "Comprehensive enterprise resource planning platforms to streamline business operations and boost efficiency.",
-    href: "/services",
-  },
-  {
-    icon: Cloud,
-    title: "Cloud Infrastructure",
-    description: "Scalable cloud solutions, migration services, and DevOps implementation for modern businesses.",
-    href: "/services",
-  },
-  {
     icon: GraduationCap,
     title: "Educational Programs",
     description: "Hands-on workshops and awareness programs about drone technology for schools, colleges, and professionals.",
@@ -45,16 +33,16 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="py-24 border-b">
+    <section className="py-32 border-b md:py-40 lg:py-48">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Comprehensive Technology Solutions</h2>
+        <div className="text-center mb-20 max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6">Core Service Offerings</h2>
           <p className="text-muted-foreground text-lg">
-            From AI-powered software to drone technology and enterprise systems - we deliver end-to-end digital transformation.
+            From AI-powered software to drone technology and corporate training - we deliver innovative solutions for digital transformation.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <Link key={feature.title} href={feature.href} className="group">
               <Card className="h-full transition-all duration-300 hover:shadow-lg hover:border-primary/50 hover:-translate-y-1">
