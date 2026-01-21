@@ -47,7 +47,7 @@ export default function BlogGrid() {
               <p className="text-gray-500 text-lg">No blog posts found in this category.</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-8 max-w-7xl mx-auto">
+            <div className="grid gap-8 md:grid-cols-2 max-w-7xl mx-auto">
               {displayedPosts.map((post, index) => (
                 <Link
                   href={`/blog/${post.id}`}
