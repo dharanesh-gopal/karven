@@ -8,7 +8,7 @@ import {
   Heart, Coffee, Globe, ChevronLeft, ChevronRight, 
   Quote, Star, Cpu, CheckCircle, FileText, UserCheck 
 } from "lucide-react"
-import { JOBS_DATA } from "./data"
+import { JOBS_DATA, type Job } from "./data"
 
 // --- 1. CONFIGURATION & DATA ---
 
@@ -352,7 +352,7 @@ export default function CareersPage() {
             <div className="lg:col-span-2 grid sm:grid-cols-2 gap-6">
               {PERKS.map((perk, i) => (
                 <RevealOnScroll key={i} delay={i * 100}>
-                  <div className="h-full p-8 rounded-2xl bg--50 border border-slate-100 hover:border-sky-300 hover:shadow-xl transition-all duration-300">
+                  <div className="h-full p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-sky-300 hover:shadow-xl transition-all duration-300">
                     <div className="w-10 h-10 bg-sky-50 rounded-lg flex items-center justify-center mb-4 text-sky-600">
                       <perk.icon className="w-5 h-5" />
                     </div>
@@ -382,7 +382,7 @@ export default function CareersPage() {
           </div>
           
           <div className="space-y-4">
-            {JOBS_DATA.map((job, i) => (
+            {JOBS_DATA.map((job: Job, i: number) => (
               <RevealOnScroll key={job.id} delay={i * 50}>
                 <Link href={`/careers/${job.id}`} className="block">
                   <div className="group flex flex-col md:flex-row items-center justify-between p-8 rounded-3xl bg-white border border-slate-200 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-100/40 transition-all cursor-pointer relative overflow-hidden">
