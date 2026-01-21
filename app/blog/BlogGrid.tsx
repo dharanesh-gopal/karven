@@ -44,17 +44,12 @@ export default function BlogGrid() {
               <p className="text-gray-500 text-lg">No blog posts found in this category.</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-8 max-w-6xl mx-auto">
+            <div className="flex flex-col gap-8 max-w-7xl mx-auto">
               {filteredPosts.map((post, index) => (
-                <div key={post.id} className="flex items-start gap-8">
-                  {/* Number */}
-                  <div className="text-5xl font-bold text-gray-200 min-w-fit leading-none mt-2">
-                    {String(index + 1).padStart(2, '0')}
-                  </div>
-                  <Link
-                    href={`/blog/${post.id}`}
-                    className="group flex flex-col flex-1 bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200"
-                  >
+                <Link
+                  href={`/blog/${post.id}`}
+                  className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200"
+                >
                   {/* Image Section with Category Badge Overlay */}
                   <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
                     {post.heroImage ? (
@@ -101,7 +96,6 @@ export default function BlogGrid() {
                     </div>
                   </div>
                   </Link>
-                </div>
               ))}
             </div>
           )}

@@ -100,7 +100,7 @@ export default async function BlogDetailPage({ params }: Props) {
 
       {/* Premium Content Section */}
       <article className="py-16 lg:py-24 bg-white">
-        <div className="container mx-auto px-4 max-w-6xl">
+        <div className="container mx-auto px-4 max-w-7xl">
           {/* Back Button removed - using fixed position button */}
 
           {/* Category & Branch Badges with Premium Design */}
@@ -187,7 +187,7 @@ export default async function BlogDetailPage({ params }: Props) {
               
               {/* Content */}
               <div className="relative z-10 p-12 md:p-16 text-left">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                   <h3 className="text-4xl md:text-5xl font-bold mb-4 text-white leading-tight text-left" style={{ color: '#FFFFFF' }}>
                     Interested in {post.branch}?
                   </h3>
@@ -222,7 +222,7 @@ export default async function BlogDetailPage({ params }: Props) {
       {/* Premium Related Posts Section */}
       {relatedPosts.length > 0 && (
         <section className="py-20 bg-white border-t-2 border-gray-200">
-          <div className="container mx-auto px-4 max-w-6xl">
+          <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex items-center gap-3 mb-12">
               <div className="p-3 bg-gray-900 rounded-xl">
                 <BookOpen className="h-6 w-6 text-white" />
