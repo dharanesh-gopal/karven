@@ -443,6 +443,205 @@ export default function TrainingPage() {
         </div>
       </section>
 
+      {/* Why Learn with KarVenSen Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Why Learn with KarVenSen
+            </h2>
+          </div>
+
+          <div className="max-w-6xl mx-auto space-y-16">
+            {/* First Row - Text Left, Image Right */}
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-4 pr-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Why Train With Us?</h3>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Award className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm mb-1">DGCA Certification</h4>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Industry-Leading Instructors</h4>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Comprehensive Support System</h4>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Tractor className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Focus on Entrepreneurship</h4>
+                  </div>
+                </div>
+              
+                <Link 
+                  href="/contact"
+                  className="inline-flex items-center gap-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-colors"
+                >
+                  Join Today
+                </Link>
+              </div>
+              
+              <div className="relative pl-6">
+                <img
+                  src="/training-image2.png"
+                  alt="Training with KarVenSen"
+                  className="rounded-xl shadow-lg w-full h-auto"
+                />
+              </div>
+            </div>
+
+            {/* Second Row - Image Left, Text Right */}
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="relative pr-6">
+                <img
+                  src="/training-image.png"
+                  alt="What sets us apart"
+                  className="rounded-xl shadow-lg w-full h-auto"
+                />
+              </div>
+              
+              <div className="space-y-4 pl-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">What Sets Us Apart?</h3>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <GraduationCap className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Expert Guidance</h4>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Real-World Experience</h4>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Award className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Industry Recognition</h4>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Career Support</h4>
+                  </div>
+                </div>
+
+                <Link 
+                  href="/contact"
+                  className="inline-flex items-center gap-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-colors"
+                >
+                  Learn More
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Career Opportunities After Training */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Career Opportunities After Training
+            </h2>
+          </div>
+
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            {/* Left Side - Career Cards */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow-md p-6 flex items-start gap-4 hover:shadow-xl transition-shadow">
+                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Users className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Tailored Job Placement Support</h3>
+                  <p className="text-gray-600 text-sm">
+                    Connect with top agricultural and tech companies actively hiring certified drone pilots and AI specialists.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow-md p-6 flex items-start gap-4 hover:shadow-xl transition-shadow">
+                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Award className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Exclusive Drone Pilot Opportunities</h3>
+                  <p className="text-gray-600 text-sm">
+                    Access to exclusive job openings in precision agriculture, infrastructure inspection, and aerial surveying.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow-md p-6 flex items-start gap-4 hover:shadow-xl transition-shadow">
+                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <GraduationCap className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Expert Mentorship Programs</h3>
+                  <p className="text-gray-600 text-sm">
+                    Ongoing guidance from industry experts to help you launch your career or start your own drone business.
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center mt-8">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-base font-medium transition-colors shadow-lg"
+                >
+                  Join Today
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Side - Image */}
+            <div className="relative">
+              <img
+                src="/boy%20with%20drone.png"
+                alt="Career opportunities in drone technology"
+                className="rounded-2xl shadow-2xl w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Upcoming Programs */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
