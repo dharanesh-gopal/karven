@@ -35,12 +35,6 @@ export default function BlogPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Premium Badge */}
-            <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-md border border-gray-300 text-gray-900 rounded-full text-sm font-semibold mb-8 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 hover:scale-105 transition-all duration-300">
-              <BookOpen className="h-4 w-4" />
-              <span>Insights & Updates</span>
-            </div>
-            
             {/* Main Heading with Green & Black */}
             <h1 className="text-6xl md:text-7xl font-bold mb-8 leading-tight">
               <span className="text-white">The KarVenSen </span>

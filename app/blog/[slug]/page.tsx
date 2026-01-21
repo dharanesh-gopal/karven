@@ -140,22 +140,22 @@ export default async function BlogDetailPage({ params }: Props) {
           {/* Article Content with Enhanced Reading Experience */}
           <div className="prose prose-lg prose-gray max-w-none text-left">
             {/* Introduction with Premium Typography */}
-            <p className="text-2xl text-gray-700 leading-relaxed mb-12 font-light border-l-4 border-gray-900 pl-6 italic text-left">
+            <p className="text-3xl text-gray-700 leading-relaxed mb-12 font-light border-l-4 border-gray-900 pl-6 italic text-left">
               {post.excerpt}
             </p>
 
             {/* Main Content - Detailed Information based on Branch */}
-            <div className="space-y-10 text-gray-800 leading-relaxed">
+            <div className="space-y-10 text-lg text-gray-800 leading-relaxed">
               <ContentSection post={post} />
             </div>
 
             {/* Premium Key Takeaways Box */}
             <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-l-4 border-gray-900 rounded-r-xl p-8 my-12 shadow-lg text-left">
-              <h3 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2 text-left">
+              <h3 className="text-3xl font-bold text-gray-900 mb-5 flex items-center gap-2 text-left">
                 <span className="w-2 h-2 bg-gray-900 rounded-full"></span>
                 Key Takeaways
               </h3>
-              <ul className="space-y-3 text-gray-700 text-left">
+              <ul className="space-y-3 text-lg text-gray-700 text-left">
                 <li className="flex items-start gap-3">
                   <span className="text-gray-900 font-bold mt-1">•</span>
                   <span>Advanced {post.branch.toLowerCase()} implementation strategies</span>
@@ -192,7 +192,7 @@ export default async function BlogDetailPage({ params }: Props) {
                     Interested in {post.branch}?
                   </h3>
                   
-                  <p className="text-xl text-gray-300 mb-10 leading-relaxed text-left">
+                  <p className="text-2xl text-gray-300 mb-10 leading-relaxed text-left">
                     Learn how Karvensen can help you implement cutting-edge solutions for your business.
                   </p>
                   

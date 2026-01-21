@@ -8,10 +8,13 @@ import { blogPosts, blogCategories } from "@/lib/blog-data"
 
 export default function BlogGrid() {
   const [selectedCategory, setSelectedCategory] = useState("All")
+  const [postsToShow, setPostsToShow] = useState(6)
 
   const filteredPosts = selectedCategory === "All" 
     ? blogPosts 
     : blogPosts.filter(post => post.category === selectedCategory)
+
+  const displayedPosts = filteredPosts.slice(0, postsToShow)
 
   return (
     <>
@@ -45,7 +48,7 @@ export default function BlogGrid() {
             </div>
           ) : (
             <div className="flex flex-col gap-8 max-w-7xl mx-auto">
-              {filteredPosts.map((post, index) => (
+              {displayedPosts.map((post, index) => (
                 <Link
                   href={`/blog/${post.id}`}
                   className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200"
@@ -97,6 +100,18 @@ export default function BlogGrid() {
                   </div>
                   </Link>
               ))}
+            </div>
+          )}
+          
+          {/* Learn More Button */}
+          {postsToShow < filteredPosts.length && (
+            <div className="flex justify-center mt-12">
+              <button
+                onClick={() => setPostsToShow(postsToShow + 6)}
+                className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                Show More
+              </button>
             </div>
           )}
         </div>
