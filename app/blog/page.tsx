@@ -3,6 +3,7 @@ import { Calendar, Clock, ArrowRight, BookOpen } from "lucide-react"
 import Link from "next/link"
 import { blogPosts, blogCategories } from "@/lib/blog-data"
 import BlogGrid from "./BlogGrid"
+import BackButton from "@/components/back-button"
 
 export const metadata: Metadata = {
   title: "Blog | Karvensen",
@@ -13,6 +14,10 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white">
+      {/* Back Button */}
+      <div className="fixed top-6 left-6 z-50 bg-white rounded-lg shadow-lg p-2">
+        <BackButton href="/" />
+      </div>
       {/* Hero Section with Animated Background */}
       <section className="relative py-32 overflow-hidden bg-gray-900">
         {/* Video Background */}

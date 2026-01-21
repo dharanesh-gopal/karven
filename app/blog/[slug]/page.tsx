@@ -7,6 +7,7 @@ import { blogContentMap, generateDefaultContent } from "@/lib/blog-content"
 import { notFound } from "next/navigation"
 import BlogSubtitleAnimator from "@/components/blog-subtitle-animator"
 import ScrollToTop from "@/components/scroll-to-top"
+import BackButton from "@/components/back-button"
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -49,6 +50,11 @@ export default async function BlogDetailPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Back Button */}
+      <div className="fixed top-6 left-6 z-50 bg-white rounded-lg shadow-lg p-2">
+        <BackButton href="/blog" />
+      </div>
+      
       {/* Scroll to Top on Page Load */}
       <ScrollToTop />
       
@@ -93,39 +99,32 @@ export default async function BlogDetailPage({ params }: Props) {
       </section>
 
       {/* Premium Content Section */}
-      <article className="py-16 lg:py-24">
-        <div className="container mx-auto px-4 max-w-4xl">
-          {/* Back Button with enhanced styling */}
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-10 transition-all duration-300 font-medium group"
-          >
-            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Blog</span>
-          </Link>
+      <article className="py-16 lg:py-24 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl">
+          {/* Back Button removed - using fixed position button */}
 
           {/* Category & Branch Badges with Premium Design */}
           <div className="flex flex-wrap items-center gap-3 mb-8">
-            <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-gray-900 to-black text-white text-sm font-bold shadow-lg shadow-gray-400">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-bold shadow-lg">
               {post.category}
             </span>
-            <span className="inline-flex items-center px-4 py-2 rounded-full border-2 border-gray-300 text-gray-900 text-sm font-semibold bg-gray-50">
+            <span className="inline-flex items-center px-4 py-2 rounded-full border-2 border-gray-300 text-gray-900 text-sm font-semibold bg-white">
               {post.branch}
             </span>
           </div>
 
           {/* Premium Title with Better Typography */}
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gray-900 mb-8 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gray-900 mb-8 leading-tight text-left">
             {post.title}
           </h1>
 
           {/* Meta Info with Premium Styling */}
-          <div className="flex flex-wrap items-center gap-6 text-gray-600 pb-8 mb-12 border-b-2 border-gray-100">
+          <div className="flex flex-wrap items-center gap-6 text-gray-600 pb-8 mb-12 border-b-2 border-gray-200 text-left">
             <div className="flex items-center gap-2">
               <div className="p-2 bg-gray-100 rounded-full">
                 <Calendar className="h-4 w-4 text-gray-900" />
               </div>
-              <span className="text-sm font-medium">
+              <span className="text-sm font-medium text-gray-600">
                 {new Date(post.date).toLocaleDateString('en-US', { 
                   month: 'long', 
                   day: 'numeric', 
@@ -134,14 +133,14 @@ export default async function BlogDetailPage({ params }: Props) {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">By <span className="text-gray-900">{post.author}</span></span>
+              <span className="text-sm font-medium text-gray-600">By <span className="text-gray-900">{post.author}</span></span>
             </div>
           </div>
 
           {/* Article Content with Enhanced Reading Experience */}
-          <div className="prose prose-lg prose-gray max-w-none">
+          <div className="prose prose-lg prose-gray max-w-none text-left">
             {/* Introduction with Premium Typography */}
-            <p className="text-2xl text-gray-700 leading-relaxed mb-12 font-light border-l-4 border-gray-900 pl-6 italic">
+            <p className="text-2xl text-gray-700 leading-relaxed mb-12 font-light border-l-4 border-gray-900 pl-6 italic text-left">
               {post.excerpt}
             </p>
 
@@ -151,12 +150,12 @@ export default async function BlogDetailPage({ params }: Props) {
             </div>
 
             {/* Premium Key Takeaways Box */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-l-4 border-gray-900 rounded-r-xl p-8 my-12 shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-l-4 border-gray-900 rounded-r-xl p-8 my-12 shadow-lg text-left">
+              <h3 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2 text-left">
                 <span className="w-2 h-2 bg-gray-900 rounded-full"></span>
                 Key Takeaways
               </h3>
-              <ul className="space-y-3 text-gray-700">
+              <ul className="space-y-3 text-gray-700 text-left">
                 <li className="flex items-start gap-3">
                   <span className="text-gray-900 font-bold mt-1">•</span>
                   <span>Advanced {post.branch.toLowerCase()} implementation strategies</span>
@@ -187,13 +186,13 @@ export default async function BlogDetailPage({ params }: Props) {
               </div>
               
               {/* Content */}
-              <div className="relative z-10 p-12 md:p-16">
-                <div className="max-w-4xl mx-auto">
-                  <h3 className="text-4xl md:text-5xl font-bold mb-4 text-white leading-tight" style={{ color: '#FFFFFF' }}>
+              <div className="relative z-10 p-12 md:p-16 text-left">
+                <div className="max-w-6xl mx-auto">
+                  <h3 className="text-4xl md:text-5xl font-bold mb-4 text-white leading-tight text-left" style={{ color: '#FFFFFF' }}>
                     Interested in {post.branch}?
                   </h3>
                   
-                  <p className="text-xl text-gray-300 mb-10 leading-relaxed">
+                  <p className="text-xl text-gray-300 mb-10 leading-relaxed text-left">
                     Learn how Karvensen can help you implement cutting-edge solutions for your business.
                   </p>
                   
@@ -222,11 +221,11 @@ export default async function BlogDetailPage({ params }: Props) {
 
       {/* Premium Related Posts Section */}
       {relatedPosts.length > 0 && (
-        <section className="py-20 bg-gradient-to-b from-gray-50 to-white border-t-2 border-gray-100">
-          <div className="container mx-auto px-4 max-w-7xl">
+        <section className="py-20 bg-white border-t-2 border-gray-200">
+          <div className="container mx-auto px-4 max-w-6xl">
             <div className="flex items-center gap-3 mb-12">
-              <div className="p-3 bg-gray-100 rounded-xl">
-                <BookOpen className="h-6 w-6 text-gray-900" />
+              <div className="p-3 bg-gray-900 rounded-xl">
+                <BookOpen className="h-6 w-6 text-white" />
               </div>
               <h2 className="text-3xl font-bold text-gray-900">Related Articles</h2>
             </div>

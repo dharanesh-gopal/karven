@@ -16,7 +16,7 @@ export default function BlogGrid() {
   return (
     <>
       {/* Premium Category Filter Pills */}
-      <section className="py-12 bg-white border-b border-gray-100">
+      <section className="py-12 bg-white border-b border-gray-200">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-3 justify-center max-w-4xl mx-auto">
             {blogCategories.map((category) => (
@@ -25,8 +25,8 @@ export default function BlogGrid() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 ${
                   selectedCategory === category
-                    ? "bg-gradient-to-r from-gray-900 via-black to-gray-800 text-white shadow-lg shadow-gray-400"
-                    : "bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-900 hover:text-gray-900 hover:shadow-md"
+                    ? "bg-gray-900 text-white shadow-lg shadow-gray-900/20"
+                    : "bg-white text-gray-700 border-2 border-gray-300 hover:border-gray-900 hover:shadow-md"
                 }`}
               >
                 {category}
@@ -37,20 +37,24 @@ export default function BlogGrid() {
       </section>
 
       {/* Premium Blog Grid */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           {filteredPosts.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-gray-500 text-lg">No blog posts found in this category.</p>
             </div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-              {filteredPosts.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/blog/${post.id}`}
-                  className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100"
-                >
+            <div className="flex flex-col gap-8 max-w-6xl mx-auto">
+              {filteredPosts.map((post, index) => (
+                <div key={post.id} className="flex items-start gap-8">
+                  {/* Number */}
+                  <div className="text-5xl font-bold text-gray-200 min-w-fit leading-none mt-2">
+                    {String(index + 1).padStart(2, '0')}
+                  </div>
+                  <Link
+                    href={`/blog/${post.id}`}
+                    className="group flex flex-col flex-1 bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200"
+                  >
                   {/* Image Section with Category Badge Overlay */}
                   <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
                     {post.heroImage ? (
@@ -96,7 +100,8 @@ export default function BlogGrid() {
                       </div>
                     </div>
                   </div>
-                </Link>
+                  </Link>
+                </div>
               ))}
             </div>
           )}
