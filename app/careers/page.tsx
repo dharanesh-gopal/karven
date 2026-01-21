@@ -159,11 +159,11 @@ const HeroSection = () => {
           <div className="max-w-2xl">
             <div className="flex items-center gap-3 mb-4 animate-in fade-in slide-in-from-left duration-700">
                <span className="h-px w-8 bg-sky-500"></span>
-               <span className="text-sky-400 font-mono text-xs uppercase tracking-widest">/ Join_The_Revolution</span>
+               <span className="text-sky-400 font-mono text-xs uppercase tracking-widest"> Join The Revolution</span>
             </div>
             
             <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4 animate-in fade-in slide-in-from-bottom duration-700 delay-100">
-              Life at <span className="font-mono text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500 font-light italic">KarVenSen_</span>
+              Life at <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500 font-white bold">KarVenSen</span>
             </h1>
             
             {/* Typewriter Subtext */}
