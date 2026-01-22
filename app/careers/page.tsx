@@ -11,6 +11,8 @@ import {
   Loader2, CheckCircle2 // Added these for the dynamic modal
 } from "lucide-react"
 import { JOBS_DATA } from "./data"
+import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
 
 // --- 1. DATA CONSTANTS ---
 
@@ -317,7 +319,7 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
 // --- 4. SUB-COMPONENTS (IN-PAGE) ---
 
-const HiringPipeline = () => {
+const HiringPipeline = ({ steps }: { steps: any[] }) => {
   const [activeStep, setActiveStep] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
@@ -338,24 +340,24 @@ const HiringPipeline = () => {
       setActiveStep(0); 
       interval = setInterval(() => {
         step++;
-        if (step < HIRING_STEPS.length) setActiveStep(step);
+        if (step < steps.length) setActiveStep(step);
         else clearInterval(interval);
       }, 500);
     } else {
       setActiveStep(-1);
     }
     return () => clearInterval(interval);
-  }, [isInView]);
+  }, [isInView, steps]);
 
   return (
     <div ref={containerRef} className="relative py-12">
       <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -translate-y-1/2 z-0 hidden md:block rounded-full"></div>
       <div 
         className="absolute top-1/2 left-0 h-1 bg-sky-600 -translate-y-1/2 z-0 transition-all duration-700 ease-out hidden md:block rounded-full"
-        style={{ width: activeStep === -1 ? '0%' : `${(activeStep / (HIRING_STEPS.length - 1)) * 100}%` }}
+        style={{ width: activeStep === -1 ? '0%' : `${(activeStep / (steps.length - 1)) * 100}%` }}
       ></div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
-        {HIRING_STEPS.map((step, i) => {
+        {steps.map((step, i) => {
           const isActive = i <= activeStep;
           return (
             <div key={i} className={`text-center transition-all duration-700 transform ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: `${i * 100}ms` }}>
@@ -374,7 +376,7 @@ const HiringPipeline = () => {
   )
 }
 
-const HeroSection = () => {
+const HeroSection = ({ cultureData }: { cultureData: any[] }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [typedText, setTypedText] = useState("");
   const fullText = "We are building the autonomous infrastructure of tomorrow.";
@@ -450,7 +452,7 @@ const HeroSection = () => {
 
         <div className="relative group animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500">
           <div ref={scrollRef} className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            {CULTURE_IMAGES.map((img, idx) => (
+            {cultureData.map((img: any, idx: number) => (
               <div key={idx} className="min-w-[280px] md:min-w-[320px] lg:min-w-[25%] h-[350px] relative rounded-xl overflow-hidden snap-center shrink-0 cursor-pointer border border-white/10 hover:border-sky-500 transition-all duration-300 group/card">
                 <img src={img.url} alt={img.title} className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-90"></div>
@@ -478,18 +480,112 @@ export default function CareersPage() {
   const [isPolicyModalOpen, setIsPolicyModalOpen] = useState(false);
   const [isTalentModalOpen, setIsTalentModalOpen] = useState(false); // STATE INITIALIZED CORRECTLY
 
-  // Group JOBS_DATA by Department for Section 6
-  const groupedJobs = JOBS_DATA.reduce((acc, job) => {
+  // Fetch careers data from CMS
+  const { data: cmsValues } = useSanityData<any[]>(
+    `*[_type == "careerValue" && isActive == true] | order(order asc){
+      title,
+      "desc": description,
+      icon,
+      order
+    }`,
+    {},
+    []
+  )
+
+  const { data: cmsSteps } = useSanityData<any[]>(
+    `*[_type == "hiringStep" && isActive == true] | order(order asc){
+      title,
+      "desc": description,
+      icon,
+      order
+    }`,
+    {},
+    []
+  )
+
+  const { data: cmsTestimonials } = useSanityData<any[]>(
+    `*[_type == "careerTestimonial" && isActive == true] | order(order asc){
+      name,
+      role,
+      quote,
+      "image": image.asset
+    }`,
+    {},
+    []
+  )
+
+  const { data: cmsCulture } = useSanityData<any[]>(
+    `*[_type == "cultureImage" && isActive == true] | order(order asc){
+      title,
+      category,
+      "url": image.asset
+    }`,
+    {},
+    []
+  )
+
+  const { data: cmsBenefits } = useSanityData<any[]>(
+    `*[_type == "careerBenefit" && isActive == true] | order(order asc){
+      title,
+      "desc": description,
+      category,
+      icon
+    }`,
+    {},
+    []
+  )
+
+  const { data: cmsJobs } = useSanityData<any[]>(
+    `*[_type == "jobOpening" && isActive == true] | order(order asc){
+      "id": id.current,
+      title,
+      department,
+      location,
+      type,
+      experience,
+      postedAt,
+      description,
+      responsibilities,
+      requirements
+    }`,
+    {},
+    []
+  )
+
+  // Use CMS data with fallback
+  const VALUES = (cmsValues && cmsValues.length > 0) ? cmsValues : CORPORATE_VALUES
+  const STEPS = (cmsSteps && cmsSteps.length > 0) ? cmsSteps : HIRING_STEPS
+  const TESTIMONIALS_DATA = (cmsTestimonials && cmsTestimonials.length > 0) 
+    ? cmsTestimonials.map(t => ({ ...t, image: typeof t.image === 'object' ? urlFor(t.image).url() : t.image }))
+    : TESTIMONIALS
+  const CULTURE_DATA = (cmsCulture && cmsCulture.length > 0)
+    ? cmsCulture.map(c => ({ ...c, url: typeof c.url === 'object' ? urlFor(c.url).url() : c.url }))
+    : CULTURE_IMAGES
+  
+  // Group benefits by category
+  const BENEFITS_BY_CATEGORY = (cmsBenefits && cmsBenefits.length > 0) 
+    ? cmsBenefits.reduce((acc, benefit) => {
+        if (!acc[benefit.category]) acc[benefit.category] = []
+        acc[benefit.category].push(benefit)
+        return acc
+      }, {} as Record<string, typeof cmsBenefits>)
+    : BENEFIT_CATEGORIES
+
+  // Use CMS jobs or fallback
+  const JOBS = (cmsJobs && cmsJobs.length > 0) ? cmsJobs : JOBS_DATA
+
+  // Group JOBS by Department for Section 6
+  const groupedJobs = JOBS.reduce((acc, job) => {
     if (!acc[job.department]) acc[job.department] = [];
     acc[job.department].push(job);
     return acc;
-  }, {} as Record<string, typeof JOBS_DATA>);
+  }, {} as Record<string, typeof JOBS>);
 
   return (
     <main className="min-h-screen bg-white font-sans text-slate-800 selection:bg-sky-500 selection:text-white">
       
       {/* SECTION 1: HERO */}
-      <HeroSection />
+      <HeroSection cultureData={CULTURE_DATA} />
 
       {/* SECTION 2: VALUES */}
       <section className="py-24 bg-slate-50 border-t border-slate-200">
@@ -512,7 +608,7 @@ export default function CareersPage() {
 
                 {/* VALUES LIST */}
                 <div className="space-y-8 pt-4">
-                  {CORPORATE_VALUES.map((val, i) => (
+                  {VALUES.map((val: any, i: number) => (
                     <div key={i} className="flex gap-5 group cursor-default">
                       
                       {/* DYNAMIC ICON: Only this changes on hover */}
@@ -559,7 +655,7 @@ export default function CareersPage() {
       <section className="py-24 bg-gradient-to-b from-slate-50 to-slate-100 border-y border-slate-200">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16"><h2 className="text-4xl font-bold text-slate-900">Our Hiring Process</h2><p className="text-slate-500 mt-2">A transparent path from application to offer.</p></div>
-          <HiringPipeline />
+          <HiringPipeline steps={STEPS} />
         </div>
       </section>
 
@@ -569,7 +665,7 @@ export default function CareersPage() {
         <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-16"><h2 className="text-4xl font-bold text-white mb-4">Voices from the Team</h2><p className="text-slate-400">Hear from the people building the future.</p></div>
           <div className="grid md:grid-cols-3 gap-8">
-            {TESTIMONIALS.map((t, i) => (<RevealOnScroll key={i} delay={i * 150}><div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 p-8 rounded-2xl relative hover:bg-slate-800 transition-all duration-300 group cursor-default"><Quote className="w-10 h-10 text-sky-500/10 absolute top-6 right-6 group-hover:text-sky-500/30 group-hover:scale-110 transition-all duration-500" /><div className="flex items-center gap-1 mb-6">{[0, 1, 2, 3, 4].map((starIndex) => (<Star key={starIndex} className="w-4 h-4 fill-current text-sky-600 group-hover:text-yellow-400 transition-colors duration-300" style={{ transitionDelay: `${starIndex * 75}ms` }} />))}</div><p className="text-lg text-slate-300 italic mb-8 relative z-10 leading-relaxed group-hover:text-white transition-colors duration-300">"{t.quote}"</p><div className="flex items-center gap-4 pt-6 border-t border-slate-700"><img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover ring-2 ring-slate-600 group-hover:ring-sky-500 transition-all duration-300" /><div><h4 className="font-bold text-white text-sm">{t.name}</h4><p className="text-xs font-semibold text-sky-400 uppercase tracking-wide">{t.role}</p></div></div></div></RevealOnScroll>))}
+            {TESTIMONIALS_DATA.map((t: any, i: number) => (<RevealOnScroll key={i} delay={i * 150}><div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 p-8 rounded-2xl relative hover:bg-slate-800 transition-all duration-300 group cursor-default"><Quote className="w-10 h-10 text-sky-500/10 absolute top-6 right-6 group-hover:text-sky-500/30 group-hover:scale-110 transition-all duration-500" /><div className="flex items-center gap-1 mb-6">{[0, 1, 2, 3, 4].map((starIndex) => (<Star key={starIndex} className="w-4 h-4 fill-current text-sky-600 group-hover:text-yellow-400 transition-colors duration-300" style={{ transitionDelay: `${starIndex * 75}ms` }} />))}</div><p className="text-lg text-slate-300 italic mb-8 relative z-10 leading-relaxed group-hover:text-white transition-colors duration-300">"{t.quote}"</p><div className="flex items-center gap-4 pt-6 border-t border-slate-700"><img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover ring-2 ring-slate-600 group-hover:ring-sky-500 transition-all duration-300" /><div><h4 className="font-bold text-white text-sm">{t.name}</h4><p className="text-xs font-semibold text-sky-400 uppercase tracking-wide">{t.role}</p></div></div></div></RevealOnScroll>))}
           </div>
         </div>
       </section>
@@ -586,9 +682,9 @@ export default function CareersPage() {
                 <button onClick={() => setIsPolicyModalOpen(true)} className="flex items-center gap-3 text-slate-900 font-bold transition-all duration-300 group-hover:gap-4 group-hover:text-sky-700"><span className="border-b-2 border-slate-900 pb-1 transition-colors duration-300 group-hover:border-sky-700">View Full Policy Guide</span><ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"/></button>
             </div>
             <div className="lg:col-span-2">
-              <div className="flex flex-wrap gap-2 mb-8 border-b border-slate-100 pb-1">{Object.keys(BENEFIT_CATEGORIES).map((tab) => (<button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 text-sm font-bold rounded-t-lg transition-all duration-300 relative top-[1px] ${activeTab === tab ? "text-sky-700 border-b-2 border-sky-700 bg-sky-50/50" : "text-slate-400 hover:text-slate-600"}`}>{tab}</button>))}</div>
+              <div className="flex flex-wrap gap-2 mb-8 border-b border-slate-100 pb-1">{Object.keys(BENEFITS_BY_CATEGORY).map((tab) => (<button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 text-sm font-bold rounded-t-lg transition-all duration-300 relative top-[1px] ${activeTab === tab ? "text-sky-700 border-b-2 border-sky-700 bg-sky-50/50" : "text-slate-400 hover:text-slate-600"}`}>{tab}</button>))}</div>
               <div className="grid sm:grid-cols-2 gap-6 min-h-[300px]">
-                {BENEFIT_CATEGORIES[activeTab as keyof typeof BENEFIT_CATEGORIES].map((perk, i) => (
+                {BENEFITS_BY_CATEGORY[activeTab as keyof typeof BENEFITS_BY_CATEGORY].map((perk: any, i: number) => (
                   <SpotlightCard key={perk.title} className="p-6 animate-in fade-in zoom-in-95 duration-500" delay={i * 100}>
                     <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center mb-4 text-slate-400 group-hover:bg-sky-600 group-hover:text-white transition-all duration-500"><perk.icon className="w-6 h-6" /></div>
                     <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-sky-700 transition-colors">{perk.title}</h3>
@@ -618,9 +714,9 @@ export default function CareersPage() {
           <div className="space-y-16">
             {Object.entries(groupedJobs).map(([category, jobs], catIndex) => (
               <div key={category} className="animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${catIndex * 100}ms` }}>
-                <div className="flex items-center gap-4 mb-6"><h3 className="text-2xl font-bold text-slate-900">{category}</h3><div className="h-px flex-grow bg-slate-200"></div><span className="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded border border-slate-200">{jobs.length} roles</span></div>
+                <div className="flex items-center gap-4 mb-6"><h3 className="text-2xl font-bold text-slate-900">{category}</h3><div className="h-px flex-grow bg-slate-200"></div><span className="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded border border-slate-200">{(jobs as any[]).length} roles</span></div>
                 <div className="grid gap-4">
-                  {jobs.map((job, jobIndex) => (
+                  {(jobs as any[]).map((job: any, jobIndex: number) => (
                     <RevealOnScroll key={job.id} delay={jobIndex * 50}>
                       <Link href={`/careers/${job.id}`} className="block">
                         <JobSpotlightRow className="group p-0 border border-slate-200 bg-white hover:border-sky-300 transition-all duration-300">

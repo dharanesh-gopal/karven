@@ -9,6 +9,7 @@ import {
   Share2, Linkedin, Twitter, Target, User
 } from "lucide-react"
 import { JOBS_DATA } from "../data"
+import { useSanityData } from "@/hooks/useSanityData"
 
 // --- UTILS ---
 const formatDate = (dateString: string) => dateString;
@@ -22,7 +23,26 @@ export default function JobApplicationPage() {
   const [resume, setResume] = useState<File | null>(null)
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle")
 
-  const job = JOBS_DATA.find((j) => j.id === params.id)
+  // Fetch job from CMS
+  const { data: cmsJob } = useSanityData<any>(
+    `*[_type == "jobOpening" && id.current == $id && isActive == true][0]{
+      "id": id.current,
+      title,
+      department,
+      location,
+      type,
+      experience,
+      postedAt,
+      description,
+      responsibilities,
+      requirements
+    }`,
+    { id: params.id },
+    null
+  )
+
+  // Use CMS data or fallback
+  const job = cmsJob || JOBS_DATA.find((j) => j.id === params.id)
 
   if (!job) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-center p-6">

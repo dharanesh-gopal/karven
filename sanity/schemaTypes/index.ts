@@ -39,6 +39,13 @@ import trainingProgram from './trainingProgram'
 import trainingStat from './trainingStat'
 import trainingFaq from './trainingFaq'
 import trainingCourse from './trainingCourse'
+import careerHero from './careerHero'
+import careerValue from './careerValue'
+import hiringStep from './hiringStep'
+import careerTestimonial from './careerTestimonial'
+import cultureImage from './cultureImage'
+import careerBenefit from './careerBenefit'
+import jobOpening from './jobOpening'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -92,5 +99,14 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     trainingFaq,
     trainingCourse,
     upcomingProgram,
+    
+    // Careers Page
+    careerHero,
+    careerValue,
+    hiringStep,
+    careerTestimonial,
+    cultureImage,
+    careerBenefit,
+    jobOpening,
   ],
 }
