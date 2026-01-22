@@ -1,18 +1,43 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { TrendingUp, Users, Award, CheckCircle2 } from "lucide-react"
+import { TrendingUp, Users, Award, CheckCircle2, LucideIcon } from "lucide-react"
+import { useSanityData } from "@/hooks/useSanityData"
 
-const stats = [
-  { icon: Users, value: 150, suffix: "+", label: "Clients Worldwide", color: "blue" },
-  { icon: CheckCircle2, value: 500, suffix: "+", label: "Projects Completed", color: "green" },
-  { icon: Award, value: 25, suffix: "+", label: "Industry Awards", color: "yellow" },
-  { icon: TrendingUp, value: 98, suffix: "%", label: "Client Satisfaction", color: "purple" }
+interface StatData {
+  _id: string
+  label: string
+  value: string
+  description?: string
+  icon?: string
+  order: number
+}
+
+const fallbackStats = [
+  { _id: "1", icon: "Users", value: "150+", label: "Clients Worldwide", order: 1 },
+  { _id: "2", icon: "CheckCircle2", value: "500+", label: "Projects Completed", order: 2 },
+  { _id: "3", icon: "Award", value: "25+", label: "Industry Awards", order: 3 },
+  { _id: "4", icon: "TrendingUp", value: "98%", label: "Client Satisfaction", order: 4 }
 ]
+
+const iconMap: Record<string, LucideIcon> = {
+  Users,
+  CheckCircle2,
+  Award,
+  TrendingUp
+}
 
 export function StatsSection() {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
+
+  const { data } = useSanityData<StatData[]>(
+    '*[_type == "stats" && isActive == true] | order(order asc)',
+    {},
+    fallbackStats
+  )
+
+  const stats = data || fallbackStats
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,10 +62,13 @@ export function StatsSection() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat, index) => {
-            const Icon = stat.icon
+            const Icon = stat.icon && iconMap[stat.icon] ? iconMap[stat.icon] : Users
+            const numValue = parseInt(stat.value.replace(/\D/g, '')) || 0
+            const suffix = stat.value.replace(/\d/g, '')
+            
             return (
               <div
-                key={index}
+                key={stat._id}
                 className="text-center transform hover:scale-105 transition-transform"
                 style={{
                   animation: isVisible ? `fadeInUp 0.6s ease-out ${index * 0.1}s forwards` : "none",
@@ -51,8 +79,11 @@ export function StatsSection() {
                   <Icon className="h-8 w-8 text-white" />
                 </div>
                 <div className="text-5xl font-bold text-white mb-2">
-                  <Counter target={stat.value} isVisible={isVisible} duration={2000} />
-                  {stat.suffix}
+                  {numValue > 0 ? (
+                    <><Counter target={numValue} isVisible={isVisible} duration={2000} />{suffix}</>
+                  ) : (
+                    stat.value
+                  )}
                 </div>
                 <div className="text-blue-100 font-medium">{stat.label}</div>
               </div>

@@ -2,21 +2,38 @@
 
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+import { useSanityData } from "@/hooks/useSanityData"
 
-const processSteps = [
+interface ProcessStep {
+  _id: string
+  title: string
+  description: string
+  stepNumber: number
+  icon?: string
+}
+
+const fallbackSteps = [
   {
+    _id: "1",
+    stepNumber: 1,
     title: "Strategic Consultation",
     description: "We partner with you to identify specific operational challenges.",
   },
   {
+    _id: "2",
+    stepNumber: 2,
     title: "AI-Driven System Design",
     description: "Developing custom solutions with proprietary AI models.",
   },
   {
+    _id: "3",
+    stepNumber: 3,
     title: "Precision Deployment",
     description: "Execution led by DGCA-certified pilots.",
   },
   {
+    _id: "4",
+    stepNumber: 4,
     title: "Advanced Analytics & Reporting",
     description: "Processing raw data into actionable business results.",
   },
@@ -25,6 +42,14 @@ const processSteps = [
 export function HowWeWorkSection() {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
+
+  const { data } = useSanityData<ProcessStep[]>(
+    '*[_type == "processStep" && isActive == true] | order(stepNumber asc)',
+    {},
+    fallbackSteps
+  )
+
+  const processSteps = data || fallbackSteps
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -92,7 +117,7 @@ export function HowWeWorkSection() {
             <div className="space-y-6 pt-4">
               {processSteps.map((step, index) => (
                 <div 
-                  key={index} 
+                  key={step._id} 
                   className={`flex gap-4 transition-all duration-1000 ${
                     isVisible 
                       ? 'opacity-100 translate-y-0' 
@@ -104,7 +129,7 @@ export function HowWeWorkSection() {
                   <div className="flex-shrink-0">
                     <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
                       <span className="text-gray-900 font-semibold text-sm">
-                        {index + 1}
+                        {step.stepNumber || index + 1}
                       </span>
                     </div>
                   </div>

@@ -8,9 +8,21 @@ import training from './training'
 import testimonial from './testimonial'
 import project from './project'
 import settings from './settings'
+import heroSection from './heroSection'
+import feature from './feature'
+import stats from './stats'
+import processStep from './processStep'
+import ctaSection from './ctaSection'
+import contactInfo from './contactInfo'
+import siteSettings from './siteSettings'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
+    // Site-wide
+    siteSettings,
+    contactInfo,
+    
+    // Content
     service,
     blog,
     author,
@@ -19,5 +31,12 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     testimonial,
     project,
     settings,
+    
+    // Homepage
+    heroSection,
+    feature,
+    stats,
+    processStep,
+    ctaSection,
   ],
 }
