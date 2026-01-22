@@ -2,7 +2,7 @@ import { defineType } from 'sanity'
 
 export default defineType({
   name: 'trainingCourse',
-  title: 'Training Course',
+  title: 'Training Course (Full Details)',
   type: 'document',
   fields: [
     {
@@ -49,6 +49,91 @@ export default defineType({
       type: 'string',
       description: 'Course duration (e.g., "8 Days", "3-5 Days")',
       validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'price',
+      title: 'Price',
+      type: 'string',
+      description: 'Course price (e.g., "₹25,000")',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'level',
+      title: 'Level',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Beginner', value: 'Beginner' },
+          { title: 'Intermediate', value: 'Intermediate' },
+          { title: 'Advanced', value: 'Advanced' },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'maxStudents',
+      title: 'Max Students',
+      type: 'string',
+      description: 'Maximum students (e.g., "15", "20-30")',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'certification',
+      title: 'Certification',
+      type: 'string',
+      description: 'Certificate type (e.g., "Certificate of Completion", "Professional Certification")',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'highlights',
+      title: 'Course Highlights',
+      type: 'array',
+      of: [{ type: 'string' }],
+      validation: (Rule) => Rule.required().min(1),
+    },
+    {
+      name: 'curriculum',
+      title: 'Curriculum',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'session',
+              title: 'Session',
+              type: 'string',
+              description: 'Session number/range (e.g., "Session 1-2", "Day 1")',
+            },
+            {
+              name: 'title',
+              title: 'Title',
+              type: 'string',
+            },
+            {
+              name: 'topics',
+              title: 'Topics',
+              type: 'array',
+              of: [{ type: 'string' }],
+            },
+          ],
+        },
+      ],
+      validation: (Rule) => Rule.required().min(1),
+    },
+    {
+      name: 'prerequisites',
+      title: 'Prerequisites',
+      type: 'array',
+      of: [{ type: 'string' }],
+      validation: (Rule) => Rule.required().min(1),
+    },
+    {
+      name: 'included',
+      title: "What's Included",
+      type: 'array',
+      of: [{ type: 'string' }],
+      validation: (Rule) => Rule.required().min(1),
     },
     {
       name: 'detailsLink',

@@ -1,9 +1,12 @@
 "use client"
 
-import { use, useState } from "react"
+import { use, useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { CheckCircle, Clock, Calendar, Users, Award, ArrowLeft, DollarSign, X } from "lucide-react"
 import { notFound } from "next/navigation"
+import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
 
 const coursesData = {
   "course-a": {
@@ -309,7 +312,6 @@ const coursesData = {
 
 export default function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params)
-  const course = coursesData[courseId as keyof typeof coursesData]
   const [showEnrollForm, setShowEnrollForm] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [formData, setFormData] = useState({
@@ -324,6 +326,37 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
     experience: '',
     message: ''
   })
+
+  // Fetch course data from CMS
+  const { data: courses } = useSanityData<any[]>(
+    `*[_type == "trainingCourse" && slug.current == $slug && isActive == true]{
+      title,
+      subtitle,
+      description,
+      "image": image.asset,
+      duration,
+      price,
+      level,
+      maxStudents,
+      certification,
+      highlights,
+      curriculum,
+      prerequisites,
+      included
+    }`,
+    { slug: courseId },
+    []
+  )
+
+  // Get course data or fallback
+  const course = courses && courses.length > 0 
+    ? courses[0]
+    : coursesData[courseId as keyof typeof coursesData]
+
+  useEffect(() => {
+    // Close enrollment form when courseId changes
+    setShowEnrollForm(false)
+  }, [courseId])
 
   if (!course) {
     notFound()
@@ -417,11 +450,20 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
             <div className="md:col-span-2 space-y-8">
               {/* Course Image */}
               <div className="relative h-96 rounded-xl overflow-hidden">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-full object-cover"
-                />
+                {course.image && typeof course.image === 'object' ? (
+                  <Image
+                    src={urlFor(course.image).url()}
+                    alt={course.title}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <img
+                    src={course.image || "/train-1.jpeg"}
+                    alt={course.title}
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
 
               {/* Description */}
