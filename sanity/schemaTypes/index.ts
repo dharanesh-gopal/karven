@@ -20,6 +20,18 @@ import gallerySection from './gallerySection'
 import testimonialsSection from './testimonialsSection'
 import howWeWorkSection from './howWeWorkSection'
 import footerSettings from './footerSettings'
+import aboutTagline from './aboutTagline'
+import aboutHero from './aboutHero'
+import impactStat from './impactStat'
+import aboutPurpose from './aboutPurpose'
+import coreValue from './coreValue'
+import journeyMilestone from './journeyMilestone'
+import industryCard from './industryCard'
+import aboutGallery from './aboutGallery'
+import teamMember from './teamMember'
+import award from './award'
+import partner from './partner'
+import groupCompany from './groupCompany'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -48,5 +60,19 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     stats,
     processStep,
     ctaSection,
+    
+    // About Page
+    aboutTagline,
+    aboutHero,
+    impactStat,
+    aboutPurpose,
+    coreValue,
+    journeyMilestone,
+    industryCard,
+    aboutGallery,
+    teamMember,
+    award,
+    partner,
+    groupCompany,
   ],
 }

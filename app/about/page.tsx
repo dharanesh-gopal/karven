@@ -4,45 +4,99 @@ import { useEffect, useState, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Target, Eye, Award, Users, Plane, Lightbulb, Shield, TrendingUp, Building2, GraduationCap, Cloud, Cpu, ChevronDown, Linkedin, X, Send, Home, MessageCircle } from "lucide-react"
 import Image from "next/image"
+import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
 
-const values = [
-  {
-    icon: Lightbulb,
-    title: "Innovation First",
-    description: "Pioneering AI and drone solutions that solve real-world challenges for farmers, businesses, and educational institutions.",
-  },
-  {
-    icon: Shield,
-    title: "Quality & Reliability",
-    description: "Enterprise-grade solutions with rigorous testing. Make in India quality with global standards.",
-  },
-  {
-    icon: Users,
-    title: "Community Impact",
-    description: "Committed to empowering farmers and educating youth about emerging technologies through hands-on programs.",
-  },
-  {
-    icon: Award,
-    title: "Excellence",
-    description: "Delivering exceptional results in every project - from AI software to drone deployments and training workshops.",
-  },
-]
+interface AboutTaglineData {
+  mainText: string
+  description: string
+}
 
-const milestones = [
-  { year: "2023", event: "Karvensen founded by Karthika Venkatesan with a vision for AI-driven innovation" },
-  { year: "2023", event: "Launched agricultural drone technology program with Make in India initiative" },
-  { year: "2023", event: "Began educational workshops in schools and colleges across India" },
-  { year: "2024", event: "Expanded to LMS and ERP solutions for enterprise clients" },
-  { year: "2024", event: "Deployed 500+ drones for agricultural monitoring" },
-  { year: "2025", event: "Reached 100+ workshops conducted and 50+ enterprise clients" },
-]
+interface AboutHeroData {
+  mainTitle: string
+  subtitle: string
+  buttonText: string
+}
 
-const impactStats = [
-  { value: 53, label: "DGCA Pilots Trained", icon: Users, suffix: "+" },
-  { value: 1, label: "UAV Surveys", icon: Cpu, suffix: "+" },
-  { value: 9, label: "Countries", icon: Target, suffix: "+" },
-  { value: 60, label: "Partners", icon: Award, suffix: "+" },
-]
+interface ImpactStatData {
+  value: number
+  label: string
+  suffix: string
+  icon: string
+}
+
+interface AboutPurposeData {
+  purposeTitle: string
+  purposeDescription: string
+  visionTitle: string
+  visionDescription: string
+  missionTitle: string
+  missionDescription: string
+}
+
+interface CoreValueData {
+  title: string
+  description: string
+  icon: string
+}
+
+interface JourneyMilestoneData {
+  year: string
+  event: string
+}
+
+interface IndustryCardData {
+  title: string
+  image: any
+}
+
+interface AboutGalleryData {
+  images: Array<{ asset: any; alt: string; caption?: string }>
+  autoplayInterval: number
+}
+
+interface TeamMemberData {
+  name: string
+  role: string
+  category: string
+  image: any
+  linkedinUrl?: string
+}
+
+interface AwardData {
+  title: string
+  subtitle: string
+  image: any
+  badgeText: string
+  badgeColor: string
+}
+
+interface PartnerData {
+  name: string
+  displayText: string
+  textColor: string
+}
+
+interface GroupCompanyData {
+  name: string
+  description: string
+  websiteUrl: string
+  image: any
+}
+
+// Helper function to get icon component from icon name
+const getIconComponent = (iconName: string) => {
+  const icons: Record<string, any> = {
+    Users,
+    Cpu,
+    Target,
+    Award,
+    Lightbulb,
+    Shield,
+    Eye,
+  }
+  return icons[iconName] || Users
+}
 
 // Custom hook for counting animation
 function useCountUp(end: number, duration: number = 2000, isVisible: boolean = false) {
@@ -98,14 +152,15 @@ function useInView(options = {}) {
 }
 
 // Animated stat component
-function AnimatedStat({ stat }: { stat: typeof impactStats[0] }) {
+function AnimatedStat({ stat }: { stat: ImpactStatData }) {
   const { ref, isVisible } = useInView()
   const count = useCountUp(stat.value, 2000, isVisible)
+  const IconComponent = getIconComponent(stat.icon)
 
   return (
     <div ref={ref} className="text-center">
       <div className="mb-4 mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-        <stat.icon className="h-8 w-8 text-gray-700" />
+        <IconComponent className="h-8 w-8 text-gray-700" />
       </div>
       <div className="text-4xl font-bold mb-2 text-gray-900">
         {count}{stat.suffix}
@@ -128,6 +183,190 @@ export default function AboutPage() {
   const galleryRef = useInView()
   const awardsRef = useInView()
   const videoSectionRef = useRef<HTMLElement>(null)
+
+  const { data: taglineData } = useSanityData<AboutTaglineData>(
+    `*[_type == "aboutTagline" && isActive == true][0]{
+      mainText,
+      description
+    }`,
+    {},
+    {
+      mainText: "Trusted by Industry Leaders",
+      description: "Our clientele includes government agencies, defense forces, and leading enterprises that rely on our drone solutions and software services for innovation, efficiency, and mission-critical success."
+    }
+  )
+
+  const { data: heroData } = useSanityData<AboutHeroData>(
+    `*[_type == "aboutHero" && isActive == true][0]{
+      mainTitle,
+      subtitle,
+      buttonText
+    }`,
+    {},
+    {
+      mainTitle: "Bringing AI & Technology Closer to You!",
+      subtitle: "Unlocking the Skies, Transforming Industries",
+      buttonText: "Discover our story"
+    }
+  )
+
+  const { data: impactStats } = useSanityData<ImpactStatData[]>(
+    `*[_type == "impactStat" && isActive == true] | order(order asc){
+      value,
+      label,
+      suffix,
+      icon
+    }`,
+    {},
+    [
+      { value: 53, label: "DGCA Pilots Trained", icon: "Users", suffix: "+" },
+      { value: 1, label: "UAV Surveys", icon: "Cpu", suffix: "+" },
+      { value: 9, label: "Countries", icon: "Target", suffix: "+" },
+      { value: 60, label: "Partners", icon: "Award", suffix: "+" },
+    ]
+  )
+
+  const { data: purposeData } = useSanityData<AboutPurposeData>(
+    `*[_type == "aboutPurpose" && isActive == true][0]{
+      purposeTitle,
+      purposeDescription,
+      visionTitle,
+      visionDescription,
+      missionTitle,
+      missionDescription
+    }`,
+    {},
+    {
+      purposeTitle: "PURPOSE",
+      purposeDescription: "Building an Efficient & Sustainable World With Drone Technology, AI-Powered Software Solutions, and Cloud Services.",
+      visionTitle: "VISION",
+      visionDescription: "We Aspire To Be The Most Trusted Global Technology & Services Company, delivering innovative drone solutions, enterprise software, and AI-driven platforms.",
+      missionTitle: "MISSION",
+      missionDescription: "Continuously Thriving To Up-Skill And Empower The World Through Drones, AI Software, LMS Platforms, ERP Systems, and Cloud Technologies."
+    }
+  )
+
+  const { data: coreValues } = useSanityData<CoreValueData[]>(
+    `*[_type == "coreValue" && isActive == true] | order(order asc){
+      title,
+      description,
+      icon
+    }`,
+    {},
+    [
+      {
+        icon: "Lightbulb",
+        title: "Innovation First",
+        description: "Pioneering AI and drone solutions that solve real-world challenges for farmers, businesses, and educational institutions.",
+      },
+      {
+        icon: "Shield",
+        title: "Quality & Reliability",
+        description: "Enterprise-grade solutions with rigorous testing. Make in India quality with global standards.",
+      },
+      {
+        icon: "Users",
+        title: "Community Impact",
+        description: "Committed to empowering farmers and educating youth about emerging technologies through hands-on programs.",
+      },
+      {
+        icon: "Award",
+        title: "Excellence",
+        description: "Delivering exceptional results in every project - from AI software to drone deployments and training workshops.",
+      },
+    ]
+  )
+
+  const { data: journeyMilestones } = useSanityData<JourneyMilestoneData[]>(
+    `*[_type == "journeyMilestone" && isActive == true] | order(order asc){
+      year,
+      event
+    }`,
+    {},
+    [
+      { year: "2023", event: "Karvensen founded by Karthika Venkatesan with a vision for AI-driven innovation" },
+      { year: "2023", event: "Launched agricultural drone technology program with Make in India initiative" },
+      { year: "2023", event: "Began educational workshops in schools and colleges across India" },
+      { year: "2024", event: "Expanded to LMS and ERP solutions for enterprise clients" },
+      { year: "2024", event: "Deployed 500+ drones for agricultural monitoring" },
+      { year: "2025", event: "Reached 100+ workshops conducted and 50+ enterprise clients" },
+    ]
+  )
+
+  const { data: industryCards } = useSanityData<IndustryCardData[]>(
+    `*[_type == "industryCard" && isActive == true] | order(order asc){
+      title,
+      "image": image.asset
+    }`,
+    {},
+    []
+  )
+
+  const { data: galleryData } = useSanityData<AboutGalleryData>(
+    `*[_type == "aboutGallery" && isActive == true][0]{
+      images[]{"asset": asset, alt, caption},
+      autoplayInterval
+    }`,
+    {},
+    { images: [], autoplayInterval: 3000 }
+  )
+
+  const { data: leadershipTeam } = useSanityData<TeamMemberData[]>(
+    `*[_type == "teamMember" && category == "leadership" && isActive == true] | order(order asc){
+      name,
+      role,
+      category,
+      "image": image.asset,
+      linkedinUrl
+    }`,
+    {},
+    []
+  )
+
+  const { data: boardMembers } = useSanityData<TeamMemberData[]>(
+    `*[_type == "teamMember" && category == "board" && isActive == true] | order(order asc){
+      name,
+      role,
+      category,
+      "image": image.asset,
+      linkedinUrl
+    }`,
+    {},
+    []
+  )
+
+  const { data: awards } = useSanityData<AwardData[]>(
+    `*[_type == "award" && isActive == true] | order(order asc){
+      title,
+      subtitle,
+      "image": image.asset,
+      badgeText,
+      badgeColor
+    }`,
+    {},
+    []
+  )
+
+  const { data: partners } = useSanityData<PartnerData[]>(
+    `*[_type == "partner" && isActive == true] | order(order asc){
+      name,
+      displayText,
+      textColor
+    }`,
+    {},
+    []
+  )
+
+  const { data: groupCompanies } = useSanityData<GroupCompanyData[]>(
+    `*[_type == "groupCompany" && isActive == true] | order(order asc){
+      name,
+      description,
+      websiteUrl,
+      "image": image.asset
+    }`,
+    {},
+    []
+  )
 
   // Gallery images array
   const galleryImages = [
@@ -195,10 +434,10 @@ export default function AboutPage() {
       <section className="relative py-12 bg-gradient-to-r from-gray-900 to-gray-800 text-white overflow-hidden">
         <div className="container mx-auto px-4 text-center">
           <p className="text-lg md:text-xl font-medium animate-fade-in">
-            Trusted by Industry Leaders
+            {taglineData?.mainText || "Trusted by Industry Leaders"}
           </p>
           <p className="text-sm md:text-base text-gray-300 mt-2 animate-fade-in-delay">
-            Our clientele includes government agencies, defense forces, and leading enterprises that rely on our drone solutions and software services for innovation, efficiency, and mission-critical success.
+            {taglineData?.description || "Our clientele includes government agencies, defense forces, and leading enterprises that rely on our drone solutions and software services for innovation, efficiency, and mission-critical success."}
           </p>
         </div>
       </section>
@@ -208,18 +447,16 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center mb-12">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gray-900 mb-6 animate-fade-in">
-              Bringing AI & Technology
-              <br />
-              Closer to You!
+              {heroData?.mainTitle || "Bringing AI & Technology Closer to You!"}
             </h1>
             <p className="text-lg text-gray-600 mb-8 animate-fade-in-delay">
-              Unlocking the Skies, Transforming Industries
+              {heroData?.subtitle || "Unlocking the Skies, Transforming Industries"}
             </p>
             <button
               onClick={scrollToSection}
               className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors animate-fade-in-delay-2 cursor-pointer"
             >
-              <span>Discover our story</span>
+              <span>{heroData?.buttonText || "Discover our story"}</span>
               <ChevronDown className="h-5 w-5 animate-bounce" />
             </button>
           </div>
@@ -432,10 +669,9 @@ export default function AboutPage() {
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
                 <Target className="h-8 w-8 text-red-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">PURPOSE</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{purposeData?.purposeTitle || "PURPOSE"}</h2>
               <p className="text-gray-600 leading-relaxed">
-                Building an Efficient & Sustainable World With Drone Technology, AI-Powered Software Solutions, 
-                and Cloud Services.
+                {purposeData?.purposeDescription || "Building an Efficient & Sustainable World With Drone Technology, AI-Powered Software Solutions, and Cloud Services."}
               </p>
             </div>
             
@@ -444,10 +680,9 @@ export default function AboutPage() {
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
                 <Eye className="h-8 w-8 text-red-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">VISION</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{purposeData?.visionTitle || "VISION"}</h2>
               <p className="text-gray-600 leading-relaxed">
-                We Aspire To Be The Most Trusted Global Technology & Services Company, delivering innovative 
-                drone solutions, enterprise software, and AI-driven platforms.
+                {purposeData?.visionDescription || "We Aspire To Be The Most Trusted Global Technology & Services Company, delivering innovative drone solutions, enterprise software, and AI-driven platforms."}
               </p>
             </div>
             
@@ -456,10 +691,9 @@ export default function AboutPage() {
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
                 <Award className="h-8 w-8 text-red-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">MISSION</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">{purposeData?.missionTitle || "MISSION"}</h2>
               <p className="text-gray-600 leading-relaxed">
-                Continuously Thriving To Up-Skill And Empower The World Through Drones, AI Software, 
-                LMS Platforms, ERP Systems, and Cloud Technologies.
+                {purposeData?.missionDescription || "Continuously Thriving To Up-Skill And Empower The World Through Drones, AI Software, LMS Platforms, ERP Systems, and Cloud Technologies."}
               </p>
             </div>
           </div>
@@ -481,19 +715,27 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto">
-            {values.map((value, index) => (
-              <div 
-                key={value.title} 
-                className="text-center bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-gray-400 hover:-translate-y-1 transition-all duration-300"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="mb-4 mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-100 group-hover:bg-red-200 transition-colors">
-                  <value.icon className="h-8 w-8 text-red-600" />
+            {(coreValues && coreValues.length > 0 ? coreValues : [
+              { icon: "Lightbulb", title: "Innovation First", description: "Pioneering AI and drone solutions that solve real-world challenges for farmers, businesses, and educational institutions." },
+              { icon: "Shield", title: "Quality & Reliability", description: "Enterprise-grade solutions with rigorous testing. Make in India quality with global standards." },
+              { icon: "Users", title: "Community Impact", description: "Committed to empowering farmers and educating youth about emerging technologies through hands-on programs." },
+              { icon: "Award", title: "Excellence", description: "Delivering exceptional results in every project - from AI software to drone deployments and training workshops." },
+            ]).map((value, index) => {
+              const IconComponent = getIconComponent(value.icon)
+              return (
+                <div 
+                  key={value.title} 
+                  className="text-center bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-gray-400 hover:-translate-y-1 transition-all duration-300"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="mb-4 mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-100 group-hover:bg-red-200 transition-colors">
+                    <IconComponent className="h-8 w-8 text-red-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{value.title}</h3>
+                  <p className="text-gray-600 text-sm">{value.description}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{value.title}</h3>
-                <p className="text-gray-600 text-sm">{value.description}</p>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
@@ -515,7 +757,14 @@ export default function AboutPage() {
               {/* Timeline line */}
               <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gray-200 md:-translate-x-px" />
 
-              {milestones.map((milestone, index) => (
+              {(journeyMilestones && journeyMilestones.length > 0 ? journeyMilestones : [
+                { year: "2023", event: "Karvensen founded by Karthika Venkatesan with a vision for AI-driven innovation" },
+                { year: "2023", event: "Launched agricultural drone technology program with Make in India initiative" },
+                { year: "2023", event: "Began educational workshops in schools and colleges across India" },
+                { year: "2024", event: "Expanded to LMS and ERP solutions for enterprise clients" },
+                { year: "2024", event: "Deployed 500+ drones for agricultural monitoring" },
+                { year: "2025", event: "Reached 100+ workshops conducted and 50+ enterprise clients" },
+              ]).map((milestone, index) => (
                 <div
                   key={index}
                   className={`relative flex items-center gap-6 mb-8 ${index % 2 === 0 ? "md:flex-row-reverse" : ""} animate-fade-in-up`}
