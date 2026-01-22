@@ -54,25 +54,6 @@ export function HeroSection() {
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 font-medium">
             {content.subtitle}
           </p>
-          
-          {content.ctaText && (
-            <div className="mt-8 flex gap-4 justify-center flex-wrap">
-              <Link
-                href={content.ctaLink || "/contact"}
-                className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
-              >
-                {content.ctaText}
-              </Link>
-              {content.secondaryCtaText && (
-                <Link
-                  href={content.secondaryCtaLink || "/services"}
-                  className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg font-semibold transition-colors backdrop-blur-sm"
-                >
-                  {content.secondaryCtaText}
-                </Link>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
