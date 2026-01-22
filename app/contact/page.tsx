@@ -84,7 +84,6 @@ export default function ContactPage() {
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [selectedLocation, setSelectedLocation] = useState<LocationCard | null>(locations[0])
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -167,12 +166,11 @@ export default function ContactPage() {
               {locations.map((location, index) => (
                 <div
                   key={index}
-                  onClick={() => setSelectedLocation(location)}
-                  className={`rounded-lg shadow-md transition-all duration-300 p-6 border cursor-pointer ${
-                    selectedLocation?.name === location.name
-                      ? "bg-red-50 border-red-300 shadow-lg scale-105"
-                      : "bg-gray-50 border-gray-100 hover:shadow-lg"
-                  }`}
+                  onClick={() => {
+                    const encodedAddress = encodeURIComponent(location.address.replace(/\n/g, ", "))
+                    window.open(`https://www.google.com/maps/search/${encodedAddress}`, "_blank")
+                  }}
+                  className="rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 border cursor-pointer bg-gray-50 border-gray-100 hover:bg-gray-100"
                 >
                   <div className="mb-5">
                     <h3 className="text-lg font-bold text-gray-900">{location.name}</h3>
@@ -341,54 +339,18 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Interactive Map with Location Markers */}
-              <div className="rounded-2xl overflow-hidden shadow-lg h-full min-h-96 relative bg-gray-100 flex items-center justify-center">
-                <div className="w-full h-full">
-                  {/* Map Title and Note */}
-                  <div className="absolute top-0 left-0 right-0 bg-white border-b border-gray-200 p-4 z-10">
-                    <h3 className="font-semibold text-gray-900">Karvensen Locations</h3>
-                    <p className="text-xs text-gray-600 mt-1">Click on a location card to highlight it on the map</p>
-                  </div>
-
-                  {/* Google Map Embed - Centered on selected location */}
-                  <iframe
-                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${selectedLocation ? "50000" : "6307842.393878756"}!2d${selectedLocation?.lng || 77.64}!3d${selectedLocation?.lat || 20.593684}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s!2s${selectedLocation?.name}!5e0!3m2!1sen!2sin!4v1700000000000&markers=${locations.map((loc) => `${loc.lat},${loc.lng}(${loc.name})`).join("|")}`}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0, display: "block", minHeight: "400px", marginTop: "60px" } as React.CSSProperties}
-                    allowFullScreen={true}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Karvensen Locations Across India"
-                  />
-
-                  {/* Location Info Overlay */}
-                  {selectedLocation && (
-                    <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-xs z-20">
-                      <div className="flex gap-1 mb-2">
-                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-100">
-                          <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                          <span className="text-xs font-semibold text-red-700">{selectedLocation.role}</span>
-                        </span>
-                      </div>
-                      <h4 className="font-bold text-gray-900 mb-2">{selectedLocation.name}</h4>
-                      <div className="space-y-1 text-xs text-gray-600">
-                        <div className="flex gap-2">
-                          <MapPin className="h-3 w-3 text-red-500 flex-shrink-0 mt-0.5" />
-                          <p>{selectedLocation.address.split("\n")[0]}</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <Phone className="h-3 w-3 text-red-500 flex-shrink-0 mt-0.5" />
-                          <p>{selectedLocation.phone}</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <Mail className="h-3 w-3 text-red-500 flex-shrink-0 mt-0.5" />
-                          <p>{selectedLocation.email}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+              {/* Google Map with All Location Markers */}
+              <div className="rounded-2xl overflow-hidden shadow-lg h-full min-h-96">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3889.6455905127277!2d77.64!3d20.593684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1705927200000"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, display: "block", minHeight: "400px" } as React.CSSProperties}
+                  allowFullScreen={true}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Karvensen Locations Across India"
+                />
               </div>
             </div>
           </div>
