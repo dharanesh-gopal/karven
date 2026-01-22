@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Mail, Phone, MapPin, Send, Loader2, ArrowLeft } from "lucide-react"
 import dynamic from "next/dynamic"
 import { motion } from "framer-motion"
@@ -100,14 +100,24 @@ export default function ContactPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
+  const searchParams = useSearchParams()
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
     email: "",
     country: "",
     city: "",
+    enquiryType: "",
     message: "",
   })
+
+  // Auto-select enquiry type from URL parameter
+  useEffect(() => {
+    const enquiry = searchParams.get('enquiry')
+    if (enquiry) {
+      setFormData(prev => ({ ...prev, enquiryType: enquiry }))
+    }
+  }, [searchParams])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -130,6 +140,7 @@ export default function ContactPage() {
       email: "",
       country: "",
       city: "",
+      enquiryType: "",
       message: "",
     })
   }
@@ -330,6 +341,29 @@ export default function ContactPage() {
                           required
                           className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                         />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                          Enquiry About <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          name="enquiryType"
+                          value={formData.enquiryType}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
+                        >
+                          <option value="">Select enquiry type</option>
+                          <option value="services">Services</option>
+                          <option value="training">Training Programs</option>
+                          <option value="custom-training">Custom Training</option>
+                          <option value="drone-services">Drone Services</option>
+                          <option value="software-development">Software Development</option>
+                          <option value="careers">Careers</option>
+                          <option value="partnership">Partnership</option>
+                          <option value="general">General Inquiry</option>
+                        </select>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">

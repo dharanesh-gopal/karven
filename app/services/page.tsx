@@ -303,7 +303,7 @@ export default function ServicesPage() {
               </div>
 
               <Link
-                href="/contact"
+                href="/contact?enquiry=drone-services"
                 className="block relative rounded-2xl overflow-hidden shadow-2xl group cursor-pointer"
               >
                 <Image
@@ -699,7 +699,7 @@ export default function ServicesPage() {
           {/* CTA Button */}
           <div className="flex justify-center animate-fade-up animation-delay-300">
             <Button asChild size="lg" className="group bg-white text-red-600 hover:bg-gray-100 shadow-2xl hover:shadow-white/50 hover:scale-105 transition-all duration-300 px-8 py-6 text-lg font-semibold">
-              <Link href="/contact">
+              <Link href="/contact?enquiry=services">
                 Schedule a Consultation
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>

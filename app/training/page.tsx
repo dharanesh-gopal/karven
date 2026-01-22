@@ -193,7 +193,7 @@ function UpcomingProgramsGrid() {
               </a>
             ) : (
               <Link
-                href="/contact"
+                href="/contact?enquiry=training"
                 className="inline-flex items-center gap-2 text-red-600 font-medium text-sm hover:gap-3 transition-all duration-300"
               >
                 <span>Enquire Now</span>
@@ -740,7 +740,7 @@ export default function TrainingPage() {
 
               <div className="text-center mt-8">
                 <Link
-                  href="/contact"
+                  href="/contact?enquiry=training"
                   className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-base font-medium transition-colors shadow-lg"
                 >
                   Join Today
@@ -771,7 +771,7 @@ export default function TrainingPage() {
           </div>
           <UpcomingProgramsGrid />
           <div className="text-center mt-8">
-            <Link href="/contact" className="inline-flex items-center px-6 py-3 bg-white text-gray-900 border border-gray-300 rounded hover:bg-gray-100 transition-colors font-medium">
+            <Link href="/contact?enquiry=custom-training" className="inline-flex items-center px-6 py-3 bg-white text-gray-900 border border-gray-300 rounded hover:bg-gray-100 transition-colors font-medium">
               Request Custom Training
             </Link>
           </div>
