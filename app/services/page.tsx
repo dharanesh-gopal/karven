@@ -75,7 +75,7 @@ const droneServices = [
 const aiSoftwareServices = [
   {
     id: "ai-software",
-    iconName: "Cpu",
+    icon: Cpu,
     title: "AI Software Development",
     tagline: "Intelligent Solutions for Modern Challenges",
     description:
@@ -109,7 +109,7 @@ const aiSoftwareServices = [
   },
   {
     id: "lms",
-    iconName: "BookOpen",
+    icon: BookOpen,
     title: "Learning Management Systems",
     tagline: "Modern Education Platforms",
     description:
@@ -129,7 +129,7 @@ const aiSoftwareServices = [
 const educationalServices = [
   {
     id: "training",
-    iconName: "GraduationCap",
+    icon: GraduationCap,
     title: "Educational Programs",
     tagline: "Awareness & Skill Development",
     description:
