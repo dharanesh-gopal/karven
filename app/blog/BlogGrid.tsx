@@ -50,6 +50,7 @@ export default function BlogGrid() {
             <div className="grid gap-8 md:grid-cols-2 max-w-7xl mx-auto">
               {displayedPosts.map((post, index) => (
                 <Link
+                  key={post.id}
                   href={`/blog/${post.id}`}
                   className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200"
                 >

@@ -15,7 +15,7 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Back Button */}
-      <div className="fixed top-6 left-6 z-50 bg-white rounded-lg shadow-lg p-2">
+      <div className="fixed top-6 left-6 z-50">
         <BackButton href="/" />
       </div>
       {/* Hero Section with Animated Background */}

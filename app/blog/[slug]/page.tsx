@@ -51,7 +51,7 @@ export default async function BlogDetailPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-white">
       {/* Back Button */}
-      <div className="fixed top-6 left-6 z-50 bg-white rounded-lg shadow-lg p-2">
+      <div className="fixed top-6 left-6 z-50">
         <BackButton href="/blog" />
       </div>
       

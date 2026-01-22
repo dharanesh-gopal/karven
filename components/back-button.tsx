@@ -23,7 +23,7 @@ export default function BackButton({ href, label = "Back", className = "" }: Bac
   return (
     <button
       onClick={handleClick}
-      className={`flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors duration-300 rounded-2xl ${className}`}
+      className={`flex items-center gap-2 px-4 py-2 text-gray-900 bg-white hover:bg-gray-100 hover:text-gray-900 transition-all duration-300 rounded-2xl shadow-lg ${className}`}
       aria-label={label}
     >
       <ArrowLeft className="h-5 w-5" />
