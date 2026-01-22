@@ -15,12 +15,14 @@ import processStep from './processStep'
 import ctaSection from './ctaSection'
 import contactInfo from './contactInfo'
 import siteSettings from './siteSettings'
+import notification from './notification'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     // Site-wide
     siteSettings,
     contactInfo,
+    notification,
     
     // Content
     service,

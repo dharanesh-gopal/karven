@@ -2,70 +2,63 @@
 
 import { useState, useEffect } from 'react'
 import { Bell, X } from 'lucide-react'
+import { useSanityData } from '@/hooks/useSanityData'
 
 interface Notification {
-  id: string
+  _id: string
   title: string
   message: string
   type: 'update' | 'addon' | 'feature'
-  timestamp: Date
+  publishedAt: string
   isNew: boolean
 }
 
 export default function NotificationButton() {
   const [isOpen, setIsOpen] = useState(false)
-  const [notifications, setNotifications] = useState<Notification[]>([])
-  const [unreadCount, setUnreadCount] = useState(0)
+  const [readNotifications, setReadNotifications] = useState<Set<string>>(new Set())
+  
+  // Fetch notifications from Sanity
+  const { data: sanityNotifications } = useSanityData<Notification[]>(
+    `*[_type == "notification" && isActive == true] | order(publishedAt desc) {
+      _id,
+      title,
+      message,
+      type,
+      publishedAt,
+      isNew
+    }`,
+    {},
+    []
+  )
 
+  // Load read notifications from localStorage
   useEffect(() => {
-    // Fetch notifications from Sanity CMS
-    // This is a placeholder - replace with actual Sanity query
-    const fetchNotifications = async () => {
-      // Example notifications - replace with Sanity CMS data
-      const mockNotifications: Notification[] = [
-        {
-          id: '1',
-          title: 'New Feature Added',
-          message: 'Check out our new AI-powered drone analytics dashboard!',
-          type: 'feature',
-          timestamp: new Date(),
-          isNew: false
-        },
-        {
-          id: '2',
-          title: 'Service Update',
-          message: 'Precision spraying now available in 5 new regions.',
-          type: 'update',
-          timestamp: new Date(Date.now() - 86400000),
-          isNew: false
-        },
-        {
-          id: '3',
-          title: 'New Add-on',
-          message: 'Advanced thermal imaging add-on now available for all drone services.',
-          type: 'addon',
-          timestamp: new Date(Date.now() - 172800000),
-          isNew: false
-        }
-      ]
-      
-      setNotifications(mockNotifications)
-      setUnreadCount(mockNotifications.filter(n => n.isNew).length)
+    const stored = localStorage.getItem('readNotifications')
+    if (stored) {
+      setReadNotifications(new Set(JSON.parse(stored)))
     }
-
-    fetchNotifications()
   }, [])
 
+  // Process notifications with read status
+  const notifications = (sanityNotifications || []).map(n => ({
+    ...n,
+    isNew: n.isNew && !readNotifications.has(n._id)
+  }))
+
+  const unreadCount = notifications.filter(n => n.isNew).length
+
   const markAsRead = (id: string) => {
-    setNotifications(prev =>
-      prev.map(n => n.id === id ? { ...n, isNew: false } : n)
-    )
-    setUnreadCount(prev => Math.max(0, prev - 1))
+    const updated = new Set(readNotifications)
+    updated.add(id)
+    setReadNotifications(updated)
+    localStorage.setItem('readNotifications', JSON.stringify(Array.from(updated)))
   }
 
   const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, isNew: false })))
-    setUnreadCount(0)
+    const allIds = notifications.map(n => n._id)
+    const updated = new Set([...readNotifications, ...allIds])
+    setReadNotifications(updated)
+    localStorage.setItem('readNotifications', JSON.stringify(Array.from(updated)))
   }
 
   const getTypeColor = (type: string) => {
@@ -94,7 +87,8 @@ export default function NotificationButton() {
     }
   }
 
-  const formatTimestamp = (date: Date) => {
+  const formatTimestamp = (dateString: string) => {
+    const date = new Date(dateString)
     const now = new Date()
     const diff = now.getTime() - date.getTime()
     const hours = Math.floor(diff / 3600000)
@@ -168,11 +162,11 @@ export default function NotificationButton() {
                 <div className="divide-y divide-gray-100">
                   {notifications.map((notification) => (
                     <div
-                      key={notification.id}
+                      key={notification._id}
                       className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer ${
                         notification.isNew ? 'bg-blue-50/50' : ''
                       }`}
-                      onClick={() => markAsRead(notification.id)}
+                      onClick={() => markAsRead(notification._id)}
                     >
                       <div className="flex items-start gap-3">
                         {/* Type Indicator */}
@@ -199,7 +193,7 @@ export default function NotificationButton() {
                           
                           {/* Timestamp */}
                           <p className="text-xs text-gray-400">
-                            {formatTimestamp(notification.timestamp)}
+                            {formatTimestamp(notification.publishedAt)}
                           </p>
                         </div>
                       </div>
