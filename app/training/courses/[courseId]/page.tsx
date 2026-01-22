@@ -583,7 +583,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
             Feel free to reach out to us. We're here to help you make the right decision for your career.
           </p>
           <Link
-            href="/contact"
+            href="/contact?enquiry=training"
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
           >
             Contact Us
