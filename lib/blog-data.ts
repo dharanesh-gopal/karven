@@ -20,29 +20,7 @@ export const blogCategories = [
 ]
 
 export const blogPosts: BlogPost[] = [
-  // ARTIFICIAL INTELLIGENCE (12 posts)
-  {
-    id: "ai-agriculture-transformation",
-    title: "AI in Agriculture: Transforming India's Farming Landscape",
-    excerpt: "Discover how AI-powered analytics, crop monitoring, and predictive models are revolutionizing agricultural productivity across Indian farms.",
-    category: "Artificial Intelligence",
-    branch: "AI in Agriculture",
-    date: "2026-01-15",
-    readTime: "6 min read",
-    author: "Karvensen Team",
-    heroImage: "/blog-img1.jpg",
-  },
-  {
-    id: "ai-healthcare-detection",
-    title: "AI-Driven Healthcare: Early Disease Detection Systems",
-    excerpt: "Explore how computer vision and machine learning enable rapid medical imaging analysis and predictive diagnostics in modern healthcare.",
-    category: "Artificial Intelligence",
-    branch: "AI in Healthcare",
-    date: "2026-01-12",
-    readTime: "7 min read",
-    author: "Karvensen Team",
-    heroImage: "/blog-img2.jpg",
-  },
+  // ARTIFICIAL INTELLIGENCE (10 posts)
   {
     id: "computer-vision-applications",
     title: "Computer Vision Applications: From Theory to Practice",
