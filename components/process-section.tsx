@@ -38,11 +38,6 @@ export function ProcessSection() {
             }`}
           >
             <div className="max-w-lg">
-              <div className="inline-block mb-6">
-                <span className="text-gray-400 text-sm font-semibold tracking-wider uppercase">
-                  Who We Are
-                </span>
-              </div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white leading-tight">
                 About Karvensen
               </h2>
@@ -56,20 +51,6 @@ export function ProcessSection() {
                   <div>
                     <h4 className="text-white font-semibold mb-1">Innovation First</h4>
                     <p className="text-gray-400 text-sm">Cutting-edge technology driving business transformation</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2"></div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-1">Made in India</h4>
-                    <p className="text-gray-400 text-sm">Proudly developing solutions for India and the world</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2"></div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-1">Client Focused</h4>
-                    <p className="text-gray-400 text-sm">Delivering results that exceed expectations</p>
                   </div>
                 </div>
               </div>

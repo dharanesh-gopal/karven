@@ -19,7 +19,7 @@ export default function BlogGrid() {
   return (
     <>
       {/* Premium Category Filter Pills */}
-      <section className="py-12 bg-white border-b border-gray-200">
+      <section className="py-12 bg-white border-b border-indigo-200">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-3 justify-center max-w-4xl mx-auto">
             {blogCategories.map((category) => (
@@ -28,8 +28,8 @@ export default function BlogGrid() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 ${
                   selectedCategory === category
-                    ? "bg-gray-900 text-white shadow-lg shadow-gray-900/20"
-                    : "bg-white text-gray-700 border-2 border-gray-300 hover:border-gray-900 hover:shadow-md"
+                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+                    : "bg-white text-indigo-700 border-2 border-indigo-200 hover:border-indigo-600 hover:shadow-md"
                 }`}
               >
                 {category}
@@ -52,49 +52,50 @@ export default function BlogGrid() {
                 <Link
                   key={post.id}
                   href={`/blog/${post.id}`}
-                  className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200"
+                  className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-indigo-100"
                 >
                   {/* Image Section with Category Badge Overlay */}
-                  <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
+                  <div className="relative h-56 overflow-hidden bg-indigo-200">
                     {post.heroImage ? (
                       <Image
                         src={post.heroImage}
                         alt={post.title}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority
                         unoptimized
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                      <div className="absolute inset-0 flex items-center justify-center text-indigo-400">
                         <span className="text-sm">Image loading...</span>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-black/20" />
+                    <div className="absolute inset-0 bg-black/10" />
                     {/* Category Badge Overlay */}
-                    <div className="absolute top-4 left-4 px-4 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-gray-900 shadow-lg z-10">
+                    <div className="absolute top-4 left-4 px-4 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-indigo-600 shadow-lg z-10">
                       {post.category}
                     </div>
                     {/* Hover Glow Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
 
                   {/* Content Section */}
                   <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors duration-300 line-clamp-2">
+                    <h3 className="text-xl font-bold text-indigo-900 mb-3 group-hover:text-indigo-600 transition-colors duration-300 line-clamp-2">
                       {post.title}
                     </h3>
-                    <p className="text-gray-600 leading-relaxed flex-1 line-clamp-3 mb-4">
+                    <p className="text-indigo-700 leading-relaxed flex-1 line-clamp-3 mb-4">
                       {post.excerpt}
                     </p>
                     
                     {/* Footer with Date */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <div className="flex items-center justify-between pt-4 border-t border-indigo-100">
+                      <div className="flex items-center gap-2 text-sm text-indigo-600">
                         <Calendar className="h-4 w-4" />
                         <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                       </div>
-                      <div className="text-gray-900 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="text-indigo-900 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         Read more →
                       </div>
                     </div>
@@ -109,7 +110,7 @@ export default function BlogGrid() {
             <div className="flex justify-center mt-12">
               <button
                 onClick={() => setPostsToShow(postsToShow + 6)}
-                className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 Show More
               </button>
