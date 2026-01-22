@@ -493,13 +493,6 @@ export default function TrainingPage() {
                     <h4 className="font-semibold text-gray-900 text-sm mb-1">Focus on Entrepreneurship</h4>
                   </div>
                 </div>
-              
-                <Link 
-                  href="/contact"
-                  className="inline-flex items-center gap-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-colors"
-                >
-                  Join Today
-                </Link>
               </div>
               
               <div className="relative pl-6">
@@ -559,13 +552,6 @@ export default function TrainingPage() {
                     <h4 className="font-semibold text-gray-900 text-sm mb-1">Career Support</h4>
                   </div>
                 </div>
-
-                <Link 
-                  href="/contact"
-                  className="inline-flex items-center gap-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-colors"
-                >
-                  Learn More
-                </Link>
               </div>
             </div>
           </div>
