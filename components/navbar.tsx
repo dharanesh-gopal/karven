@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -72,6 +73,7 @@ const training = [
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     setMounted(true)
@@ -98,49 +100,49 @@ export function Navbar() {
           <NavigationMenuList className="bg-transparent [&>*]:bg-transparent">
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/" className="group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent">
+                <Link href="/" className={`group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent ${pathname === '/' ? 'after:scale-x-100' : 'after:scale-x-0'}`}>
                   Home
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/about" className="group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent">
+                <Link href="/about" className={`group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent ${pathname === '/about' ? 'after:scale-x-100' : 'after:scale-x-0'}`}>
                   About
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/services" className="group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent">
+                <Link href="/services" className={`group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent ${pathname?.startsWith('/services') ? 'after:scale-x-100' : 'after:scale-x-0'}`}>
                   Services
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/training" className="group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent">
+                <Link href="/training" className={`group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent ${pathname?.startsWith('/training') ? 'after:scale-x-100' : 'after:scale-x-0'}`}>
                   Training
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/blog" className="group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent">
+                <Link href="/blog" className={`group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent ${pathname?.startsWith('/blog') ? 'after:scale-x-100' : 'after:scale-x-0'}`}>
                   Blog
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/careers" className="group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent">
+                <Link href="/careers" className={`group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent ${pathname?.startsWith('/careers') ? 'after:scale-x-100' : 'after:scale-x-0'}`}>
                   Careers
                 </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/contact" className="group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent">
+                <Link href="/contact" className={`group inline-flex h-9 w-max items-center justify-center px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:text-gray-900 focus:outline-none relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gray-900 hover:after:scale-x-100 after:transition-transform after:duration-300 !bg-transparent ${pathname === '/contact' ? 'after:scale-x-100' : 'after:scale-x-0'}`}>
                   Contact
                 </Link>
               </NavigationMenuLink>

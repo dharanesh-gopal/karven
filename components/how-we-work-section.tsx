@@ -158,7 +158,7 @@ export function HowWeWorkSection() {
           >
             <div className="relative w-full aspect-square">
               <Image
-                src="/K logo with services.png"
+                src="/new k logo with services.png"
                 alt="K logo with services"
                 fill
                 className="object-contain"
