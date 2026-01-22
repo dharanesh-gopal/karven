@@ -10,36 +10,7 @@ export const metadata: Metadata = {
     "Explore deep insights, innovations, and real-world applications across AI, Drone Technology, Cloud Computing, LMS platforms, and next-generation digital solutions.",
 }
 
-async function getBlogPosts() {
-  try {
-    const query = `*[_type == "blog"] | order(publishedAt desc) {
-      "id": _id,
-      title,
-      "excerpt": excerpt,
-      "category": coalesce(categories[0]->title, "Uncategorized"),
-      "date": publishedAt,
-      "author": author->name
-    }`
-    const posts = await client.fetch(query)
-
-    if (!posts || posts.length === 0) {
-      return mockBlogPosts
-    }
-
-    return posts.map((post: any) => ({
-      ...post,
-      readTime: "5 min read", // Placeholder until added to schema
-      category: post.category || "Uncategorized",
-      author: post.author || "Karvensen Team"
-    }))
-  } catch (error) {
-    console.warn("Failed to fetch blog posts from Sanity, using mock data:", error)
-    return mockBlogPosts
-  }
-}
-
-export default async function BlogPage() {
-  const blogPosts = await getBlogPosts()
+export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-white">
