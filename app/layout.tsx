@@ -3,9 +3,7 @@ import type { Metadata } from "next"
 import { Outfit, Space_Grotesk } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import NotificationButton from "@/components/notification-button"
+import { ConditionalLayout } from "@/components/conditional-layout"
 import "./globals.css"
 
 const outfit = Outfit({ 
@@ -37,10 +35,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${outfit.variable} ${spaceGrotesk.variable} font-sans antialiased bg-white overflow-x-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
-          <Navbar />
-          <main className="min-h-screen bg-white dark:bg-gray-950">{children}</main>
-          <Footer />
-          <NotificationButton />
+          <ConditionalLayout>{children}</ConditionalLayout>
         </ThemeProvider>
         <Analytics />
       </body>
