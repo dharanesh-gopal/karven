@@ -8,13 +8,13 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import "./globals.css"
 
-const outfit = Outfit({ 
+const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
   display: "swap"
 })
 
-const spaceGrotesk = Space_Grotesk({ 
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
   display: "swap"
@@ -49,7 +49,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${outfit.variable} ${spaceGrotesk.variable} ${inter.className} font-sans antialiased bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300 overflow-x-hidden`}>
+      <body
+        suppressHydrationWarning
+        className={`${outfit.variable} ${spaceGrotesk.variable} ${inter.className} font-sans antialiased bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300 overflow-x-hidden`}
+      >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Navbar />
           <main className="min-h-screen">
