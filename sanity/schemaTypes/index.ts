@@ -33,6 +33,11 @@ import award from './award'
 import partner from './partner'
 import groupCompany from './groupCompany'
 import serviceItem from './serviceItem'
+import upcomingProgram from './upcomingProgram'
+import trainingHero from './trainingHero'
+import trainingProgram from './trainingProgram'
+import trainingStat from './trainingStat'
+import trainingFaq from './trainingFaq'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -78,5 +83,12 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     
     // Services Page
     serviceItem,
+    
+    // Training Page
+    trainingHero,
+    trainingProgram,
+    trainingStat,
+    trainingFaq,
+    upcomingProgram,
   ],
 }

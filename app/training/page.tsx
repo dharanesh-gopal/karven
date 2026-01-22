@@ -4,106 +4,260 @@ import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Tractor, GraduationCap, Award, Users, CheckCircle, ArrowRight, Clock, MapPin, Calendar, ChevronLeft, ChevronRight } from "lucide-react"
+import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
+import Image from "next/image"
 
-const programs = [
-  {
-    id: "farmers",
-    icon: Tractor,
-    title: "Farmer Drone Awareness Programs",
-    description:
-      "Empowering farmers with knowledge of drone technology for precision agriculture, crop monitoring, and sustainable farming practices.",
-    features: [
-      "Introduction to agricultural drones",
-      "Crop health monitoring basics",
-      "Precision spraying techniques",
-      "Data interpretation for farming decisions",
-      "Government schemes and subsidies",
-      "Hands-on drone operation experience",
-    ],
-    duration: "2-3 Days",
-    format: "On-site / Field Training",
-    certification: "Certificate of Completion",
-    audience: "Farmers, Agricultural Officers, Farm Managers",
-  },
-  {
-    id: "schools",
-    icon: GraduationCap,
-    title: "School & College Technical Workshops",
-    description:
-      "Inspiring the next generation with practical exposure to AI, drones, and emerging technologies through interactive workshops.",
-    features: [
-      "Introduction to AI and Machine Learning",
-      "Drone basics and flight principles",
-      "Hands-on coding exercises",
-      "Project-based learning activities",
-      "Career guidance in technology",
-      "Interactive demonstrations",
-    ],
-    duration: "1-5 Days",
-    format: "On-campus Workshops",
-    certification: "Participation Certificate",
-    audience: "Students (Class 8-12), College Students, Teachers",
-  },
-  {
-    id: "skills",
-    icon: Award,
-    title: "Skill Development & Certification",
-    description:
-      "Professional certification programs to build expertise in drone piloting, AI development, and enterprise software systems.",
-    features: [
-      "DGCA drone pilot certification prep",
-      "AI/ML fundamentals and applications",
-      "Cloud computing and DevOps",
-      "Enterprise software development",
-      "Project management methodologies",
-      "Industry placement assistance",
-    ],
-    duration: "4-12 Weeks",
-    format: "Hybrid (Online + Practical)",
-    certification: "Professional Certification",
-    audience: "Working Professionals, Graduates, Career Changers",
-  },
-]
+interface UpcomingProgramData {
+  title: string
+  description?: string
+  image?: any
+  location: string
+  date: string
+  spots: string
+  category?: string
+  duration?: string
+  fee?: string
+  registrationLink?: string
+}
 
-const stats = [
-  { value: "500+", label: "Farmers Trained" },
-  { value: "50+", label: "Schools Reached" },
-  { value: "200+", label: "Certified Professionals" },
-  { value: "30+", label: "Districts Covered" },
-]
+interface TrainingHeroData {
+  title: string
+  subtitle: string
+  primaryButtonText: string
+  primaryButtonLink: string
+  secondaryButtonText: string
+  secondaryButtonLink: string
+}
 
-const faqs = [
-  {
-    question: "Who can enroll in the training programs?",
-    answer:
-      "Our programs are designed for various audiences - farmers for agriculture programs, students from class 8 onwards for school workshops, and graduates or working professionals for skill development courses. Each program has specific eligibility criteria mentioned in the details.",
-  },
-  {
-    question: "Are the certifications recognized?",
-    answer:
-      "Yes, our certifications are industry-recognized. For drone pilot certification, we prepare candidates for DGCA (Directorate General of Civil Aviation) examinations. Our technical certifications are valued by employers in the IT industry.",
-  },
-  {
-    question: "Do you conduct programs at our location?",
-    answer:
-      "We offer on-site training for farmer awareness programs and school workshops. For larger groups or organizations, we can customize programs and conduct them at your preferred location.",
-  },
-  {
-    question: "What is the cost of the programs?",
-    answer:
-      "Program costs vary based on duration, content, and format. We also partner with government bodies and CSR initiatives to offer subsidized or free programs for certain communities. Contact us for detailed pricing.",
-  },
-  {
-    question: "Is financial assistance available?",
-    answer:
-      "We work with various government schemes and NGOs to provide subsidized training for eligible participants. We also offer flexible payment options for our professional certification programs.",
-  },
-]
+interface TrainingFaqData {
+  question: string
+  answer: string
+}
+
+// Upcoming Programs Grid Component
+function UpcomingProgramsGrid() {
+  const { data: upcomingPrograms } = useSanityData<UpcomingProgramData[]>(
+    `*[_type == "upcomingProgram" && isActive == true] | order(order asc){
+      title,
+      description,
+      "image": image.asset,
+      location,
+      date,
+      spots,
+      category,
+      duration,
+      fee,
+      registrationLink
+    }`,
+    {},
+    []
+  )
+
+  const fallbackPrograms: UpcomingProgramData[] = [
+    {
+      title: "Farmer Drone Workshop",
+      location: "Warangal, Telangana",
+      date: "Feb 15-17, 2026",
+      spots: "30 spots available",
+      description: "Hands-on training for farmers on using drones for precision agriculture and crop monitoring",
+      duration: "3 Days",
+      category: "farmer",
+      image: null,
+      fee: "₹5,000",
+      registrationLink: undefined,
+    },
+    {
+      title: "AI/ML Bootcamp",
+      location: "Online + Hyderabad",
+      date: "Mar 1 - Apr 30, 2026",
+      spots: "50 spots available",
+      description: "Comprehensive bootcamp covering AI fundamentals, machine learning, and practical applications",
+      duration: "8 Weeks",
+      category: "professional",
+      image: null,
+      fee: "₹15,000",
+      registrationLink: undefined,
+    },
+    {
+      title: "School Tech Festival",
+      location: "Multiple Schools, AP",
+      date: "Feb 20-28, 2026",
+      spots: "Open registration",
+      description: "Interactive workshops and demonstrations of AI and drone technology for students",
+      duration: "1-2 Days per school",
+      category: "school",
+      image: null,
+      fee: undefined,
+      registrationLink: undefined,
+    },
+  ]
+
+  const programs = (upcomingPrograms && upcomingPrograms.length > 0) ? upcomingPrograms : fallbackPrograms
+
+  return (
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {programs.map((event) => (
+        <div key={event.title} className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group">
+          {/* Image */}
+          {event.image ? (
+            <div className="relative h-48 w-full overflow-hidden">
+              <Image
+                src={urlFor(event.image).url()}
+                alt={event.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              {event.category && (
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold rounded-full">
+                    {event.category === 'farmer' ? 'Farmer Training' :
+                     event.category === 'school' ? 'School Workshop' :
+                     event.category === 'professional' ? 'Professional Course' :
+                     event.category === 'online' ? 'Online Course' : event.category}
+                  </span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="relative h-48 w-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+              <Calendar className="h-16 w-16 text-white/30" />
+              {event.category && (
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold rounded-full">
+                    {event.category === 'farmer' ? 'Farmer Training' :
+                     event.category === 'school' ? 'School Workshop' :
+                     event.category === 'professional' ? 'Professional Course' :
+                     event.category === 'online' ? 'Online Course' : event.category}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* Content */}
+          <div className="p-6">
+            <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-red-600 transition-colors">{event.title}</h3>
+            
+            {event.description && (
+              <p className="text-sm text-gray-600 mb-4 line-clamp-2">{event.description}</p>
+            )}
+            
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <MapPin className="h-4 w-4 text-gray-400" />
+                <span>{event.location}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <Calendar className="h-4 w-4 text-gray-400" />
+                <span>{event.date}</span>
+              </div>
+              {event.duration && (
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <Clock className="h-4 w-4 text-gray-400" />
+                  <span>{event.duration}</span>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="px-3 py-1 bg-red-50 text-red-700 text-xs font-medium rounded-full border border-red-200">
+                {event.spots}
+              </span>
+              {event.fee && (
+                <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full border border-green-200">
+                  {event.fee}
+                </span>
+              )}
+            </div>
+            
+            {event.registrationLink ? (
+              <a
+                href={event.registrationLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-red-600 font-medium text-sm hover:gap-3 transition-all duration-300"
+              >
+                <span>Register Now</span>
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            ) : (
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 text-red-600 font-medium text-sm hover:gap-3 transition-all duration-300"
+              >
+                <span>Enquire Now</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 export default function TrainingPage() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  // CMS Data Hooks
+  const { data: heroData } = useSanityData<TrainingHeroData>(
+    `*[_type == "trainingHero" && isActive == true][0]{
+      title,
+      subtitle,
+      primaryButtonText,
+      primaryButtonLink,
+      secondaryButtonText,
+      secondaryButtonLink
+    }`,
+    {},
+    {
+      title: 'Drone Awareness & <span class="text-white">Technical Training</span>',
+      subtitle: 'Empowering communities with knowledge and skills in AI and drone technology. From farmers to students to professionals, we have programs designed for everyone.',
+      primaryButtonText: 'Browse Programs',
+      primaryButtonLink: '#programs',
+      secondaryButtonText: 'Contact Us',
+      secondaryButtonLink: '/contact',
+    }
+  )
+
+  const { data: faqsData } = useSanityData<TrainingFaqData[]>(
+    `*[_type == "trainingFaq" && isActive == true] | order(order asc){
+      question,
+      answer
+    }`,
+    {},
+    []
+  )
   
+  // Fallback FAQs
+  const fallbackFaqs: TrainingFaqData[] = [
+    {
+      question: "Who can enroll in the training programs?",
+      answer: "Our programs are designed for various audiences - farmers for agriculture programs, students from class 8 onwards for school workshops, and graduates or working professionals for skill development courses. Each program has specific eligibility criteria mentioned in the details.",
+    },
+    {
+      question: "Are the certifications recognized?",
+      answer: "Yes, our certifications are industry-recognized. For drone pilot certification, we prepare candidates for DGCA (Directorate General of Civil Aviation) examinations. Our technical certifications are valued by employers in the IT industry.",
+    },
+    {
+      question: "Do you conduct programs at our location?",
+      answer: "We offer on-site training for farmer awareness programs and school workshops. For larger groups or organizations, we can customize programs and conduct them at your preferred location.",
+    },
+    {
+      question: "What is the cost of the programs?",
+      answer: "Program costs vary based on duration, content, and format. We also partner with government bodies and CSR initiatives to offer subsidized or free programs for certain communities. Contact us for detailed pricing.",
+    },
+    {
+      question: "Is financial assistance available?",
+      answer: "We work with various government schemes and NGOs to provide subsidized training for eligible participants. We also offer flexible payment options for our professional certification programs.",
+    },
+  ]
+
+  const activeFaqs = (faqsData && faqsData.length > 0) ? faqsData : fallbackFaqs
+
   const mediaItems = [
     {
       type: 'image',
@@ -176,12 +330,9 @@ export default function TrainingPage() {
             <div className="mb-4 inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
               Training Programs
             </div>
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl mb-6">
-              Drone Awareness & <span className="text-white">Technical Training</span>
-            </h1>
+            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl mb-6" dangerouslySetInnerHTML={{ __html: heroData?.title || 'Drone Awareness & <span class="text-white">Technical Training</span>' }} />
             <p className="text-lg text-white/90">
-              Empowering communities with knowledge and skills in AI and drone technology. From farmers to students to
-              professionals, we have programs designed for everyone.
+              {heroData?.subtitle || 'Empowering communities with knowledge and skills in AI and drone technology. From farmers to students to professionals, we have programs designed for everyone.'}
             </p>
           </div>
         </div>
@@ -637,48 +788,7 @@ export default function TrainingPage() {
               Register for our upcoming training sessions and workshops
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                title: "Farmer Drone Workshop",
-                location: "Warangal, Telangana",
-                date: "Feb 15-17, 2026",
-                spots: "30 spots available",
-              },
-              {
-                title: "AI/ML Bootcamp",
-                location: "Online + Hyderabad",
-                date: "Mar 1 - Apr 30, 2026",
-                spots: "50 spots available",
-              },
-              {
-                title: "School Tech Festival",
-                location: "Multiple Schools, AP",
-                date: "Feb 20-28, 2026",
-                spots: "Open registration",
-              },
-            ].map((event) => (
-              <div key={event.title} className="bg-white border border-gray-200 rounded-lg p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-700">
-                    <Calendar className="h-6 w-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 mb-1">{event.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{event.location}</p>
-                    <div className="flex flex-wrap gap-2">
-                      <span className="px-2 py-1 bg-gray-200 text-gray-900 text-xs rounded">
-                        {event.date}
-                      </span>
-                      <span className="px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded">
-                        {event.spots}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <UpcomingProgramsGrid />
           <div className="text-center mt-8">
             <Link href="/contact" className="inline-flex items-center px-6 py-3 bg-white text-gray-900 border border-gray-300 rounded hover:bg-gray-100 transition-colors font-medium">
               Request Custom Training
@@ -696,7 +806,7 @@ export default function TrainingPage() {
               <p className="text-gray-600">Common questions about our training programs</p>
             </div>
             <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq, index) => (
+              {activeFaqs.map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger className="text-left text-gray-900">{faq.question}</AccordionTrigger>
                   <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
