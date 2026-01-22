@@ -26,128 +26,216 @@ import {
 import Link from "next/link"
 import Image from "next/image"
 import { DroneIcon } from "@/components/icons/drone-icon"
+import { useSanityData } from "@/hooks/useSanityData"
 
-const droneServices = [
-  {
-    id: "survey-mapping",
-    icon: Camera,
-    title: "Drone Survey and Mapping",
-    description: "High-precision aerial surveys and 3D mapping solutions for construction, mining, and land management.",
-  },
-  {
-    id: "surveillance",
-    icon: Video,
-    title: "Drone Surveillance and Videography",
-    description: "Professional aerial surveillance and cinematography services for security, events, and media production.",
-  },
-  {
-    id: "precision-spraying",
-    icon: Sprout,
-    title: "Precision Spraying",
-    description: "Advanced agricultural drone spraying systems for efficient crop protection and fertilization.",
-  },
-  {
-    id: "delivery",
-    icon: Package,
-    title: "Drone Delivery",
-    description: "Innovative drone delivery solutions for last-mile logistics and emergency medical supplies.",
-  },
-  {
-    id: "hardware-software",
-    icon: Microchip,
-    title: "Hardware, Software & Firmware",
-    description: "Custom drone hardware design, software development, and firmware optimization services.",
-  },
-  {
-    id: "drone-in-box",
-    icon: Box,
-    title: "Drone-In-A-Box & Tethered Systems",
-    description: "Automated drone deployment systems and tethered solutions for continuous monitoring.",
-  },
-  {
-    id: "data-gis",
-    icon: BarChart3,
-    title: "Data, GIS & Digital Solutions",
-    description: "Comprehensive data processing, GIS analysis, and digital twin solutions from drone imagery.",
-  },
-]
+interface ServiceItemData {
+  title: string
+  slug: { current: string }
+  category: string
+  icon: string
+  tagline?: string
+  description: string
+  features?: string[]
+  applications?: string[]
+}
 
-const aiSoftwareServices = [
-  {
-    id: "ai-software",
-    icon: Cpu,
-    title: "AI Software Development",
-    tagline: "Intelligent Solutions for Modern Challenges",
-    description:
-      "Custom AI and machine learning solutions tailored to your business needs. From predictive analytics to natural language processing, we build AI systems that drive real business value.",
-    features: [
-      "Custom Machine Learning Models",
-      "Computer Vision & Image Processing",
-      "Natural Language Processing (NLP)",
-      "Predictive Analytics & Forecasting",
-      "AI Integration & Deployment",
-      "Model Training & Optimization",
-    ],
-    applications: ["Manufacturing Quality Control", "Customer Behavior Analysis", "Process Automation", "Risk Assessment"],
-  },
-  {
-    id: "cloud-services",
-    icon: Cloud,
-    title: "Cloud Services",
-    tagline: "Scalable Infrastructure for Modern Business",
-    description:
-      "Comprehensive cloud computing solutions for businesses of all sizes. From cloud migration to infrastructure management, we provide secure, scalable, and cost-effective cloud services.",
-    features: [
-      "Cloud Migration & Strategy",
-      "Infrastructure as a Service (IaaS)",
-      "Platform as a Service (PaaS)",
-      "Cloud Security & Compliance",
-      "Disaster Recovery Solutions",
-      "24/7 Monitoring & Support",
-    ],
-    applications: ["Enterprise Applications", "Data Storage & Backup", "Web Hosting", "DevOps & CI/CD"],
-  },
-  {
-    id: "lms",
-    icon: BookOpen,
-    title: "Learning Management Systems",
-    tagline: "Modern Education Platforms",
-    description:
-      "Comprehensive LMS solutions for educational institutions and corporate training. Engage learners with interactive content, assessments, and progress tracking.",
-    features: [
-      "Course Management & Delivery",
-      "Interactive Assessments",
-      "Progress Tracking & Analytics",
-      "Mobile-Responsive Design",
-      "Integration with Existing Systems",
-      "Certification Management",
-    ],
-    applications: ["Corporate Training", "Academic Courses", "Skill Development", "Compliance Training"],
-  },
-]
-
-const educationalServices = [
-  {
-    id: "training",
-    icon: GraduationCap,
-    title: "Educational Programs",
-    tagline: "Awareness & Skill Development",
-    description:
-      "Hands-on workshops and awareness programs about drone technology, AI, and emerging technologies for schools, colleges, and professionals.",
-    features: [
-      "Drone Awareness Workshops",
-      "Practical Drone Operation Training",
-      "AI & Technology Seminars",
-      "Career Guidance Programs",
-      "Hands-on Project Sessions",
-      "Certification Courses",
-    ],
-    applications: ["School Workshops", "College Programs", "Farmer Training", "Professional Development"],
-  },
-]
+// Helper function to get icon component from icon name
+const getServiceIcon = (iconName: string) => {
+  const icons: Record<string, any> = {
+    Camera,
+    Video,
+    Sprout,
+    Package,
+    Microchip,
+    Box,
+    BarChart3,
+    Radio,
+    Cpu,
+    Cloud,
+    BookOpen,
+    GraduationCap,
+    Plane,
+    Server,
+  }
+  return icons[iconName] || Camera
+}
 
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState<string | null>(null)
+
+  // Fetch services from Sanity CMS
+  const { data: droneServicesData } = useSanityData<ServiceItemData[]>(
+    `*[_type == "serviceItem" && category == "drone" && isActive == true] | order(order asc){
+      title,
+      slug,
+      category,
+      icon,
+      description
+    }`,
+    {},
+    []
+  )
+
+  const { data: softwareServicesData } = useSanityData<ServiceItemData[]>(
+    `*[_type == "serviceItem" && category == "software" && isActive == true] | order(order asc){
+      title,
+      slug,
+      category,
+      icon,
+      tagline,
+      description,
+      features,
+      applications
+    }`,
+    {},
+    []
+  )
+
+  const { data: educationServicesData } = useSanityData<ServiceItemData[]>(
+    `*[_type == "serviceItem" && category == "education" && isActive == true] | order(order asc){
+      title,
+      slug,
+      category,
+      icon,
+      tagline,
+      description,
+      features,
+      applications
+    }`,
+    {},
+    []
+  )
+
+  // Fallback data with exact current values
+  const droneServices = (droneServicesData && droneServicesData.length > 0) ? droneServicesData : [
+    {
+      slug: { current: "survey-mapping" },
+      icon: "Camera",
+      title: "Drone Survey and Mapping",
+      description: "High-precision aerial surveys and 3D mapping solutions for construction, mining, and land management.",
+      category: "drone"
+    },
+    {
+      slug: { current: "surveillance" },
+      icon: "Video",
+      title: "Drone Surveillance and Videography",
+      description: "Professional aerial surveillance and cinematography services for security, events, and media production.",
+      category: "drone"
+    },
+    {
+      slug: { current: "precision-spraying" },
+      icon: "Sprout",
+      title: "Precision Spraying",
+      description: "Advanced agricultural drone spraying systems for efficient crop protection and fertilization.",
+      category: "drone"
+    },
+    {
+      slug: { current: "delivery" },
+      icon: "Package",
+      title: "Drone Delivery",
+      description: "Innovative drone delivery solutions for last-mile logistics and emergency medical supplies.",
+      category: "drone"
+    },
+    {
+      slug: { current: "hardware-software" },
+      icon: "Microchip",
+      title: "Hardware, Software & Firmware",
+      description: "Custom drone hardware design, software development, and firmware optimization services.",
+      category: "drone"
+    },
+    {
+      slug: { current: "drone-in-box" },
+      icon: "Box",
+      title: "Drone-In-A-Box & Tethered Systems",
+      description: "Automated drone deployment systems and tethered solutions for continuous monitoring.",
+      category: "drone"
+    },
+    {
+      slug: { current: "data-gis" },
+      icon: "BarChart3",
+      title: "Data, GIS & Digital Solutions",
+      description: "Comprehensive data processing, GIS analysis, and digital twin solutions from drone imagery.",
+      category: "drone"
+    },
+  ]
+
+  const aiSoftwareServices = (softwareServicesData && softwareServicesData.length > 0) ? softwareServicesData : [
+    {
+      slug: { current: "ai-software" },
+      icon: "Cpu",
+      title: "AI Software Development",
+      tagline: "Intelligent Solutions for Modern Challenges",
+      description:
+        "Custom AI and machine learning solutions tailored to your business needs. From predictive analytics to natural language processing, we build AI systems that drive real business value.",
+      features: [
+        "Custom Machine Learning Models",
+        "Computer Vision & Image Processing",
+        "Natural Language Processing (NLP)",
+        "Predictive Analytics & Forecasting",
+        "AI Integration & Deployment",
+        "Model Training & Optimization",
+      ],
+      applications: ["Manufacturing Quality Control", "Customer Behavior Analysis", "Process Automation", "Risk Assessment"],
+      category: "software"
+    },
+    {
+      slug: { current: "cloud-services" },
+      icon: "Cloud",
+      title: "Cloud Services",
+      tagline: "Scalable Infrastructure for Modern Business",
+      description:
+        "Comprehensive cloud computing solutions for businesses of all sizes. From cloud migration to infrastructure management, we provide secure, scalable, and cost-effective cloud services.",
+      features: [
+        "Cloud Migration & Strategy",
+        "Infrastructure as a Service (IaaS)",
+        "Platform as a Service (PaaS)",
+        "Cloud Security & Compliance",
+        "Disaster Recovery Solutions",
+        "24/7 Monitoring & Support",
+      ],
+      applications: ["Enterprise Applications", "Data Storage & Backup", "Web Hosting", "DevOps & CI/CD"],
+      category: "software"
+    },
+    {
+      slug: { current: "lms" },
+      icon: "BookOpen",
+      title: "Learning Management Systems",
+      tagline: "Modern Education Platforms",
+      description:
+        "Comprehensive LMS solutions for educational institutions and corporate training. Engage learners with interactive content, assessments, and progress tracking.",
+      features: [
+        "Course Management & Delivery",
+        "Interactive Assessments",
+        "Progress Tracking & Analytics",
+        "Mobile-Responsive Design",
+        "Integration with Existing Systems",
+        "Certification Management",
+      ],
+      applications: ["Corporate Training", "Academic Courses", "Skill Development", "Compliance Training"],
+      category: "software"
+    },
+  ]
+
+  const educationalServices = (educationServicesData && educationServicesData.length > 0) ? educationServicesData : [
+    {
+      slug: { current: "training" },
+      icon: "GraduationCap",
+      title: "Educational Programs",
+      tagline: "Awareness & Skill Development",
+      description:
+        "Hands-on workshops and awareness programs about drone technology, AI, and emerging technologies for schools, colleges, and professionals.",
+      features: [
+        "Drone Awareness Workshops",
+        "Practical Drone Operation Training",
+        "AI & Technology Seminars",
+        "Career Guidance Programs",
+        "Hands-on Project Sessions",
+        "Certification Courses",
+      ],
+      applications: ["School Workshops", "College Programs", "Farmer Training", "Professional Development"],
+      category: "education"
+    },
+  ]
 
   return (
     <div className="min-h-screen">
@@ -262,32 +350,35 @@ export default function ServicesPage() {
                 <div className="mt-3 h-1 w-24 bg-gradient-to-r from-red-600 to-red-400 mx-auto rounded-full" />
               </div>
               <div className="space-y-4">
-                {droneServices.map((service) => (
-                  <Link
-                    key={service.id}
-                    href={
-                      service.id === 'survey-mapping' ? '/services/drone-survey-and-mapping' :
-                      service.id === 'surveillance' ? '/services/drone-surveillance-and-videography' :
-                      service.id === 'precision-spraying' ? '/services/precision-spraying' :
-                      service.id === 'delivery' ? '/services/drone-delivery' :
-                      service.id === 'hardware-software' ? '/services/hardware-software-firmware' :
-                      service.id === 'drone-in-box' ? '/services/drone-in-a-box' :
-                      service.id === 'data-gis' ? '/services/data-gis-digital-solutions' :
-                      `#${service.id}`
-                    }
-                    className="flex items-start gap-4 p-4 rounded-lg hover:bg-gradient-to-r hover:from-red-50 hover:to-transparent transition-all duration-300 group cursor-pointer border border-transparent hover:border-red-200 hover:shadow-md"
-                    onMouseEnter={() => setSelectedService(service.id)}
-                    onMouseLeave={() => setSelectedService(null)}
-                  >
-                    <div className="flex-shrink-0 mt-1">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3 ${
-                        selectedService === service.id
-                          ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
-                          : 'bg-gray-100 text-gray-600 group-hover:bg-red-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-red-600/30'
-                      }`}>
-                        <service.icon className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
+                {droneServices.map((service) => {
+                  const ServiceIcon = getServiceIcon(service.icon)
+                  const serviceId = typeof service.slug === 'string' ? service.slug : service.slug?.current
+                  return (
+                    <Link
+                      key={serviceId}
+                      href={
+                        serviceId === 'survey-mapping' ? '/services/drone-survey-and-mapping' :
+                        serviceId === 'surveillance' ? '/services/drone-surveillance-and-videography' :
+                        serviceId === 'precision-spraying' ? '/services/precision-spraying' :
+                        serviceId === 'delivery' ? '/services/drone-delivery' :
+                        serviceId === 'hardware-software' ? '/services/hardware-software-firmware' :
+                        serviceId === 'drone-in-box' ? '/services/drone-in-a-box' :
+                        serviceId === 'data-gis' ? '/services/data-gis-digital-solutions' :
+                        `#${serviceId}`
+                      }
+                      className="flex items-start gap-4 p-4 rounded-lg hover:bg-gradient-to-r hover:from-red-50 hover:to-transparent transition-all duration-300 group cursor-pointer border border-transparent hover:border-red-200 hover:shadow-md"
+                      onMouseEnter={() => setSelectedService(serviceId || null)}
+                      onMouseLeave={() => setSelectedService(null)}
+                    >
+                      <div className="flex-shrink-0 mt-1">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3 ${
+                          selectedService === serviceId
+                            ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
+                            : 'bg-gray-100 text-gray-600 group-hover:bg-red-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-red-600/30'
+                        }`}>
+                          <ServiceIcon className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
+                        </div>
                       </div>
-                    </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900 mb-1 group-hover:text-red-600 transition-colors duration-300 flex items-center gap-2">
                         {service.title}
@@ -298,7 +389,8 @@ export default function ServicesPage() {
                       </p>
                     </div>
                   </Link>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -394,44 +486,48 @@ export default function ServicesPage() {
                 <div className="mt-3 h-1 w-24 bg-gradient-to-r from-blue-600 to-blue-400 mx-auto rounded-full" />
               </div>
               <div className="space-y-4">
-                {aiSoftwareServices.map((service) => (
-                  <Link
-                    key={service.id}
-                    href={
-                      service.id === 'ai-software' ? '/services/ai-software-development' :
-                      service.id === 'cloud-services' ? '/services/cloud-services' :
-                      service.id === 'lms' ? '/services/learning-management-systems' :
-                      '/contact'
-                    }
-                    className="flex items-start gap-4 p-4 rounded-lg hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all duration-300 group cursor-pointer border border-transparent hover:border-blue-200 hover:shadow-md"
-                    onMouseEnter={() => setSelectedService(service.id)}
-                    onMouseLeave={() => setSelectedService(null)}
-                  >
-                    <div className="flex-shrink-0 mt-1">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3 ${
-                        selectedService === service.id
-                          ? 'bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg shadow-blue-600/50'
-                          : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                      }`}>
-                        <service.icon className={`w-6 h-6 transition-colors duration-300 ${
-                          selectedService === service.id ? 'text-white' : 'text-gray-600'
-                        }`} />
+                {aiSoftwareServices.map((service) => {
+                  const ServiceIcon = getServiceIcon(service.icon)
+                  const serviceId = typeof service.slug === 'string' ? service.slug : service.slug?.current
+                  return (
+                    <Link
+                      key={serviceId}
+                      href={
+                        serviceId === 'ai-software' ? '/services/ai-software-development' :
+                        serviceId === 'cloud-services' ? '/services/cloud-services' :
+                        serviceId === 'lms' ? '/services/learning-management-systems' :
+                        '/contact'
+                      }
+                      className="flex items-start gap-4 p-4 rounded-lg hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all duration-300 group cursor-pointer border border-transparent hover:border-blue-200 hover:shadow-md"
+                      onMouseEnter={() => setSelectedService(serviceId || null)}
+                      onMouseLeave={() => setSelectedService(null)}
+                    >
+                      <div className="flex-shrink-0 mt-1">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3 ${
+                          selectedService === serviceId
+                            ? 'bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg shadow-blue-600/50'
+                            : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                        }`}>
+                          <ServiceIcon className={`w-6 h-6 transition-colors duration-300 ${
+                            selectedService === serviceId ? 'text-white' : 'text-gray-600'
+                          }`} />
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className={`text-lg font-bold mb-1 transition-colors duration-300 ${
-                        selectedService === service.id ? 'text-blue-600' : 'text-gray-900'
-                      }`}>
-                        {service.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-2">{service.description}</p>
-                      <div className="flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:gap-3 transition-all duration-300">
-                        <span>Explore Service</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      <div className="flex-1">
+                        <h3 className={`text-lg font-bold mb-1 transition-colors duration-300 ${
+                          selectedService === serviceId ? 'text-blue-600' : 'text-gray-900'
+                        }`}>
+                          {service.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-2">{service.description}</p>
+                        <div className="flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:gap-3 transition-all duration-300">
+                          <span>Explore Service</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -526,39 +622,43 @@ export default function ServicesPage() {
                 <div className="mt-3 h-1 w-24 bg-gradient-to-r from-purple-600 to-purple-400 mx-auto rounded-full" />
               </div>
               <div className="space-y-4">
-                {educationalServices.map((service) => (
-                  <Link
-                    key={service.id}
-                    href={service.id === 'training' ? '/services/educational-programs' : '/contact'}
-                    className="flex items-start gap-4 p-4 rounded-lg hover:bg-gradient-to-r hover:from-purple-50 hover:to-transparent transition-all duration-300 group cursor-pointer border border-transparent hover:border-purple-200 hover:shadow-md"
-                    onMouseEnter={() => setSelectedService(service.id)}
-                    onMouseLeave={() => setSelectedService(null)}
-                  >
-                    <div className="flex-shrink-0 mt-1">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3 ${
-                        selectedService === service.id
-                          ? 'bg-gradient-to-br from-purple-600 to-purple-700 shadow-lg shadow-purple-600/50'
-                          : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                      }`}>
-                        <service.icon className={`w-6 h-6 transition-colors duration-300 ${
-                          selectedService === service.id ? 'text-white' : 'text-gray-600'
-                        }`} />
+                {educationalServices.map((service) => {
+                  const ServiceIcon = getServiceIcon(service.icon)
+                  const serviceId = typeof service.slug === 'string' ? service.slug : service.slug?.current
+                  return (
+                    <Link
+                      key={serviceId}
+                      href={serviceId === 'training' ? '/services/educational-programs' : '/contact'}
+                      className="flex items-start gap-4 p-4 rounded-lg hover:bg-gradient-to-r hover:from-purple-50 hover:to-transparent transition-all duration-300 group cursor-pointer border border-transparent hover:border-purple-200 hover:shadow-md"
+                      onMouseEnter={() => setSelectedService(serviceId || null)}
+                      onMouseLeave={() => setSelectedService(null)}
+                    >
+                      <div className="flex-shrink-0 mt-1">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3 ${
+                          selectedService === serviceId
+                            ? 'bg-gradient-to-br from-purple-600 to-purple-700 shadow-lg shadow-purple-600/50'
+                            : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                        }`}>
+                          <ServiceIcon className={`w-6 h-6 transition-colors duration-300 ${
+                            selectedService === serviceId ? 'text-white' : 'text-gray-600'
+                          }`} />
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className={`text-lg font-bold mb-1 transition-colors duration-300 ${
-                        selectedService === service.id ? 'text-purple-600' : 'text-gray-900'
-                      }`}>
-                        {service.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-2">{service.description}</p>
-                      <div className="flex items-center gap-2 text-purple-600 font-medium text-sm group-hover:gap-3 transition-all duration-300">
-                        <span>Explore Service</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      <div className="flex-1">
+                        <h3 className={`text-lg font-bold mb-1 transition-colors duration-300 ${
+                          selectedService === serviceId ? 'text-purple-600' : 'text-gray-900'
+                        }`}>
+                          {service.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-2">{service.description}</p>
+                        <div className="flex items-center gap-2 text-purple-600 font-medium text-sm group-hover:gap-3 transition-all duration-300">
+                          <span>Explore Service</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  )
+                })}
               </div>
             </div>
           </div>

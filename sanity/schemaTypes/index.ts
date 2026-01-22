@@ -32,6 +32,7 @@ import teamMember from './teamMember'
 import award from './award'
 import partner from './partner'
 import groupCompany from './groupCompany'
+import serviceItem from './serviceItem'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -74,5 +75,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     award,
     partner,
     groupCompany,
+    
+    // Services Page
+    serviceItem,
   ],
 }
