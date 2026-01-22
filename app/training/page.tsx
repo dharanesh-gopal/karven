@@ -35,6 +35,15 @@ interface TrainingFaqData {
   answer: string
 }
 
+interface TrainingCourseData {
+  title: string
+  subtitle: string
+  description: string
+  image: any
+  duration: string
+  detailsLink: string
+}
+
 // Upcoming Programs Grid Component
 function UpcomingProgramsGrid() {
   const { data: upcomingPrograms } = useSanityData<UpcomingProgramData[]>(
@@ -231,6 +240,19 @@ export default function TrainingPage() {
     {},
     []
   )
+
+  const { data: coursesData } = useSanityData<TrainingCourseData[]>(
+    `*[_type == "trainingCourse" && isActive == true] | order(order asc){
+      title,
+      subtitle,
+      description,
+      "image": image.asset,
+      duration,
+      detailsLink
+    }`,
+    {},
+    []
+  )
   
   // Fallback FAQs
   const fallbackFaqs: TrainingFaqData[] = [
@@ -257,6 +279,43 @@ export default function TrainingPage() {
   ]
 
   const activeFaqs = (faqsData && faqsData.length > 0) ? faqsData : fallbackFaqs
+
+  const fallbackCourses: TrainingCourseData[] = [
+    {
+      title: "Course A | Small Class Drone Pilot Training",
+      subtitle: "Introduction to Drone Flying",
+      description: "A comprehensive program designed to offer a blend of theoretical education and hands-on practical experience.",
+      image: null,
+      duration: "8 Days",
+      detailsLink: "/training/courses/course-a",
+    },
+    {
+      title: "Course B | Small and Medium Class Drone Training",
+      subtitle: "Mastery in Drone Flying",
+      description: "For those looking to master both small and medium drones, this course offers in-depth training in both theory and practice.",
+      image: null,
+      duration: "13 days",
+      detailsLink: "/training/courses/course-b",
+    },
+    {
+      title: "Course C | Educational Drone Workshop",
+      subtitle: "STEM & Robotics for Students",
+      description: "Designed for schools and colleges, this workshop introduces students to drone technology, coding, and practical applications.",
+      image: null,
+      duration: "3-5 Days",
+      detailsLink: "/training/courses/course-c",
+    },
+    {
+      title: "Course D | Agricultural Drone Operations",
+      subtitle: "Precision Agriculture Training",
+      description: "Specialized training for farmers and agriculture professionals on using drones for crop monitoring, spraying, and field analysis.",
+      image: null,
+      duration: "6 Days",
+      detailsLink: "/training/courses/course-d",
+    },
+  ]
+
+  const activeCourses = (coursesData && coursesData.length > 0) ? coursesData : fallbackCourses
 
   const mediaItems = [
     {
@@ -406,129 +465,51 @@ export default function TrainingPage() {
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Our Training Courses</h2>
           
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-            {/* Course A */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src="/train-1.jpeg"
-                  alt="Small Class Drone Pilot Training"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Course A | Small Class Drone Pilot Training
-                </h3>
-                <p className="text-lg font-medium text-gray-700 mb-3">Introduction to Drone Flying</p>
-                <p className="text-gray-600 mb-4">
-                  A comprehensive program designed to offer a blend of theoretical education and hands-on practical experience.
-                </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Duration:</span> 8 Days
+            {activeCourses.map((course, index) => (
+              <div key={index} className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
+                <div className="relative h-64 overflow-hidden">
+                  {course.image ? (
+                    <Image
+                      src={urlFor(course.image).url()}
+                      alt={course.title}
+                      fill
+                      className="object-cover transition-transform duration-500 hover:scale-110"
+                    />
+                  ) : (
+                    <img
+                      src={
+                        index === 0 ? "/train-1.jpeg" :
+                        index === 1 ? "/train-2.jpeg" :
+                        index === 2 ? "/edu drone.png" :
+                        "/dron in agri land.png"
+                      }
+                      alt={course.title}
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    />
+                  )}
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    {course.title}
+                  </h3>
+                  <p className="text-lg font-medium text-gray-700 mb-3">{course.subtitle}</p>
+                  <p className="text-gray-600 mb-4">
+                    {course.description}
                   </p>
-                  <Link 
-                    href="/training/courses/course-a"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
-                  >
-                    Learn More
-                  </Link>
+                  <div className="flex items-center justify-between">
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Duration:</span> {course.duration}
+                    </p>
+                    <Link 
+                      href={course.detailsLink}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
+                    >
+                      Learn More
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Course B */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src="/train-2.jpeg"
-                  alt="Small and Medium Class Drone Training"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Course B | Small and Medium Class Drone Training
-                </h3>
-                <p className="text-lg font-medium text-gray-700 mb-3">Mastery in Drone Flying</p>
-                <p className="text-gray-600 mb-4">
-                  For those looking to master both small and medium drones, this course offers in-depth training in both theory and practice.
-                </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Duration:</span> 13 days
-                  </p>
-                  <Link 
-                    href="/training/courses/course-b"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
-                  >
-                    Learn More
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Course C */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src="/edu drone.png"
-                  alt="Educational Drone Workshop"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Course C | Educational Drone Workshop
-                </h3>
-                <p className="text-lg font-medium text-gray-700 mb-3">STEM & Robotics for Students</p>
-                <p className="text-gray-600 mb-4">
-                  Designed for schools and colleges, this workshop introduces students to drone technology, coding, and practical applications.
-                </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Duration:</span> 3-5 Days
-                  </p>
-                  <Link 
-                    href="/training/courses/course-c"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
-                  >
-                    Learn More
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Course D */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src="/dron in agri land.png"
-                  alt="Agricultural Drone Training"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Course D | Agricultural Drone Operations
-                </h3>
-                <p className="text-lg font-medium text-gray-700 mb-3">Precision Agriculture Training</p>
-                <p className="text-gray-600 mb-4">
-                  Specialized training for farmers and agriculture professionals on using drones for crop monitoring, spraying, and field analysis.
-                </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Duration:</span> 6 Days
-                  </p>
-                  <Link 
-                    href="/training/courses/course-d"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
-                  >
-                    Learn More
-                  </Link>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

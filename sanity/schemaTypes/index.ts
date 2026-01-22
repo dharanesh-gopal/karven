@@ -38,6 +38,7 @@ import trainingHero from './trainingHero'
 import trainingProgram from './trainingProgram'
 import trainingStat from './trainingStat'
 import trainingFaq from './trainingFaq'
+import trainingCourse from './trainingCourse'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -89,6 +90,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     trainingProgram,
     trainingStat,
     trainingFaq,
+    trainingCourse,
     upcomingProgram,
   ],
 }
