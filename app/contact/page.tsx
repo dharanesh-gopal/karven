@@ -1,157 +1,194 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from "react";
-import ConnectCards from "@/components/ui/connect-cards";
-import ContactSection from "@/components/contact-section";
-import CursorDrone from "@/components/ui/cursor-drone";
+import type React from "react"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { MapPin, Mail, Phone, Clock, CheckCircle, Send } from "lucide-react"
+
+const inquiryTypes = [
+  { value: "general", label: "General Inquiry" },
+  { value: "demo", label: "Book a Demo" },
+  { value: "partnership", label: "Partnership Opportunity" },
+  { value: "training", label: "Training Programs" },
+  { value: "careers", label: "Career Application" },
+  { value: "support", label: "Technical Support" },
+]
+
+const contactInfo = [
+  {
+    icon: MapPin,
+    title: "Office Address",
+    details: ["KarVenSen Technologies", "Hitech City, Hyderabad", "Telangana 500081, India"],
+  },
+  {
+    icon: Mail,
+    title: "Email Us",
+    details: ["contact@karvensen.com", "sales@karvensen.com", "careers@karvensen.com"],
+  },
+  {
+    icon: Phone,
+    title: "Call Us",
+    details: ["+91 123 456 7890", "+91 987 654 3210"],
+  },
+  {
+    icon: Clock,
+    title: "Business Hours",
+    details: ["Monday - Friday: 9:00 AM - 6:00 PM", "Saturday: 10:00 AM - 2:00 PM", "Sunday: Closed"],
+  },
+]
 
 export default function ContactPage() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    // Simulate form submission
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+    setIsLoading(false)
+    setIsSubmitted(true)
+  }
 
   return (
-    <>
-      <CursorDrone />
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes pulse-glow {
-          0%, 100% {
-            box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
-          }
-          50% {
-            box-shadow: 0 0 40px rgba(220, 38, 38, 0.8);
-          }
-        }
-
-        @keyframes underline-expand {
-          from {
-            width: 0;
-          }
-          to {
-            width: 100%;
-          }
-        }
-
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out;
-        }
-
-        .animate-slideInRight {
-          animation: slideInRight 0.8s ease-out;
-        }
-
-        .animate-pulseGlow {
-          animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        .animate-expandUnderline {
-          animation: underline-expand 1s ease-out 0.4s forwards;
-        }
-
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-        .delay-400 { animation-delay: 0.4s; }
-      `}</style>
-
-      {/* Hero Section: "Get in Touch" */}
-      <section className="relative w-full bg-[#1a1f2c] py-24 md:py-32 flex flex-col items-center text-center px-4 overflow-hidden">
-        {/* Background animated gradient */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-red-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        </div>
-
-        {/* Subtle curve at the bottom */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-          <svg
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-            className="relative block w-full h-[60px] fill-white"
-          >
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" />
-          </svg>
-        </div>
-
-        <div className="z-10 max-w-4xl mx-auto space-y-6 flex flex-col items-center">
-          {/* Badge with animation */}
-          <div
-            className={`inline-block px-4 py-1.5 rounded-full bg-black/30 border border-white/10 backdrop-blur-sm mb-4 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
-            style={{ animationDelay: '0.1s' }}
-          >
-            <span className="text-red-500 font-bold text-sm tracking-wide uppercase flex items-center justify-center gap-2">
-              <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-              Fly High. Aim Higher!
-              <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></span>
-            </span>
-          </div>
-
-          {/* Main heading with animated underline */}
-          <h1
-            className={`text-4xl md:text-6xl font-bold text-white tracking-tight ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
-            style={{ animationDelay: '0.2s' }}
-          >
-            Get in Touch{' '}
-            <span className="relative inline-block">
-              with Us
-              <span
-                className={`absolute bottom-0 left-0 h-1 bg-gradient-to-r from-red-600 via-red-500 to-red-400 rounded-full ${isVisible ? 'animate-expandUnderline' : 'w-0'}`}
-                style={{ width: isVisible ? '100%' : '0%' }}
-              ></span>
-            </span>
-          </h1>
-
-          {/* Description with animation */}
-          <p
-            className={`text-gray-400 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}
-            style={{ animationDelay: '0.3s' }}
-          >
-            We're here to answer your queries, offer personalized assistance, and guide
-            you through every step of your drone experience. Reach out to us, and let's
-            make your vision take flight.
-          </p>
-
-          {/* Animated CTA hint */}
-          <div
-            className={`flex justify-center gap-2 items-center text-red-500 text-sm font-medium mt-8 ${isVisible ? 'animate-slideInRight' : 'opacity-0'}`}
-            style={{ animationDelay: '0.4s' }}
-          >
-            <span>↓ Scroll to explore our services</span>
-            <div className="inline-block animate-bounce">↓</div>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="relative py-20 border-b border-gray-200">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-4">
+              Get in Touch
+            </h1>
+            <p className="text-lg text-gray-600">
+              Whether you're interested in our services, training programs, or partnership opportunities, we'd love to
+              hear from you.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Animated Contact Cards Section */}
-      <ConnectCards />
+      {/* Contact Form & Info */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-12 lg:grid-cols-2 max-w-6xl mx-auto">
+            {/* Contact Form */}
+            <div className="border border-gray-200 rounded-lg p-8">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Send Us a Message</h2>
+                <p className="text-gray-600">Fill out the form below and we'll get back to you within 24 hours.</p>
+              </div>
 
-      {/* Contact Form Section */}
-      <ContactSection />
+              {isSubmitted ? (
+                <div className="text-center py-12">
+                  <div className="mb-4 mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-gray-700">
+                    <CheckCircle className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Thank You!</h3>
+                  <p className="text-gray-600 mb-6">
+                    Your message has been received. We'll get back to you shortly.
+                  </p>
+                  <Button onClick={() => setIsSubmitted(false)} className="bg-gray-700 hover:bg-gray-800 text-white">
+                    Send Another Message
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName" className="text-gray-900">First Name</Label>
+                      <Input id="firstName" placeholder="First Name" required className="!bg-white border-gray-900 text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-900" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName" className="text-gray-900">Last Name</Label>
+                      <Input id="lastName" placeholder="Last Name" required className="!bg-white border-gray-900 text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-900" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-gray-900">Email</Label>
+                    <Input id="email" type="email" placeholder="sample@gmail.com" required className="!bg-white border-gray-900 text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-900" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-gray-900">Phone (Optional)</Label>
+                    <Input id="phone" type="tel" placeholder="+91 98765 43210" className="!bg-white border-gray-900 text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-900" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="inquiryType" className="text-gray-900">Inquiry Type</Label>
+                    <Select defaultValue="general">
+                      <SelectTrigger id="inquiryType" className="!bg-white border-gray-900 text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-900">
+                        <SelectValue placeholder="Select inquiry type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {inquiryTypes.map((type) => (
+                          <SelectItem key={type.value} value={type.value}>
+                            {type.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="company" className="text-gray-900">Company (Optional)</Label>
+                    <Input id="company" placeholder="Your Company Name" className="!bg-white border-gray-900 text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-900" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="message" className="text-gray-900">Message</Label>
+                    <Textarea id="message" placeholder="Tell us about your project or inquiry..." rows={5} required className="!bg-white border-gray-900 text-gray-900 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-900" />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-gray-900 text-white cursor-pointer border border-gray-900 rounded px-8 py-3 transition-all duration-200 hover:bg-green-400 hover:text-gray-900 hover:translate-x-[-0.25rem] hover:translate-y-[-0.25rem] hover:shadow-[0.25rem_0.25rem_0_0_rgb(17,24,39)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      "Sending..."
+                    ) : (
+                      <>
+                        Send Message <Send className="h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
 
-    </>
-  );
+            {/* Contact Information */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-3">Contact Information</h2>
+                <p className="text-gray-600">
+                  Have questions about our AI solutions, drone services, or training programs? Our team is here to help
+                  you find the right solution for your needs.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {contactInfo.map((info) => (
+                  <div key={info.title} className="group bg-white border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:border-gray-400 hover:-translate-y-1 cursor-pointer">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100 transition-colors group-hover:bg-gray-700">
+                        <info.icon className="h-6 w-6 text-gray-900 group-hover:text-white transition-colors" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900 mb-2">{info.title}</h3>
+                        {info.details.map((detail, index) => (
+                          <p key={index} className="text-sm text-gray-600">
+                            {detail}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
 }
