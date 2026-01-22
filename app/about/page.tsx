@@ -637,7 +637,12 @@ export default function AboutPage() {
       <section className="py-16 bg-white border-b border-gray-200">
         <div className="container mx-auto px-4">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl mx-auto">
-            {impactStats.map((stat) => (
+            {(impactStats && impactStats.length > 0 ? impactStats : [
+              { value: 53, label: "DGCA Pilots Trained", icon: "Users", suffix: "+" },
+              { value: 1, label: "UAV Surveys", icon: "Cpu", suffix: "+" },
+              { value: 9, label: "Countries", icon: "Target", suffix: "+" },
+              { value: 60, label: "Partners", icon: "Award", suffix: "+" },
+            ]).map((stat) => (
               <AnimatedStat key={stat.label} stat={stat} />
             ))}
           </div>
