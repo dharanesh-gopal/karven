@@ -133,8 +133,8 @@ export function HowWeWorkSection() {
           >
             <div className="relative w-full aspect-square">
               <Image
-                src="/k logo with services.png"
-                alt="Karvensen Services Process Diagram"
+                src="/K logo with services.png"
+                alt="K logo with services"
                 fill
                 className="object-contain"
                 priority
