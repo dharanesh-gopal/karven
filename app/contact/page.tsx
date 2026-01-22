@@ -342,7 +342,7 @@ export default function ContactPage() {
               {/* Google Map with All Location Markers */}
               <div className="rounded-2xl overflow-hidden shadow-lg h-full min-h-96">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3889.6455905127277!2d77.64!3d20.593684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1705927200000"
+                  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15433739.575399752!2d78.9629!3d20.5937!3m2!1i1024!2i768!4f13.1!3m3!1m2!1sKarvensen!2sIndia!5e0!3m2!1sen!2sin!4v1705927200000"
                   width="100%"
                   height="100%"
                   style={{ border: 0, display: "block", minHeight: "400px" } as React.CSSProperties}
