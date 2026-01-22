@@ -19,28 +19,6 @@ export default defineType({
       validation: (Rule) => Rule.required().max(300),
     }),
     defineField({
-      name: 'ctaText',
-      title: 'CTA Button Text',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'ctaLink',
-      title: 'CTA Button Link',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'secondaryCtaText',
-      title: 'Secondary CTA Text',
-      type: 'string',
-    }),
-    defineField({
-      name: 'secondaryCtaLink',
-      title: 'Secondary CTA Link',
-      type: 'string',
-    }),
-    defineField({
       name: 'backgroundVideo',
       title: 'Background Video',
       type: 'file',

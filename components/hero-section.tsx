@@ -7,17 +7,11 @@ import Link from "next/link"
 interface HeroData {
   title: string
   subtitle: string
-  ctaText?: string
-  ctaLink?: string
-  secondaryCtaText?: string
-  secondaryCtaLink?: string
 }
 
 const fallbackData: HeroData = {
   title: "From Fertile Fields to Secure Borders.",
-  subtitle: "We deploy advanced AI and drone technology to revolutionize precision agriculture and fortify national defense.",
-  ctaText: "Get Started",
-  ctaLink: "/contact"
+  subtitle: "We deploy advanced AI and drone technology to revolutionize precision agriculture and fortify national defense."
 }
 
 export function HeroSection() {
