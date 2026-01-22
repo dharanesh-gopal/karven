@@ -74,10 +74,10 @@ export default function BlogDetailPage({ params }: Props) {
       {/* Subtitle Animation Controller */}
       <BlogSubtitleAnimator />
       
-      {/* AI Video Hero Section */}
-      <section className="relative w-full bg-gray-900">
+      {/* AI Video Hero Section with Overlay Content */}
+      <section className="relative w-full bg-gray-900 min-h-[600px]">
         {post.heroVideo ? (
-          <div className="relative w-full aspect-video max-h-[600px]">
+          <div className="absolute inset-0">
             <video
               autoPlay
               loop
@@ -95,64 +95,60 @@ export default function BlogDetailPage({ params }: Props) {
               )}
             </video>
             {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-gray-900/40" />
           </div>
         ) : (
           // Fallback: Featured image with gradient overlay
-          <div className="relative w-full aspect-video max-h-[600px] bg-gradient-to-br from-gray-800 to-gray-900">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900">
             {post.heroImage && (
               typeof post.heroImage === 'object' ? (
                 <Image
                   src={urlFor(post.heroImage).url()}
                   alt={post.title}
                   fill
-                  className="object-cover opacity-40"
+                  className="object-cover"
                 />
               ) : (
                 <div 
-                  className="absolute inset-0 bg-cover bg-center opacity-40"
+                  className="absolute inset-0 bg-cover bg-center"
                   style={{ backgroundImage: `url(${post.heroImage})` }}
                 />
               )
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-gray-900/40" />
           </div>
         )}
-      </section>
 
-      {/* Premium Content Section */}
-      <article className="py-16 lg:py-24">
-        <div className="container mx-auto px-4 max-w-4xl">
-          {/* Back Button with enhanced styling */}
+        {/* Content Overlay */}
+        <div className="relative z-10 container mx-auto px-4 max-w-4xl py-16 flex flex-col justify-end min-h-[600px]">
+          {/* Back Button */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-10 transition-all duration-300 font-medium group"
+            className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-8 transition-all duration-300 font-medium group"
           >
             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Blog</span>
           </Link>
 
-          {/* Category & Branch Badges with Premium Design */}
-          <div className="flex flex-wrap items-center gap-3 mb-8">
-            <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-gray-900 to-black text-white text-sm font-bold shadow-lg shadow-gray-400">
+          {/* Category & Branch Badges */}
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-bold border border-white/30">
               {post.category}
             </span>
-            <span className="inline-flex items-center px-4 py-2 rounded-full border-2 border-gray-300 text-gray-900 text-sm font-semibold bg-gray-50">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-semibold border border-white/20">
               {post.branch}
             </span>
           </div>
 
-          {/* Premium Title with Better Typography */}
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gray-900 mb-8 leading-tight">
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
             {post.title}
           </h1>
 
-          {/* Meta Info with Premium Styling */}
-          <div className="flex flex-wrap items-center gap-6 text-gray-600 pb-8 mb-12 border-b-2 border-gray-100">
+          {/* Meta Info */}
+          <div className="flex flex-wrap items-center gap-6 text-white/80">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-gray-100 rounded-full">
-                <Calendar className="h-4 w-4 text-gray-900" />
-              </div>
+              <Calendar className="h-4 w-4" />
               <span className="text-sm font-medium">
                 {new Date(post.date).toLocaleDateString('en-US', { 
                   month: 'long', 
@@ -162,9 +158,15 @@ export default function BlogDetailPage({ params }: Props) {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">By <span className="text-gray-900">{post.author}</span></span>
+              <span className="text-sm font-medium">By <span className="text-white font-semibold">{post.author}</span></span>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Premium Content Section */}
+      <article className="py-16 lg:py-24">
+        <div className="container mx-auto px-4 max-w-4xl">
 
           {/* Article Content with Enhanced Reading Experience */}
           <div className="prose prose-lg prose-gray max-w-none">
