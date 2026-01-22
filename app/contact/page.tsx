@@ -179,23 +179,24 @@ export default function ContactPage() {
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {{heroData.badge}</span>
-              </div>
-            </motion.div>
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+    setIsLoading(false)
+    setIsSubmitted(true)
+    setFormData({
+      fullName: "",
+      phone: "",
+      email: "",
+      country: "",
+      city: "",
+      enquiryType: "",
+      message: "",
+    })
+  }
 
-            <motion.h1 variants={fadeInUp} className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              {heroData.title}
-            </motion.h1>
-
-            <motion.div variants={fadeInUp} className="flex justify-center mb-8">
-              <div className="h-1 w-24 bg-red-500 rounded-full"></div>
-            </motion.div>
-
-            <motion.p
-              variants={fadeInUp}
-              className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto"
-            >
-              {heroData.description}
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -264,8 +265,8 @@ export default function ContactPage() {
             className="max-w-6xl mx-auto"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {locations.map((location, index) => (
-                <motionData.map((location: any, index: number
+              {locationData.map((location: any, index: number) => (
+                <motion.div
                   key={index}
                   variants={fadeInUp}
                   onClick={() => {
