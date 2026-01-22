@@ -1,8 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { MapPin, Clock, Briefcase, ArrowRight, Users, Zap, Heart, TrendingUp } from "lucide-react"
 
 export const metadata: Metadata = {
@@ -131,18 +128,19 @@ const jobs = [
 
 export default function CareersPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative py-24 bg-gradient-to-b from-primary/5 to-transparent">
+      <section className="relative py-20 border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="secondary" className="mb-4">
-              Join Our Team
-            </Badge>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-6">
-              Build the Future with <span className="text-primary">KarVenSen</span>
+            <div className="inline-flex items-center gap-2 bg-green-400 text-gray-900 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <Users className="h-4 w-4" />
+              We're Hiring
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-6 text-gray-900">
+              Build the Future with <span className="text-gray-900">KarVenSen</span>
             </h1>
-            <p className="text-lg text-muted-foreground text-pretty">
+            <p className="text-lg text-gray-600 text-pretty">
               Join a team of innovators working on cutting-edge AI and drone technology. We're always looking for
               passionate individuals to help us transform industries.
             </p>
@@ -151,42 +149,40 @@ export default function CareersPage() {
       </section>
 
       {/* Benefits */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl mb-4">Why Work With Us</h2>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl mb-4 text-gray-900">Why Work With Us</h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {benefits.map((benefit) => (
-              <Card key={benefit.title} className="text-center bg-card">
-                <CardContent className="pt-8">
-                  <div className="mb-4 mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                    <benefit.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="font-semibold mb-2">{benefit.title}</h3>
-                  <p className="text-sm text-muted-foreground">{benefit.description}</p>
-                </CardContent>
-              </Card>
+              <div key={benefit.title} className="text-center bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg hover:border-gray-400 transition-all">
+                <div className="mb-4 mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-gray-700">
+                  <benefit.icon className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold mb-2 text-gray-900">{benefit.title}</h3>
+                <p className="text-sm text-gray-600">{benefit.description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Open Positions */}
-      <section className="py-24">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Open Positions</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Explore current opportunities to join our team</p>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4 text-gray-900">Open Positions</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Explore current opportunities to join our team</p>
           </div>
           <div className="space-y-6 max-w-4xl mx-auto">
             {jobs.map((job) => (
-              <Card key={job.id} className="bg-card hover:border-primary/50 transition-colors">
-                <CardHeader>
+              <div key={job.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-400 hover:shadow-lg transition-all">
+                <div className="mb-4">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div>
-                      <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
-                      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                      <h3 className="text-xl font-semibold mb-2 text-gray-900">{job.title}</h3>
+                      <div className="flex flex-wrap gap-3 text-sm text-gray-600">
                         <span className="flex items-center gap-1">
                           <Briefcase className="h-4 w-4" />
                           {job.department}
@@ -201,48 +197,42 @@ export default function CareersPage() {
                         </span>
                       </div>
                     </div>
-                    <Badge variant="secondary">{job.experience}</Badge>
+                    <span className="inline-block px-3 py-1 rounded bg-gray-200 text-gray-900 text-sm">{job.experience}</span>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="mb-4">{job.description}</CardDescription>
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium mb-2">Requirements:</h4>
-                    <ul className="grid sm:grid-cols-2 gap-1 text-sm text-muted-foreground">
-                      {job.requirements.map((req, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <span className="text-primary mt-1">•</span>
-                          {req}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <Button asChild>
-                    <Link href={`/contact?position=${job.id}`}>
-                      Apply Now <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
+                </div>
+                <p className="mb-4 text-gray-600">{job.description}</p>
+                <div className="mb-4">
+                  <h4 className="text-sm font-medium mb-2 text-gray-900">Requirements:</h4>
+                  <ul className="grid sm:grid-cols-2 gap-1 text-sm text-gray-600">
+                    {job.requirements.map((req, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-gray-700 mt-1">•</span>
+                        {req}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <Link href={`/contact?position=${job.id}`} className="inline-flex items-center px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 transition-colors">
+                  Apply Now <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-primary text-primary-foreground">
+      <section className="py-20 bg-gray-700 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Don't See a Perfect Match?</h2>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg mb-8">
+          <p className="text-white/80 max-w-2xl mx-auto text-lg mb-8">
             We're always interested in hearing from talented individuals. Send us your resume and we'll keep you in mind
             for future opportunities.
           </p>
-          <Button asChild size="lg" variant="secondary">
-            <Link href="/contact">
-              Send Your Resume
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <Link href="/contact" className="inline-flex items-center px-6 py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+            Send Your Resume
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
         </div>
       </section>
     </div>
