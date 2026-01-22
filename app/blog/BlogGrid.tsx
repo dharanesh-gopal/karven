@@ -5,13 +5,36 @@ import { Calendar } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { blogPosts, blogCategories } from "@/lib/blog-data"
+import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
 
 export default function BlogGrid() {
   const [selectedCategory, setSelectedCategory] = useState("All")
 
+  // Fetch blog posts from CMS
+  const { data: cmsBlogs } = useSanityData<any[]>(
+    `*[_type == "blog" && isActive == true] | order(publishedAt desc){
+      "id": slug.current,
+      title,
+      excerpt,
+      category,
+      branch,
+      "date": publishedAt,
+      readTime,
+      "author": author->name,
+      "heroImage": heroImage.asset,
+      heroVideo
+    }`,
+    {},
+    []
+  )
+
+  // Use CMS data if available, otherwise fallback to hardcoded
+  const posts = (cmsBlogs && cmsBlogs.length > 0) ? cmsBlogs : blogPosts
+
   const filteredPosts = selectedCategory === "All" 
-    ? blogPosts 
-    : blogPosts.filter(post => post.category === selectedCategory)
+    ? posts 
+    : posts.filter(post => post.category === selectedCategory)
 
   return (
     <>
@@ -55,7 +78,7 @@ export default function BlogGrid() {
                   <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
                     {post.heroImage ? (
                       <Image
-                        src={post.heroImage}
+                        src={typeof post.heroImage === 'object' ? urlFor(post.heroImage).url() : post.heroImage}
                         alt={post.title}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-700"

@@ -1,3 +1,6 @@
+"use client"
+
+import { use } from "react"
 import type { Metadata } from "next"
 import { Calendar, ArrowLeft, BookOpen } from "lucide-react"
 import Link from "next/link"
@@ -7,45 +10,61 @@ import { blogContentMap, generateDefaultContent } from "@/lib/blog-content"
 import { notFound } from "next/navigation"
 import BlogSubtitleAnimator from "@/components/blog-subtitle-animator"
 import ScrollToTop from "@/components/scroll-to-top"
+import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
+import { PortableText } from '@portabletext/react'
 
 type Props = {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const post = blogPosts.find((p) => p.id === slug)
-  
-  if (!post) {
-    return {
-      title: "Blog Post Not Found | Karvensen",
-    }
-  }
+export default function BlogDetailPage({ params }: Props) {
+  const { slug } = use(params)
 
-  return {
-    title: `${post.title} | Karvensen Blog`,
-    description: post.excerpt,
-  }
-}
+  // Fetch blog post from CMS
+  const { data: cmsBlog } = useSanityData<any>(
+    `*[_type == "blog" && slug.current == $slug && isActive == true][0]{
+      "id": slug.current,
+      title,
+      excerpt,
+      category,
+      branch,
+      "date": publishedAt,
+      readTime,
+      "author": author->name,
+      "heroImage": heroImage.asset,
+      heroVideo,
+      body
+    }`,
+    { slug },
+    null
+  )
 
-export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    slug: post.id,
-  }))
-}
-
-export default async function BlogDetailPage({ params }: Props) {
-  const { slug } = await params
-  const post = blogPosts.find((p) => p.id === slug)
+  // Use CMS data if available, otherwise fallback
+  const post = cmsBlog || blogPosts.find((p) => p.id === slug)
 
   if (!post) {
     notFound()
   }
 
+  // Fetch related posts from CMS (same category, excluding current post)
+  const { data: cmsRelatedPosts } = useSanityData<any[]>(
+    `*[_type == "blog" && category == $category && slug.current != $slug && isActive == true][0...3] | order(publishedAt desc){
+      "id": slug.current,
+      title,
+      excerpt,
+      category,
+      "date": publishedAt,
+      "heroImage": heroImage.asset
+    }`,
+    { category: post.category, slug },
+    []
+  )
+
   // Get related posts (same category, excluding current post)
-  const relatedPosts = blogPosts
-    .filter((p) => p.category === post.category && p.id !== post.id)
-    .slice(0, 3)
+  const relatedPosts = (cmsRelatedPosts && cmsRelatedPosts.length > 0) 
+    ? cmsRelatedPosts 
+    : blogPosts.filter((p) => p.category === post.category && p.id !== post.id).slice(0, 3)
 
   return (
     <div className="min-h-screen bg-white">
@@ -82,10 +101,19 @@ export default async function BlogDetailPage({ params }: Props) {
           // Fallback: Featured image with gradient overlay
           <div className="relative w-full aspect-video max-h-[600px] bg-gradient-to-br from-gray-800 to-gray-900">
             {post.heroImage && (
-              <div 
-                className="absolute inset-0 bg-cover bg-center opacity-40"
-                style={{ backgroundImage: `url(${post.heroImage})` }}
-              />
+              typeof post.heroImage === 'object' ? (
+                <Image
+                  src={urlFor(post.heroImage).url()}
+                  alt={post.title}
+                  fill
+                  className="object-cover opacity-40"
+                />
+              ) : (
+                <div 
+                  className="absolute inset-0 bg-cover bg-center opacity-40"
+                  style={{ backgroundImage: `url(${post.heroImage})` }}
+                />
+              )
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
           </div>
@@ -147,7 +175,14 @@ export default async function BlogDetailPage({ params }: Props) {
 
             {/* Main Content - Detailed Information based on Branch */}
             <div className="space-y-10 text-gray-800 leading-relaxed">
-              <ContentSection post={post} />
+              {/* Render CMS body if available, otherwise use ContentSection */}
+              {cmsBlog?.body ? (
+                <div className="prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-p:text-lg prose-p:leading-relaxed prose-p:mb-6 prose-ul:my-6 prose-li:mb-3">
+                  <PortableText value={cmsBlog.body} />
+                </div>
+              ) : (
+                <ContentSection post={post} />
+              )}
             </div>
 
             {/* Premium Key Takeaways Box */}
@@ -241,13 +276,22 @@ export default async function BlogDetailPage({ params }: Props) {
                   {/* Image Section */}
                   <div className="relative h-48 overflow-hidden">
                     {relatedPost.heroImage ? (
-                      <Image
-                        src={relatedPost.heroImage}
-                        alt={relatedPost.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        unoptimized
-                      />
+                      typeof relatedPost.heroImage === 'object' ? (
+                        <Image
+                          src={urlFor(relatedPost.heroImage).url()}
+                          alt={relatedPost.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
+                      ) : (
+                        <Image
+                          src={relatedPost.heroImage}
+                          alt={relatedPost.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-700"
+                          unoptimized
+                        />
+                      )
                     ) : (
                       <div className="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400">
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-600/20 via-gray-700/20 to-gray-800/20 group-hover:scale-110 transition-transform duration-700"></div>
