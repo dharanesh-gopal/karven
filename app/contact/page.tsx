@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Mail, Phone, MapPin, Send, Loader2, ArrowLeft } from "lucide-react"
 import dynamic from "next/dynamic"
@@ -96,7 +96,7 @@ const locations = [
   },
 ]
 
-export default function ContactPage() {
+function ContactPageContent() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -536,5 +536,17 @@ Data
         </div>
       </motion.section>
     </div>
+  )
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Loader2 className="animate-spin h-8 w-8 text-gray-400" />
+      </div>
+    }>
+      <ContactPageContent />
+    </Suspense>
   )
 }
