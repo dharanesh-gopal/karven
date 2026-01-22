@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
 
 interface ProcessStep {
   _id: string
@@ -10,6 +11,24 @@ interface ProcessStep {
   description: string
   stepNumber: number
   icon?: string
+}
+
+interface HowWeWorkSectionData {
+  sectionTitle: string
+  mainHeading: string
+  description: string
+  image?: {
+    asset: {
+      _ref: string
+      _type: string
+    }
+  }
+}
+
+const fallbackSectionData: HowWeWorkSectionData = {
+  sectionTitle: "How We Work",
+  mainHeading: "Intelligent Integration: From Insight to Impact",
+  description: "We follow a rigorous, data-driven methodology to ensure that every drone deployment is backed by powerful AI intelligence.",
 }
 
 const fallbackSteps = [
@@ -43,13 +62,27 @@ export function HowWeWorkSection() {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
+  const { data: sectionData } = useSanityData<HowWeWorkSectionData>(
+    `*[_type == "howWeWorkSection" && isActive == true][0]{
+      sectionTitle,
+      mainHeading,
+      description,
+      image {
+        asset
+      }
+    }`,
+    {},
+    fallbackSectionData
+  )
+
   const { data } = useSanityData<ProcessStep[]>(
     '*[_type == "processStep" && isActive == true] | order(stepNumber asc)',
     {},
     fallbackSteps
   )
 
-  const processSteps = data || fallbackSteps
+  // Use fallback if data is empty or undefined
+  const processSteps = (data && data.length > 0) ? data : fallbackSteps
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -84,7 +117,7 @@ export function HowWeWorkSection() {
                 : 'opacity-0 translate-y-10'
             }`}
           >
-            How We Work
+            {sectionData?.sectionTitle || "How We Work"}
           </h2>
         </div>
 
@@ -99,7 +132,7 @@ export function HowWeWorkSection() {
                   : 'opacity-0 translate-y-10'
               }`}
             >
-              Intelligent Integration: From Insight to Impact
+              {sectionData?.mainHeading || "Intelligent Integration: From Insight to Impact"}
             </h3>
 
             {/* Description */}
@@ -110,12 +143,12 @@ export function HowWeWorkSection() {
                   : 'opacity-0 translate-y-10'
               }`}
             >
-              We follow a rigorous, data-driven methodology to ensure that every drone deployment is backed by powerful AI intelligence.
+              {sectionData?.description || "We follow a rigorous, data-driven methodology to ensure that every drone deployment is backed by powerful AI intelligence."}
             </p>
 
             {/* Process Steps List */}
             <div className="space-y-6 pt-4">
-              {processSteps.map((step, index) => (
+              {processSteps && processSteps.length > 0 && processSteps.map((step, index) => (
                 <div 
                   key={step._id} 
                   className={`flex gap-4 transition-all duration-1000 ${
@@ -157,13 +190,23 @@ export function HowWeWorkSection() {
             }`}
           >
             <div className="relative w-full aspect-square">
-              <Image
-                src="/new k logo with services.png"
-                alt="K logo with services"
-                fill
-                className="object-contain"
-                priority
-              />
+              {sectionData?.image?.asset ? (
+                <Image
+                  src={urlFor(sectionData.image.asset).width(800).url()}
+                  alt="How we work"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              ) : (
+                <Image
+                  src="/new k logo with services.png"
+                  alt="K logo with services"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              )}
             </div>
           </div>
         </div>

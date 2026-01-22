@@ -3,39 +3,82 @@
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
+import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
 
-const images = [
-  {
-    src: "/edu drone.png",
-    alt: "Educational drone"
-  },
-  {
-    src: "/train-1.jpeg",
-    alt: "Training program 1"
-  },
-  {
-    src: "/train-2.jpeg",
-    alt: "Training program 2"
-  },
-  {
-    src: "/train-3.jpeg",
-    alt: "Training program 3"
-  },
+interface GalleryImage {
+  _key: string
+  asset: {
+    _ref: string
+    _type: string
+  }
+  alt: string
+}
+
+interface GalleryData {
+  title: string
+  subtitle?: string
+  images: GalleryImage[]
+  autoplayInterval?: number
+}
+
+const fallbackData: GalleryData = {
+  title: "Built in India.",
+  subtitle: "Powered by Innovation.",
+  images: [
+    { _key: "1", asset: { _ref: "", _type: "reference" }, alt: "Educational drone" },
+    { _key: "2", asset: { _ref: "", _type: "reference" }, alt: "Training program 1" },
+    { _key: "3", asset: { _ref: "", _type: "reference" }, alt: "Training program 2" },
+    { _key: "4", asset: { _ref: "", _type: "reference" }, alt: "Training program 3" },
+  ],
+  autoplayInterval: 3,
+}
+
+const fallbackImages = [
+  { src: "/edu drone.png", alt: "Educational drone" },
+  { src: "/train-1.jpeg", alt: "Training program 1" },
+  { src: "/train-2.jpeg", alt: "Training program 2" },
+  { src: "/train-3.jpeg", alt: "Training program 3" },
 ]
 
 export function FeaturesSection() {
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const { data: galleryData, loading } = useSanityData<GalleryData>(
+    `*[_type == "gallerySection" && isActive == true][0]{
+      title,
+      subtitle,
+      images[] {
+        _key,
+        asset,
+        alt
+      },
+      autoplayInterval
+    }`,
+    {},
+    fallbackData
+  )
 
-  // Auto-play slideshow every 3 seconds
+  const [currentIndex, setCurrentIndex] = useState(0)
+  
+  // Use Sanity images if available, otherwise use fallback
+  const images = galleryData?.images && galleryData.images.length > 0 && galleryData.images[0].asset?._ref
+    ? galleryData.images.map((img) => ({
+        src: urlFor(img.asset).url(),
+        alt: img.alt || "Gallery image"
+      }))
+    : fallbackImages
+
+  const autoplayInterval = (galleryData?.autoplayInterval || 3) * 1000
+
+  // Auto-play slideshow
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => 
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       )
-    }, 3000)
+    }, autoplayInterval)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [images.length, autoplayInterval])
 
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) => 
@@ -62,9 +105,9 @@ export function FeaturesSection() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
-            Built in India.
+            {galleryData?.title || "Built in India."}
             <br />
-            <span className="text-gray-600">Powered by Innovation.</span>
+            <span className="text-gray-600">{galleryData?.subtitle || "Powered by Innovation."}</span>
           </h2>
         </div>
 

@@ -46,6 +46,16 @@ export default defineType({
       options: {
         hotspot: true,
       },
+      description: 'Background image (used if no video is provided)',
+    }),
+    defineField({
+      name: 'backgroundVideo',
+      title: 'Background Video',
+      type: 'file',
+      options: {
+        accept: 'video/*'
+      },
+      description: 'Background video (takes priority over image)',
     }),
     defineField({
       name: 'isActive',

@@ -16,6 +16,10 @@ import ctaSection from './ctaSection'
 import contactInfo from './contactInfo'
 import siteSettings from './siteSettings'
 import notification from './notification'
+import gallerySection from './gallerySection'
+import testimonialsSection from './testimonialsSection'
+import howWeWorkSection from './howWeWorkSection'
+import footerSettings from './footerSettings'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -23,6 +27,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     siteSettings,
     contactInfo,
     notification,
+    footerSettings,
     
     // Content
     service,
@@ -36,6 +41,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     
     // Homepage
     heroSection,
+    gallerySection,
+    howWeWorkSection,
+    testimonialsSection,
     feature,
     stats,
     processStep,

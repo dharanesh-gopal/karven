@@ -4,8 +4,57 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageSquare } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { ConsultationForm } from "@/components/consultation-form"
+import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
+
+interface CTASectionData {
+  title: string
+  description?: string
+  buttonText: string
+  buttonLink: string
+  backgroundImage?: {
+    asset: {
+      _ref: string
+      _type: string
+    }
+  }
+  backgroundVideo?: {
+    asset: {
+      _ref: string
+      _type: string
+      url?: string
+    }
+  }
+}
+
+const fallbackData: CTASectionData = {
+  title: "Ready to Innovate with Karvensen?",
+  description: "Let's discuss how our AI-driven solutions and drone technology can transform your operations. Join the future of intelligent automation.",
+  buttonText: "Schedule a Consultation",
+  buttonLink: "/contact",
+}
 
 export function CTASection() {
+  const { data: ctaData } = useSanityData<CTASectionData>(
+    `*[_type == "ctaSection" && isActive == true][0]{
+      title,
+      description,
+      buttonText,
+      buttonLink,
+      backgroundImage {
+        asset
+      },
+      backgroundVideo {
+        asset-> {
+          _ref,
+          _type,
+          url
+        }
+      }
+    }`,
+    {},
+    fallbackData
+  )
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
 
@@ -63,30 +112,50 @@ export function CTASection() {
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-800 text-white relative overflow-hidden">
-      {/* Video Background */}
-      <video
-        ref={videoRef}
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ pointerEvents: 'none' }}
-      >
-        <source src="/drone%20video%202.mp4" type="video/mp4" />
-        <source src="/drone video 2.mp4" type="video/mp4" />
-      </video>
+      {/* Background Video or Image */}
+      {ctaData?.backgroundVideo?.asset?.url ? (
+        <video
+          ref={videoRef}
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ pointerEvents: 'none' }}
+        >
+          <source src={ctaData.backgroundVideo.asset.url} type="video/mp4" />
+        </video>
+      ) : ctaData?.backgroundImage?.asset ? (
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${urlFor(ctaData.backgroundImage.asset).width(1920).url()})`
+          }}
+        />
+      ) : (
+        <video
+          ref={videoRef}
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ pointerEvents: 'none' }}
+        >
+          <source src="/drone%20video%202.mp4" type="video/mp4" />
+          <source src="/drone video 2.mp4" type="video/mp4" />
+        </video>
+      )}
       
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/50" />
       
       <div className="container mx-auto px-4 py-12 text-center relative z-10">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-          Ready to Innovate with Karvensen?
+          {ctaData?.title || "Ready to Innovate with Karvensen?"}
         </h2>
         <p className="text-gray-300 max-w-2xl mx-auto text-lg mb-8 leading-relaxed">
-          Let's discuss how our AI-driven solutions and drone technology can transform your operations. 
-          Join the future of intelligent automation.
+          {ctaData?.description || "Let's discuss how our AI-driven solutions and drone technology can transform your operations. Join the future of intelligent automation."}
         </p>
         <div className="flex items-center justify-center">
           <Button 
@@ -95,7 +164,7 @@ export function CTASection() {
             className="bg-white text-gray-900 hover:bg-gray-100 group"
           >
             <MessageSquare className="mr-2 h-4 w-4" />
-            Schedule a Consultation
+            {ctaData?.buttonText || "Schedule a Consultation"}
             <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
