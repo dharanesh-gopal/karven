@@ -46,6 +46,9 @@ import careerTestimonial from './careerTestimonial'
 import cultureImage from './cultureImage'
 import careerBenefit from './careerBenefit'
 import jobOpening from './jobOpening'
+import contactHero from './contactHero'
+import officeLocation from './officeLocation'
+import socialMediaSection from './socialMediaSection'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -108,5 +111,10 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     cultureImage,
     careerBenefit,
     jobOpening,
+    
+    // Contact Page
+    contactHero,
+    officeLocation,
+    socialMediaSection,
   ],
 }

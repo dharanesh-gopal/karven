@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Mail, Phone, MapPin, Send, Loader2, ArrowLeft } from "lucide-react"
 import dynamic from "next/dynamic"
 import { motion } from "framer-motion"
+import { useSanityData } from "@/hooks/useSanityData"
 
 // Dynamically import LeafletMap to avoid SSR issues
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
@@ -111,6 +112,57 @@ export default function ContactPage() {
     message: "",
   })
 
+  // Fetch contact data from CMS
+  const { data: cmsHero } = useSanityData<any>(
+    `*[_type == "contactHero" && isActive == true][0]{
+      badge,
+      title,
+      description
+    }`,
+    {},
+    null
+  )
+
+  const { data: cmsLocations } = useSanityData<any[]>(
+    `*[_type == "officeLocation" && isActive == true] | order(order asc){
+      name,
+      role,
+      address,
+      phone,
+      email,
+      lat,
+      lng
+    }`,
+    {},
+    []
+  )
+
+  const { data: cmsSocial } = useSanityData<any>(
+    `*[_type == "socialMediaSection" && isActive == true][0]{
+      badge,
+      title,
+      description,
+      socialLinks
+    }`,
+    {},
+    null
+  )
+
+  // Use CMS data with fallback
+  const heroData = cmsHero || {
+    badge: "Fly High. Aim Higher!",
+    title: "Get in Touch with Us",
+    description: "We're here to answer your queries, offer personalized assistance, and guide you through every step of your technology journey. Reach out to Karvensen and let's build the future together."
+  }
+
+  const locationData = (cmsLocations && cmsLocations.length > 0) ? cmsLocations : locations
+
+  const socialData = cmsSocial || {
+    badge: "20K+ Followers",
+    title: "Stay Connected, Stay Informed!",
+    description: "Join our growing Karvensen community for updates, insights, and innovations."
+  }
+
   // Auto-select enquiry type from URL parameter
   useEffect(() => {
     const enquiry = searchParams.get('enquiry')
@@ -127,24 +179,23 @@ export default function ContactPage() {
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsLoading(false)
-    setIsSubmitted(true)
-    setFormData({
-      fullName: "",
-      phone: "",
-      email: "",
-      country: "",
-      city: "",
-      enquiryType: "",
-      message: "",
-    })
-  }
+  const handleSubmit = async (e: React.FormEvent) => {{heroData.badge}</span>
+              </div>
+            </motion.div>
 
+            <motion.h1 variants={fadeInUp} className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+              {heroData.title}
+            </motion.h1>
+
+            <motion.div variants={fadeInUp} className="flex justify-center mb-8">
+              <div className="h-1 w-24 bg-red-500 rounded-full"></div>
+            </motion.div>
+
+            <motion.p
+              variants={fadeInUp}
+              className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto"
+            >
+              {heroData.description}
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -214,7 +265,7 @@ export default function ContactPage() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {locations.map((location, index) => (
-                <motion.div
+                <motionData.map((location: any, index: number
                   key={index}
                   variants={fadeInUp}
                   onClick={() => {
@@ -445,7 +496,7 @@ export default function ContactPage() {
               {/* Map Section */}
               <div className="rounded-2xl overflow-hidden shadow-lg h-full min-h-[400px] border border-gray-200 relative">
                 <LeafletMap locations={locations} />
-
+Data
                 {/* Map Overlay Instruction */}
                 <div className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm text-gray-700 pointer-events-none">
                   Interact to explore locations
@@ -468,13 +519,13 @@ export default function ContactPage() {
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800 border border-gray-700 mb-6">
               <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-              <span className="text-sm font-medium">20K+ Followers</span>
+              <span className="text-sm font-medium">{socialData.badge}</span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Stay Connected, Stay Informed!</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">{socialData.title}</h2>
 
             <p className="text-lg text-gray-400 mb-12">
-              Join our growing Karvensen community for updates, insights, and innovations.
+              {socialData.description}
             </p>
 
             <div className="flex justify-center gap-6 flex-wrap">
