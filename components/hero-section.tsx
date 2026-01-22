@@ -13,7 +13,7 @@ export function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover pointer-events-none -z-10"
       >
-        <source src="/drone_cinematic_video.mp4" type="video/mp4" />
+        <source src="/Drone_Cinematic_Video.mp4" type="video/mp4" />
       </video>
 
       {/* Dark Overlay for text readability */}
