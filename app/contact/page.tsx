@@ -140,7 +140,7 @@ export default function ContactPage() {
       <motion.section
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
+        viewport={{ once: false, amount: 0.2 }}
         variants={fadeInUp}
         className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white pt-8 pb-16 overflow-hidden"
       >
@@ -197,7 +197,7 @@ export default function ContactPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={staggerContainer}
             className="max-w-6xl mx-auto"
           >
@@ -214,7 +214,7 @@ export default function ContactPage() {
                   className="rounded-lg shadow-md hover:shadow-xl transition-all duration-300 p-6 border cursor-pointer bg-gray-50 border-gray-100 hover:bg-white hover:-translate-y-1 group"
                 >
                   <div className="mb-5">
-                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">
+                    <h3 className="text-lg font-bold text-gray-900 transition-colors">
                       {location.name}
                     </h3>
                     <p className="text-sm text-red-500 font-semibold mt-1">{location.role}</p>
@@ -225,11 +225,11 @@ export default function ContactPage() {
                       <MapPin className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
                       <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{location.address}</p>
                     </div>
-                    <div className="flex gap-3 text-gray-700 hover:text-red-500 transition-colors">
+                    <div className="flex gap-3 text-gray-700 transition-colors">
                       <Phone className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
                       <p className="text-sm">{location.phone}</p>
                     </div>
-                    <div className="flex gap-3 text-gray-700 hover:text-red-500 transition-colors">
+                    <div className="flex gap-3 text-gray-700 transition-colors">
                       <Mail className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
                       <p className="text-sm">{location.email}</p>
                     </div>
@@ -246,7 +246,7 @@ export default function ContactPage() {
         id="contact-map"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, margin: "-100px" }}
         variants={fadeInUp}
         className="py-20 bg-gray-50"
       >
@@ -426,7 +426,7 @@ export default function ContactPage() {
       <motion.section
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
+        viewport={{ once: false, amount: 0.2 }}
         variants={fadeInUp}
         className="py-20 bg-gray-900 text-white"
       >
