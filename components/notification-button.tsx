@@ -29,7 +29,7 @@ export default function NotificationButton() {
           message: 'Check out our new AI-powered drone analytics dashboard!',
           type: 'feature',
           timestamp: new Date(),
-          isNew: true
+          isNew: false
         },
         {
           id: '2',
@@ -37,7 +37,7 @@ export default function NotificationButton() {
           message: 'Precision spraying now available in 5 new regions.',
           type: 'update',
           timestamp: new Date(Date.now() - 86400000),
-          isNew: true
+          isNew: false
         },
         {
           id: '3',
@@ -207,13 +207,6 @@ export default function NotificationButton() {
                   ))}
                 </div>
               )}
-            </div>
-
-            {/* Footer */}
-            <div className="border-t border-gray-200 p-4 bg-gray-50">
-              <button className="w-full text-center text-sm text-red-600 hover:text-red-700 font-semibold">
-                View all updates
-              </button>
             </div>
           </div>
         </div>
