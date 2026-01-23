@@ -124,7 +124,7 @@ export function Navbar() {
 
   // Get logo image URL from Sanity or use fallback
   const logoSrc = navbarData?.logo?.image?.asset
-    ? urlFor(navbarData.logo.image).width(200).height(70).url()
+    ? urlFor(navbarData.logo.image).height(48).fit('max').url()
     : "/logo karven.png"
   const logoText = navbarData?.logo?.text || "Karvensen"
 
@@ -136,13 +136,13 @@ export function Navbar() {
     <header className="fixed top-0 z-50 w-full border-b border-gray-200 bg-white backdrop-blur-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex items-center gap-2">
+          <div className="relative h-12 w-auto flex items-center">
             <Image 
               src={logoSrc} 
               alt={`${logoText} Logo`} 
-              width={200} 
-              height={70}
-              className="h-36 w-auto object-contain"
+              width={150} 
+              height={48}
+              className="h-full w-auto object-contain max-h-12"
               priority
             />
           </div>
