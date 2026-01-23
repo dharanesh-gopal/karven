@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef, ReactNode, MouseEvent } from "react"
 import Link from "next/link"
-import { 
-  MapPin, ArrowRight, Target, Zap, Users, Award, 
-  Heart, Coffee, Globe, ChevronLeft, ChevronRight, 
-  Quote, Star, Cpu, CheckCircle, FileText, UserCheck, 
-  Terminal, ShieldCheck, Briefcase, TrendingUp, Sparkles, 
+import {
+  MapPin, ArrowRight, Target, Zap, Users, Award,
+  Heart, Coffee, Globe, ChevronLeft, ChevronRight,
+  Quote, Star, Cpu, CheckCircle, FileText, UserCheck,
+  Terminal, ShieldCheck, Briefcase, TrendingUp, Sparkles,
   Wallet, Clock, Laptop, Baby, Monitor, Lightbulb, X, Send,
   Loader2, CheckCircle2 // Added these for the dynamic modal
 } from "lucide-react"
@@ -108,6 +108,37 @@ const RevealOnScroll = ({ children, delay = 0 }: { children: ReactNode, delay?: 
   );
 };
 
+// --- NEW COMPONENT: Energetic Entrance for Cards ---
+const EnergeticReveal = ({ children, delay = 0 }: { children: ReactNode, delay?: number }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { setIsVisible(entry.isIntersecting); },
+      { threshold: 0.1, rootMargin: "50px" }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        transitionDelay: `${delay}ms`,
+        transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" // Custom spring-like bounce
+      }}
+      className={`transition-all duration-700 transform ${isVisible
+        ? "opacity-100 translate-y-0 scale-100 rotate-0"
+        : "opacity-0 translate-y-20 scale-90 rotate-1"
+        }`}
+    >
+      {children}
+    </div>
+  );
+};
+
 const SpotlightCard = ({ children, className = "", delay = 0 }: { children: ReactNode, className?: string, delay?: number }) => {
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -176,10 +207,59 @@ const BenefitsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
             <button onClick={onClose} className="p-2 hover:bg-sky-50 rounded-full transition-colors text-slate-500 hover:text-sky-600"><X className="w-6 h-6" /></button>
           </div>
           <div className="space-y-8">
-            <div className="space-y-3"><h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Clock className="w-5 h-5 text-sky-600" /> Work Philosophy</h3><div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm text-slate-600 leading-relaxed"><p className="mb-2"><strong>Core Hours:</strong> 11:00 AM - 3:00 PM (Local Time).</p><p><strong>Hybrid Policy:</strong> Remote-First. Offices available for collaboration.</p></div></div>
-            <div className="space-y-3"><h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Wallet className="w-5 h-5 text-sky-600" /> Compensation & IP</h3><ul className="list-disc pl-5 text-sm text-slate-600 space-y-2"><li><strong>Base Salary:</strong> Reviewed bi-annually.</li><li><strong>ESOPs:</strong> Vested over 4 years.</li><li><strong>Patent Bonus:</strong> $3,000 upon grant.</li></ul></div>
-            <div className="space-y-3"><h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Laptop className="w-5 h-5 text-sky-600" /> Equipment</h3><p className="text-sm text-slate-600 leading-relaxed"><strong>$1,000 Setup Stipend</strong> for home office.</p></div>
-            <div className="space-y-3"><h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Baby className="w-5 h-5 text-sky-600" /> Parental & Family</h3><ul className="list-disc pl-5 text-sm text-slate-600 space-y-2"><li><strong>Primary Caregiver:</strong> 26 Weeks Fully Paid.</li><li><strong>Secondary Caregiver:</strong> 4 Weeks Fully Paid.</li></ul></div>
+            <div className="space-y-3">
+              <h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Clock className="w-5 h-5 text-sky-600" /> Work Philosophy</h3>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm text-slate-600 leading-relaxed space-y-2">
+                <p><strong>Core Hours:</strong> 11:00 AM - 3:00 PM (Local Time) for synchronous collaboration.</p>
+                <p><strong>Flexible Schedule:</strong> Structure the rest of your day how you work best.</p>
+                <p><strong>Remote-First:</strong> We document everything. Work from anywhere with a stable connection.</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Wallet className="w-5 h-5 text-sky-600" /> Compensation & Wealth</h3>
+              <ul className="list-disc pl-5 text-sm text-slate-600 space-y-2">
+                <li><strong>Market-Leading Salary:</strong> Benchmarked against top tech tier, reviewed bi-annually.</li>
+                <li><strong>Aggressive ESOPs:</strong> Generous equity grants vested over 4 years with a 1-year cliff.</li>
+                <li><strong>Performance Bonuses:</strong> Annual cash bonuses based on company and individual OKRs.</li>
+                <li><strong>Patent Awards:</strong> $3,000 cash award for every utility patent filed and granted.</li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><TrendingUp className="w-5 h-5 text-sky-600" /> Professional Development</h3>
+              <ul className="list-disc pl-5 text-sm text-slate-600 space-y-2">
+                <li><strong>Learning Budget:</strong> $1,500 annual stipend for courses, books, and subscriptions.</li>
+                <li><strong>Conference Pass:</strong> Full sponsorship (ticket + travel) for one major tech conference per year.</li>
+                <li><strong>Certifications:</strong> 100% reimbursement for AWS, Google Cloud, and Azure certifications.</li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Laptop className="w-5 h-5 text-sky-600" /> Best-in-Class Gear</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Choose your weapon: Top-spec <strong>MacBook Pro M3 Max</strong> or <strong>Dell Precision Linux Workstation</strong>.
+                Plus a <strong>$1,000 WFH Setup Stipend</strong> for monitors, ergonomic chairs, and accessories.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Heart className="w-5 h-5 text-sky-600" /> Health & Wellness</h3>
+              <ul className="list-disc pl-5 text-sm text-slate-600 space-y-2">
+                <li><strong>Comprehensive Insurance:</strong> 100% premium coverage for you, spouse, and children.</li>
+                <li><strong>Mental Health:</strong> Unlimited free access to therapy sessions via our partner platform.</li>
+                <li><strong>Fitness Allowance:</strong> $50/month reimbursement for gym memberships or fitness apps.</li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Baby className="w-5 h-5 text-sky-600" /> Family Support</h3>
+              <ul className="list-disc pl-5 text-sm text-slate-600 space-y-2">
+                <li><strong>Primary Caregiver Leave:</strong> 26 weeks fully paid leave to bond with your new child.</li>
+                <li><strong>Secondary Caregiver Leave:</strong> 4 weeks fully paid leave.</li>
+                <li><strong>Fertility Support:</strong> Coverage for fertility treatments and family planning services.</li>
+              </ul>
+            </div>
             <div className="pt-8 border-t border-slate-100"><button onClick={onClose} className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-sky-600 transition-colors shadow-lg">Close Guide</button></div>
           </div>
         </div>
@@ -225,13 +305,13 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div 
-        className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity" 
+      <div
+        className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       ></div>
 
       <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden border border-slate-200">
-        
+
         {/* Header */}
         <div className="bg-slate-900 p-8 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/20 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
@@ -240,13 +320,13 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               {status === "success" ? "Application Received" : "Join Talent Network"}
             </h2>
             <p className="text-slate-400 text-sm mt-2">
-              {status === "success" 
-                ? "Welcome to the fleet. Check your inbox." 
+              {status === "success"
+                ? "Welcome to the fleet. Check your inbox."
                 : "Leave your details and we will contact you for future roles."}
             </p>
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors cursor-pointer z-50"
           >
             <X className="w-5 h-5" />
@@ -255,7 +335,7 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
         {/* Body */}
         <div className="p-8 bg-white min-h-[340px] flex items-center justify-center">
-          
+
           {status === "success" ? (
             <div className="text-center w-full animate-in fade-in zoom-in duration-500">
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -279,7 +359,7 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                   <input name="lastName" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition-all" placeholder="Doe" />
                 </div>
               </div>
-              
+
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
                 <input name="email" required type="email" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition-all" placeholder="jane@example.com" />
@@ -288,10 +368,10 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               {status === "error" && (
                 <p className="text-red-500 text-sm text-center">Something went wrong. Please try again.</p>
               )}
-              
+
               <div className="pt-4">
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={status === "submitting"}
                   className="w-full py-4 bg-sky-600 text-white rounded-xl font-bold hover:bg-sky-700 transition-all shadow-lg shadow-sky-200 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
@@ -335,7 +415,7 @@ const HiringPipeline = () => {
     let interval: NodeJS.Timeout;
     if (isInView) {
       let step = 0;
-      setActiveStep(0); 
+      setActiveStep(0);
       interval = setInterval(() => {
         step++;
         if (step < HIRING_STEPS.length) setActiveStep(step);
@@ -350,7 +430,7 @@ const HiringPipeline = () => {
   return (
     <div ref={containerRef} className="relative py-12">
       <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -translate-y-1/2 z-0 hidden md:block rounded-full"></div>
-      <div 
+      <div
         className="absolute top-1/2 left-0 h-1 bg-sky-600 -translate-y-1/2 z-0 transition-all duration-700 ease-out hidden md:block rounded-full"
         style={{ width: activeStep === -1 ? '0%' : `${(activeStep / (HIRING_STEPS.length - 1)) * 100}%` }}
       ></div>
@@ -387,15 +467,15 @@ const HeroSection = () => {
   };
 
   useEffect(() => {
-  let index = 0;
-  const timer = setInterval(() => {
-    const char = fullText.charAt(index);
-    setTypedText((prev) => prev + char);
-    index++;
-    if (index === fullText.length) clearInterval(timer);
-  }, 30);
-  return () => clearInterval(timer);
-}, []);
+    let index = 0;
+    const timer = setInterval(() => {
+      const char = fullText.charAt(index);
+      setTypedText((prev) => prev + char);
+      index++;
+      if (index === fullText.length) clearInterval(timer);
+    }, 30);
+    return () => clearInterval(timer);
+  }, []);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -418,20 +498,20 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section onMouseMove={handleMouseMove} className="relative pt-18 pb-16 overflow-hidden">
+    <section onMouseMove={handleMouseMove} className="relative pt-20 pb-16 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop" alt="Background" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-slate-900/90"></div> 
+        <div className="absolute inset-0 bg-slate-900/90"></div>
       </div>
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-600/20 rounded-full blur-[100px] pointer-events-none transition-transform duration-100 ease-out z-0" style={{ transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)` }}></div>
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/20 rounded-full blur-[80px] pointer-events-none transition-transform duration-100 ease-out z-0" style={{ transform: `translate(${mousePosition.x * -1}px, ${mousePosition.y * -1}px)` }}></div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-8 md:px-16 lg:px-32 relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-end gap-8 mb-12">
           <div className="max-w-2xl">
             <div className="flex items-center gap-3 mb-4 animate-in fade-in slide-in-from-left duration-700">
-               <span className="h-px w-8 bg-sky-500"></span>
-               <span className="text-sky-400 font-bold text-xs uppercase tracking-widest">Join The Revolution</span>
+              <span className="h-px w-8 bg-sky-500"></span>
+              <span className="text-sky-400 font-bold text-xs uppercase tracking-widest">Join The Revolution</span>
             </div>
             <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight mb-4 animate-in fade-in slide-in-from-bottom duration-700 delay-100">
               Life at <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500 italic">KarVenSen</span>
@@ -487,25 +567,25 @@ export default function CareersPage() {
 
   return (
     <main className="min-h-screen bg-white font-sans text-slate-800 selection:bg-sky-500 selection:text-white">
-      
+
       {/* SECTION 1: HERO */}
       <HeroSection />
 
       {/* SECTION 2: VALUES */}
       <section className="py-24 bg-slate-50 border-t border-slate-200">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-8 md:px-16 lg:px-32">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            
+
             {/* Left Column: Text & Values */}
             <RevealOnScroll>
               <div className="space-y-8">
                 <div>
                   <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
-                    Where Technology Meets <br/>
+                    Where Technology Meets <br />
                     <span className="text-sky-700">Real-World Impact</span>
                   </h2>
                   <p className="text-lg text-slate-600 leading-relaxed">
-                    At KarVenSen, we build the digital infrastructure for the aviation industry. 
+                    At KarVenSen, we build the digital infrastructure for the aviation industry.
                     Join a team dedicated to precision, safety, and scalable engineering.
                   </p>
                 </div>
@@ -514,13 +594,13 @@ export default function CareersPage() {
                 <div className="space-y-8 pt-4">
                   {CORPORATE_VALUES.map((val, i) => (
                     <div key={i} className="flex gap-5 group cursor-default">
-                      
+
                       {/* DYNAMIC ICON: Only this changes on hover */}
                       <div className="shrink-0 w-12 h-12 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-sky-700 shadow-sm transition-all duration-500 ease-out 
                         group-hover:scale-110 group-hover:rotate-6 group-hover:bg-sky-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-sky-200 group-hover:border-transparent">
                         <val.icon className="w-6 h-6" />
                       </div>
-                      
+
                       <div>
                         <h4 className="text-xl font-bold text-slate-900 mb-2 transition-colors duration-300 group-hover:text-sky-700">
                           {val.title}
@@ -533,7 +613,7 @@ export default function CareersPage() {
                   ))}
                 </div>
 
-                
+
               </div>
             </RevealOnScroll>
 
@@ -557,7 +637,7 @@ export default function CareersPage() {
 
       {/* SECTION 3: HIRING PROCESS */}
       <section className="py-24 bg-gradient-to-b from-slate-50 to-slate-100 border-y border-slate-200">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-8 md:px-16 lg:px-32">
           <div className="text-center mb-16"><h2 className="text-4xl font-bold text-slate-900">Our Hiring Process</h2><p className="text-slate-500 mt-2">A transparent path from application to offer.</p></div>
           <HiringPipeline />
         </div>
@@ -566,7 +646,7 @@ export default function CareersPage() {
       {/* SECTION 4: TESTIMONIALS */}
       <section className="py-24 bg-slate-900 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-sky-900/20 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-8 md:px-16 lg:px-32 relative z-10">
           <div className="text-center mb-16"><h2 className="text-4xl font-bold text-white mb-4">Voices from the Team</h2><p className="text-slate-400">Hear from the people building the future.</p></div>
           <div className="grid md:grid-cols-3 gap-8">
             {TESTIMONIALS.map((t, i) => (<RevealOnScroll key={i} delay={i * 150}><div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 p-8 rounded-2xl relative hover:bg-slate-800 transition-all duration-300 group cursor-default"><Quote className="w-10 h-10 text-sky-500/10 absolute top-6 right-6 group-hover:text-sky-500/30 group-hover:scale-110 transition-all duration-500" /><div className="flex items-center gap-1 mb-6">{[0, 1, 2, 3, 4].map((starIndex) => (<Star key={starIndex} className="w-4 h-4 fill-current text-sky-600 group-hover:text-yellow-400 transition-colors duration-300" style={{ transitionDelay: `${starIndex * 75}ms` }} />))}</div><p className="text-lg text-slate-300 italic mb-8 relative z-10 leading-relaxed group-hover:text-white transition-colors duration-300">"{t.quote}"</p><div className="flex items-center gap-4 pt-6 border-t border-slate-700"><img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover ring-2 ring-slate-600 group-hover:ring-sky-500 transition-all duration-300" /><div><h4 className="font-bold text-white text-sm">{t.name}</h4><p className="text-xs font-semibold text-sky-400 uppercase tracking-wide">{t.role}</p></div></div></div></RevealOnScroll>))}
@@ -577,13 +657,13 @@ export default function CareersPage() {
       {/* SECTION 5: BENEFITS */}
       <section className="py-24 bg-white relative">
         <BenefitsModal isOpen={isPolicyModalOpen} onClose={() => setIsPolicyModalOpen(false)} />
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-8 md:px-16 lg:px-32">
           <div className="grid lg:grid-cols-3 gap-16 items-start">
-            <div className="lg:col-span-1 sticky top-24 group cursor-default">
-                <div className="inline-block p-3 bg-sky-50 border border-transparent rounded-xl mb-6 transition-all duration-500 group-hover:bg-yellow-50 group-hover:border-yellow-200 group-hover:shadow-lg group-hover:shadow-yellow-100/50"><Sparkles className="w-6 h-6 text-sky-700 transition-all duration-500 group-hover:text-yellow-500 group-hover:fill-yellow-400 group-hover:rotate-12 group-hover:scale-110" /></div>
-                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">Invest in your <br/><span className="text-sky-700 transition-colors duration-300 group-hover:text-sky-600">Future Self.</span></h2>
-                <p className="text-slate-600 text-lg leading-relaxed mb-8">We don't just offer perks; we offer an ecosystem for you to master Cloud, AI, and Aviation tech.</p>
-                <button onClick={() => setIsPolicyModalOpen(true)} className="flex items-center gap-3 text-slate-900 font-bold transition-all duration-300 group-hover:gap-4 group-hover:text-sky-700"><span className="border-b-2 border-slate-900 pb-1 transition-colors duration-300 group-hover:border-sky-700">View Full Policy Guide</span><ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"/></button>
+            <div className="lg:col-span-1 lg:sticky lg:top-24 group cursor-default">
+              <div className="inline-block p-3 bg-sky-50 border border-transparent rounded-xl mb-6 transition-all duration-500 group-hover:bg-yellow-50 group-hover:border-yellow-200 group-hover:shadow-lg group-hover:shadow-yellow-100/50"><Sparkles className="w-6 h-6 text-sky-700 transition-all duration-500 group-hover:text-yellow-500 group-hover:fill-yellow-400 group-hover:rotate-12 group-hover:scale-110" /></div>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">Invest in your <br /><span className="text-sky-700 transition-colors duration-300 group-hover:text-sky-600">Future Self.</span></h2>
+              <p className="text-slate-600 text-lg leading-relaxed mb-8">We don't just offer perks; we offer an ecosystem for you to master Cloud, AI, and Aviation tech.</p>
+              <button onClick={() => setIsPolicyModalOpen(true)} className="flex items-center gap-3 text-slate-900 font-bold transition-all duration-300 group-hover:gap-4 group-hover:text-sky-700"><span className="border-b-2 border-slate-900 pb-1 transition-colors duration-300 group-hover:border-sky-700">View Full Policy Guide</span><ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" /></button>
             </div>
             <div className="lg:col-span-2">
               <div className="flex flex-wrap gap-2 mb-8 border-b border-slate-100 pb-1">{Object.keys(BENEFIT_CATEGORIES).map((tab) => (<button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 text-sm font-bold rounded-t-lg transition-all duration-300 relative top-[1px] ${activeTab === tab ? "text-sky-700 border-b-2 border-sky-700 bg-sky-50/50" : "text-slate-400 hover:text-slate-600"}`}>{tab}</button>))}</div>
@@ -603,12 +683,12 @@ export default function CareersPage() {
 
       {/* SECTION 6: JOB PORTAL (Categorized & Expanded) */}
       <section id="jobs" className="py-24 bg-slate-50 relative border-t border-slate-200">
-        
+
         {/* MODAL (Now controlled by state) */}
         <TalentNetworkModal isOpen={isTalentModalOpen} onClose={() => setIsTalentModalOpen(false)} />
 
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#475569 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-        <div className="container mx-auto px-6 max-w-6xl relative z-10">
+        <div className="container mx-auto px-8 md:px-16 lg:px-32 max-w-6xl relative z-10">
           <div className="text-center mb-20">
             <span className="font-bold text-xs text-sky-700 uppercase tracking-widest mb-3 block">Join the Fleet</span>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Current Openings</h2>
@@ -621,9 +701,9 @@ export default function CareersPage() {
                 <div className="flex items-center gap-4 mb-6"><h3 className="text-2xl font-bold text-slate-900">{category}</h3><div className="h-px flex-grow bg-slate-200"></div><span className="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded border border-slate-200">{jobs.length} roles</span></div>
                 <div className="grid gap-4">
                   {jobs.map((job, jobIndex) => (
-                    <RevealOnScroll key={job.id} delay={jobIndex * 50}>
+                    <EnergeticReveal key={job.id} delay={jobIndex * 100}>
                       <Link href={`/careers/${job.id}`} className="block">
-                        <JobSpotlightRow className="group p-0 border border-slate-200 bg-white hover:border-sky-300 transition-all duration-300">
+                        <JobSpotlightRow className="group p-0 border border-slate-200 bg-white hover:border-sky-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                           <div className="grid md:grid-cols-12 items-center p-6 md:p-8 gap-6">
                             <div className="md:col-span-5 flex items-center gap-5">
                               <div className="h-12 w-12 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 text-slate-400 font-bold group-hover:bg-sky-600 group-hover:text-white transition-colors duration-300 shrink-0">{job.title.charAt(0)}</div>
@@ -638,7 +718,7 @@ export default function CareersPage() {
                           </div>
                         </JobSpotlightRow>
                       </Link>
-                    </RevealOnScroll>
+                    </EnergeticReveal>
                   ))}
                 </div>
               </div>
@@ -651,10 +731,10 @@ export default function CareersPage() {
             <div className="relative z-10">
               <h3 className="text-3xl font-bold text-white mb-4">Don't see your perfect role?</h3>
               <p className="text-slate-400 mb-8 max-w-xl mx-auto text-lg">We are always looking for exceptional talent. Send us your resume and we'll keep you on our radar for future missions.</p>
-              
+
               {/* BUTTON CONNECTED TO STATE */}
               <button onClick={() => setIsTalentModalOpen(true)} className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold hover:bg-sky-50 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform duration-200">Join Talent Network</button>
-            
+
             </div>
           </div>
         </div>
