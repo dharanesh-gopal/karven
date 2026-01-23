@@ -375,11 +375,16 @@ export default function TrainingPage() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[90vh] flex items-center border-b border-gray-200">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/training-drone.png')" }}
-        />
+        {/* Background Video */}
+        <video 
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src="/cenimatic montage.mp4" type="video/mp4" />
+        </video>
         
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/50"></div>
@@ -586,102 +591,110 @@ export default function TrainingPage() {
 
           <div className="max-w-6xl mx-auto space-y-16">
             {/* First Row - Text Left, Image Right */}
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="space-y-4 pr-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Why Train With Us?</h3>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6 pr-6">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6">Why Train With Us?</h3>
                 
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Award className="w-4 h-4 text-blue-600" />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Award className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">DGCA Certification</h4>
+                    <h4 className="font-semibold text-gray-900 text-lg mb-1">DGCA Certification</h4>
+                    <p className="text-gray-600 text-sm">Recognized industry certification</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-4 h-4 text-blue-600" />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Industry-Leading Instructors</h4>
+                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Industry-Leading Instructors</h4>
+                    <p className="text-gray-600 text-sm">Learn from the best professionals</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-4 h-4 text-blue-600" />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Comprehensive Support System</h4>
+                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Comprehensive Support System</h4>
+                    <p className="text-gray-600 text-sm">End-to-end guidance and assistance</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Tractor className="w-4 h-4 text-blue-600" />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Tractor className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Focus on Entrepreneurship</h4>
+                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Focus on Entrepreneurship</h4>
+                    <p className="text-gray-600 text-sm">Build your own business ventures</p>
                   </div>
                 </div>
               </div>
               
               <div className="relative pl-6">
                 <img
-                  src="/train-2.jpeg"
+                  src="/open field certificate image.png"
                   alt="Training with KarVenSen"
-                  className="rounded-xl shadow-lg w-full h-auto"
+                  className="rounded-xl shadow-lg w-full h-auto max-h-[500px] object-cover"
                 />
               </div>
             </div>
 
             {/* Second Row - Image Left, Text Right */}
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="relative pr-6">
                 <img
-                  src="/train-1.jpeg"
+                  src="/staff teaches to std.png"
                   alt="What sets us apart"
-                  className="rounded-xl shadow-lg w-full h-auto"
+                  className="rounded-xl shadow-lg w-full h-auto max-h-[500px] object-cover"
                 />
               </div>
               
-              <div className="space-y-4 pl-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">What Sets Us Apart?</h3>
+              <div className="space-y-6 pl-6">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6">What Sets Us Apart?</h3>
                 
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    <GraduationCap className="w-4 h-4 text-green-600" />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <GraduationCap className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Expert Guidance</h4>
+                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Expert Guidance</h4>
+                    <p className="text-gray-600 text-sm">Personalized mentoring and support</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Real-World Experience</h4>
+                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Real-World Experience</h4>
+                    <p className="text-gray-600 text-sm">Hands-on practical training</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Award className="w-4 h-4 text-green-600" />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Award className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Industry Recognition</h4>
+                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Industry Recognition</h4>
+                    <p className="text-gray-600 text-sm">Certificates valued by employers</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-4 h-4 text-green-600" />
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">Career Support</h4>
+                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Career Support</h4>
+                    <p className="text-gray-600 text-sm">Job placement assistance</p>
                   </div>
                 </div>
               </div>

@@ -12,7 +12,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { Menu, Cpu, Plane, BookOpen, Cloud, Server, GraduationCap } from "lucide-react"
 import Image from "next/image"
 
@@ -160,7 +160,12 @@ export function Navbar() {
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] sm:w-[350px] bg-white p-6">            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>              <nav className="flex flex-col gap-6 mt-12">
+              <SheetContent side="right" className="w-[280px] sm:w-[350px] bg-white p-6">
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <SheetDescription className="sr-only">
+                  Navigate to different sections of the website
+                </SheetDescription>
+                <nav className="flex flex-col gap-6 mt-12">
                 <Link
                   href="/"
                   onClick={() => setOpen(false)}

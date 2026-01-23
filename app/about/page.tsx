@@ -373,9 +373,9 @@ export default function AboutPage() {
     { src: "/indian-professional-man.png", alt: "KarVenSen Team - Drone Training" },
     { src: "/indian-woman-professional.png", alt: "KarVenSen Team - Software Development" },
     { src: "/indian-professor-man.jpg", alt: "KarVenSen Team - AI Research" },
-    { src: "/students-using-ai-learning-platform.jpg", alt: "KarVenSen Team - Education" },
+    { src: "/staff teaches to std.png", alt: "KarVenSen Team - Education" },
     { src: "/drone-flying-over-farm-field-at-sunset.jpg", alt: "KarVenSen - Drone Operations" },
-    { src: "/precision-agriculture-drone-mapping.jpg", alt: "KarVenSen - Agriculture Solutions" },
+    { src: "/dron in agri land.png", alt: "KarVenSen - Agriculture Solutions" },
   ]
 
   useEffect(() => {
@@ -566,15 +566,14 @@ export default function AboutPage() {
       {/* Welcome Section with Icon */}
       <section 
         ref={heroRef.ref}
-        className={`relative py-20 border-y border-gray-200 bg-gray-50 overflow-hidden transition-all duration-1000 ${
+        className={`relative py-20 border-y border-gray-200 bg-gray-50 overflow-visible transition-all duration-1000 ${
           heroRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         {/* Vertical Side Text - Far Left Side */}
-        <div className="hidden lg:block absolute -left-20 top-1/2 -translate-y-1/2 -rotate-90 origin-center">
-          <div className="flex items-center gap-8">
-            <span className="text-7xl font-bold text-gray-200 tracking-wider">Aerial Innovations</span>
-            <span className="text-3xl text-gray-300 tracking-widest">listed</span>
+        <div className="hidden lg:block absolute left-10 xl:left-16 top-1/2 -translate-y-1/2 -rotate-90 origin-center whitespace-nowrap z-0">
+          <div className="flex items-center gap-6">
+            <span className="text-5xl xl:text-6xl font-bold text-gray-200 tracking-wider">Aerial Innovations</span>
           </div>
         </div>
 

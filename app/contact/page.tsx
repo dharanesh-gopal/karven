@@ -219,12 +219,6 @@ function ContactPageContent() {
           </button>
         </div>
 
-        {/* Curved bottom edge */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-16 bg-white"
-          style={{ clipPath: "polygon(0 100%, 0 20%, 100% 0, 100% 100%)" }}
-        ></div>
-
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div variants={fadeInUp}>
