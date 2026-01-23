@@ -49,6 +49,9 @@ import jobOpening from './jobOpening'
 import contactHero from './contactHero'
 import officeLocation from './officeLocation'
 import socialMediaSection from './socialMediaSection'
+import navbarSettings from './navbarSettings'
+import serviceDetailPage from './serviceDetailPage'
+import legalPage from './legalPage'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -116,5 +119,14 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     contactHero,
     officeLocation,
     socialMediaSection,
+    
+    // Navigation & Structure
+    navbarSettings,
+    
+    // Service Detail Pages
+    serviceDetailPage,
+    
+    // Legal Pages
+    legalPage,
   ],
 }

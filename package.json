@@ -7,7 +7,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed-sanity": "node scripts/seed-sanity.js",
+    "seed-all": "node scripts/seed-all-content.js",
+    "seed-complete": "node scripts/seed-complete-website.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -51,6 +54,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
     "date-fns": "4.1.0",
+    "dotenv": "^17.2.3",
     "embla-carousel-react": "8.5.1",
     "framer-motion": "^12.28.1",
     "input-otp": "1.4.1",

@@ -14,6 +14,19 @@ import { JOBS_DATA } from "./data"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
 
+// Icon mapper for Sanity string icons
+const iconMap: Record<string, any> = {
+  Globe, TrendingUp, ShieldCheck, FileText, UserCheck, Terminal, CheckCircle,
+  Sparkles, Monitor, MapPin, Heart, Coffee, Lightbulb, Award, Cpu, Target, Zap, Users
+}
+
+const getIconComponent = (iconName: string | any) => {
+  if (typeof iconName === 'string') {
+    return iconMap[iconName] || Globe
+  }
+  return iconName
+}
+
 // --- 1. DATA CONSTANTS ---
 
 const CORPORATE_VALUES = [
@@ -553,18 +566,22 @@ export default function CareersPage() {
   )
 
   // Use CMS data with fallback
-  const VALUES = (cmsValues && cmsValues.length > 0) ? cmsValues : CORPORATE_VALUES
-  const STEPS = (cmsSteps && cmsSteps.length > 0) ? cmsSteps : HIRING_STEPS
+  const VALUES = (cmsValues && cmsValues.length > 0) 
+    ? cmsValues.map((v: any) => ({ ...v, icon: getIconComponent(v.icon) }))
+    : CORPORATE_VALUES
+  const STEPS = (cmsSteps && cmsSteps.length > 0) 
+    ? cmsSteps.map((s: any) => ({ ...s, icon: getIconComponent(s.icon) }))
+    : HIRING_STEPS
   const TESTIMONIALS_DATA = (cmsTestimonials && cmsTestimonials.length > 0) 
-    ? cmsTestimonials.map(t => ({ ...t, image: typeof t.image === 'object' ? urlFor(t.image).url() : t.image }))
+    ? cmsTestimonials.map(t => ({ ...t, image: (t.image && typeof t.image === 'object') ? urlFor(t.image).url() : (t.image || TESTIMONIALS.find(ft => ft.name === t.name)?.image) }))
     : TESTIMONIALS
   const CULTURE_DATA = (cmsCulture && cmsCulture.length > 0)
-    ? cmsCulture.map(c => ({ ...c, url: typeof c.url === 'object' ? urlFor(c.url).url() : c.url }))
+    ? cmsCulture.map(c => ({ ...c, url: (c.url && typeof c.url === 'object') ? urlFor(c.url).url() : (c.url || CULTURE_IMAGES.find(fc => fc.title === c.title)?.url) }))
     : CULTURE_IMAGES
   
   // Group benefits by category
   const BENEFITS_BY_CATEGORY = (cmsBenefits && cmsBenefits.length > 0) 
-    ? cmsBenefits.reduce((acc, benefit) => {
+    ? cmsBenefits.map((b: any) => ({ ...b, icon: getIconComponent(b.icon) })).reduce((acc, benefit) => {
         if (!acc[benefit.category]) acc[benefit.category] = []
         acc[benefit.category].push(benefit)
         return acc
@@ -717,7 +734,7 @@ export default function CareersPage() {
                 <div className="flex items-center gap-4 mb-6"><h3 className="text-2xl font-bold text-slate-900">{category}</h3><div className="h-px flex-grow bg-slate-200"></div><span className="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded border border-slate-200">{(jobs as any[]).length} roles</span></div>
                 <div className="grid gap-4">
                   {(jobs as any[]).map((job: any, jobIndex: number) => (
-                    <RevealOnScroll key={job.id} delay={jobIndex * 50}>
+                    <RevealOnScroll key={job.id || `job-${category}-${jobIndex}`} delay={jobIndex * 50}>
                       <Link href={`/careers/${job.id}`} className="block">
                         <JobSpotlightRow className="group p-0 border border-slate-200 bg-white hover:border-sky-300 transition-all duration-300">
                           <div className="grid md:grid-cols-12 items-center p-6 md:p-8 gap-6">

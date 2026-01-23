@@ -15,65 +15,105 @@ import {
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { Menu, Cpu, Plane, BookOpen, Cloud, Server, GraduationCap } from "lucide-react"
 import Image from "next/image"
+import { useSanityData } from "@/hooks/useSanityData"
 
-const services = [
+// Fallback data
+const fallbackServices = [
   {
     title: "AI Software Development",
     href: "/services#ai-software",
     description: "Custom AI and machine learning solutions",
-    icon: Cpu,
+    icon: "Cpu",
   },
   {
     title: "Drone Technology",
     href: "/services#drone-technology",
     description: "Agricultural drone systems for farmers",
-    icon: Plane,
+    icon: "Plane",
   },
   {
     title: "LMS Solutions",
     href: "/services#lms",
     description: "Modern learning management systems",
-    icon: BookOpen
+    icon: "BookOpen"
   },
   {
     title: "ERP Systems",
     href: "/services#erp",
     description: "Enterprise resource planning solutions",
-    icon: Server
+    icon: "Server"
   },
   {
     title: "Cloud Infrastructure",
     href: "/services#cloud",
     description: "Scalable cloud and DevOps solutions",
-    icon: Cloud
+    icon: "Cloud"
   },
 ]
 
-const training = [
+const fallbackTraining = [
   {
     title: "Farmer Programs",
     href: "/training#farmers",
     description: "Drone awareness for agriculture",
-    icon: Plane
+    icon: "Plane"
   },
   {
     title: "School Workshops",
     href: "/training#schools",
     description: "Technical education for students",
-    icon: GraduationCap,
+    icon: "GraduationCap",
   },
   {
     title: "Professional Training",
     href: "/training#professional",
     description: "Skill development programs",
-    icon: BookOpen,
+    icon: "BookOpen",
   },
 ]
+
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Cpu,
+  Plane,
+  BookOpen,
+  Cloud,
+  Server,
+  GraduationCap,
+}
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
+
+  // Fetch navbar settings from Sanity
+  const { data: navbarData } = useSanityData<any>(
+    `*[_type == "navbarSettings" && isActive == true][0]{
+      logo,
+      serviceDropdown[] | order(order asc),
+      trainingDropdown[] | order(order asc)
+    }`,
+    {},
+    null
+  )
+
+  // Use Sanity data or fallback
+  const services = navbarData?.serviceDropdown?.length > 0 
+    ? navbarData.serviceDropdown.map((item: any) => ({
+        ...item,
+        icon: iconMap[item.icon] || Cpu
+      }))
+    : fallbackServices.map(item => ({ ...item, icon: iconMap[item.icon] }))
+
+  const training = navbarData?.trainingDropdown?.length > 0
+    ? navbarData.trainingDropdown.map((item: any) => ({
+        ...item,
+        icon: iconMap[item.icon] || BookOpen
+      }))
+    : fallbackTraining.map(item => ({ ...item, icon: iconMap[item.icon] }))
+
+  const logoPath = navbarData?.logo?.imagePath || "/logo karven.png"
 
   useEffect(() => {
     setMounted(true)
@@ -85,7 +125,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2 group">
           <div className="flex items-center gap-2">
             <Image 
-              src="/logo karven.png" 
+              src={logoPath} 
               alt="Karvensen Logo" 
               width={200} 
               height={70}
