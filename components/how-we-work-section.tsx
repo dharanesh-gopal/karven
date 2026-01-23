@@ -107,7 +107,7 @@ export function HowWeWorkSection() {
 
   return (
     <section ref={sectionRef} className="py-24 bg-white">
-      <div className="container mx-auto px-6 md:px-8 lg:px-12">
+      <div className="container mx-auto px-8 md:px-12 lg:px-16 xl:px-20">
         {/* Section Heading - Centered */}
         <div className="text-center mb-16">
           <h2 
