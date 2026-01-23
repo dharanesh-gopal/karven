@@ -9,7 +9,7 @@ import { createClient } from '@sanity/client'
 
 // Read from environment variables
 const client = createClient({
-  projectId: '8hjbioqe',
+  projectId: 'qyxjb4t2',
   dataset: 'production',
   token: process.env.SANITY_API_TOKEN,
   apiVersion: '2024-01-01',

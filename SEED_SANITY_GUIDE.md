@@ -3,7 +3,7 @@
 ## Step 1: Get Your Sanity API Token
 
 1. Go to https://www.sanity.io/manage
-2. Select your project "Karvensen" (8hjbioqe)
+2. Select your project "Karvensen" (qyxjb4t2)
 3. Go to **API** section
 4. Click **Tokens** tab
 5. Click **Add API token**
@@ -17,7 +17,7 @@
 Open `.env.local` and add:
 
 ```env
-NEXT_PUBLIC_SANITY_PROJECT_ID="8hjbioqe"
+NEXT_PUBLIC_SANITY_PROJECT_ID="qyxjb4t2"
 NEXT_PUBLIC_SANITY_DATASET="production"
 SANITY_API_TOKEN="your-token-here"
 ```

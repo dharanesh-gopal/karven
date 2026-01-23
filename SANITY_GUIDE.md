@@ -59,7 +59,7 @@ Sanity is a **headless CMS** (Content Management System) that allows you to:
 ## ✅ Project Setup Status
 
 ### Already Configured:
-- ✅ Sanity project created (ID: `8hjbioqe`)
+- ✅ Sanity project created (ID: `qyxjb4t2`)
 - ✅ Dataset: `production`
 - ✅ Sanity Studio mounted at `/studio` route
 - ✅ All schemas created:
@@ -344,7 +344,7 @@ git push origin main
 
 ### 5. Set Environment Variables on Vercel
 In Vercel dashboard:
-- `NEXT_PUBLIC_SANITY_PROJECT_ID` = `8hjbioqe`
+- `NEXT_PUBLIC_SANITY_PROJECT_ID` = `qyxjb4t2`
 - `NEXT_PUBLIC_SANITY_DATASET` = `production`
 
 ---
