@@ -41,7 +41,7 @@ export function HeroSection() {
 
       {/* Main Headline - Center */}
       <div className="relative z-10 flex-1 flex items-center justify-center">
-        <div className="text-center px-4 max-w-4xl">
+        <div className="text-center px-6 md:px-8 lg:px-12 max-w-4xl">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight">
             {content.title}
           </h1>

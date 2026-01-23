@@ -102,7 +102,7 @@ export function FeaturesSection() {
         backgroundSize: '24px 24px'
       }} />
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-6 md:px-8 lg:px-12 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
             {galleryData?.title || "Built in India."}

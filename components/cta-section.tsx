@@ -150,7 +150,7 @@ export function CTASection() {
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/50" />
       
-      <div className="container mx-auto px-4 py-12 text-center relative z-10">
+      <div className="container mx-auto px-6 md:px-8 lg:px-12 py-12 text-center relative z-10">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
           {ctaData?.title || "Ready to Innovate with Karvensen?"}
         </h2>

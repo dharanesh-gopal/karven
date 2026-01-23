@@ -167,7 +167,7 @@ export function TestimonialsSection() {
 
   return (
     <section className="py-16 bg-gray-50 border-b border-gray-200 min-h-[500px]">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-8 lg:px-12">
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">
             {sectionData?.title || "Trusted by Organizations Nationwide"}
