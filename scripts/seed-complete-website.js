@@ -76,7 +76,7 @@ const howWeWorkSection = {
   sectionTitle: 'How We Work',
   mainHeading: 'Intelligent Integration: From Insight to Impact',
   description: 'We follow a rigorous, data-driven methodology to ensure that every drone deployment is backed by powerful AI intelligence.',
-  imagePath: '/new k logo with services.png',
+  // image: Upload through Sanity Studio UI
   isActive: true
 }
 
@@ -312,7 +312,7 @@ const navbarSettings = {
   _type: 'navbarSettings',
   _id: 'navbar-main',
   isActive: true,
-  logo: { text: 'Karvensen', imagePath: '/logo karven.png' },
+  logo: { text: 'Karvensen' /* image: Upload through Sanity Studio */ },
   serviceDropdown: [
     { _key: 's1', title: 'AI Software Development', href: '/services/ai-software-development', description: 'Custom AI and ML solutions', icon: 'Cpu', order: 1 },
     { _key: 's2', title: 'Drone Technology', href: '/services/drone-survey-and-mapping', description: 'Agricultural drone systems', icon: 'Plane', order: 2 },

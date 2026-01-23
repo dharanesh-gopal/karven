@@ -19,7 +19,7 @@ const navbarData = {
   _type: 'navbarSettings',
   _id: 'navbar-main',
   isActive: true,
-  logo: { text: 'Karvensen', imagePath: '/logo karven.png' },
+  logo: { text: 'Karvensen' /* image: Upload through Sanity Studio */ },
   serviceDropdown: [
     { _key: 's1', title: 'AI Software Development', href: '/services/ai-software-development', description: 'Custom AI and ML solutions', icon: 'Cpu', order: 1 },
     { _key: 's2', title: 'Drone Technology', href: '/services/drone-survey-and-mapping', description: 'Agricultural drone systems', icon: 'Plane', order: 2 },

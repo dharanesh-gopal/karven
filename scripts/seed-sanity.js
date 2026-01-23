@@ -23,7 +23,7 @@ const navbarSettingsData = {
   isActive: true,
   logo: {
     text: 'Karvensen',
-    imagePath: '/logo karven.png'
+    // image: Upload logo through Sanity Studio UI
   },
   serviceDropdown: [
     { _key: 'service-1', title: 'AI Software Development', href: '/services#ai-software', description: 'Custom AI and machine learning solutions', icon: 'Cpu', order: 1 },

@@ -20,7 +20,7 @@ const navbarSettingsData = {
   isActive: true,
   logo: {
     text: 'Karvensen',
-    imagePath: '/logo karven.png'
+    // image: Upload logo through Sanity Studio UI
   },
   serviceDropdown: [
     {

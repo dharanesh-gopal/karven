@@ -18,7 +18,15 @@ export default defineType({
       type: 'object',
       fields: [
         { name: 'text', type: 'string', title: 'Logo Text', initialValue: 'Karvensen' },
-        { name: 'imagePath', type: 'string', title: 'Logo Image Path', initialValue: '/logo karven.png' }
+        { 
+          name: 'image', 
+          type: 'image', 
+          title: 'Logo Image',
+          options: {
+            hotspot: true,
+          },
+          description: 'Upload logo image to Sanity'
+        }
       ]
     }),
     defineField({

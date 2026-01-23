@@ -16,6 +16,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from 
 import { Menu, Cpu, Plane, BookOpen, Cloud, Server, GraduationCap } from "lucide-react"
 import Image from "next/image"
 import { useSanityData } from "@/hooks/useSanityData"
+import { urlFor } from "@/sanity/lib/image"
 
 // Fallback data
 const fallbackServices = [
@@ -90,7 +91,15 @@ export function Navbar() {
   // Fetch navbar settings from Sanity
   const { data: navbarData } = useSanityData<any>(
     `*[_type == "navbarSettings" && isActive == true][0]{
-      logo,
+      logo{
+        text,
+        image{
+          asset->{
+            _id,
+            url
+          }
+        }
+      },
       serviceDropdown[] | order(order asc),
       trainingDropdown[] | order(order asc)
     }`,
@@ -113,7 +122,11 @@ export function Navbar() {
       }))
     : fallbackTraining.map(item => ({ ...item, icon: iconMap[item.icon] }))
 
-  const logoPath = navbarData?.logo?.imagePath || "/logo karven.png"
+  // Get logo image URL from Sanity or use fallback
+  const logoSrc = navbarData?.logo?.image?.asset
+    ? urlFor(navbarData.logo.image).width(200).height(70).url()
+    : "/logo karven.png"
+  const logoText = navbarData?.logo?.text || "Karvensen"
 
   useEffect(() => {
     setMounted(true)
@@ -125,8 +138,8 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2 group">
           <div className="flex items-center gap-2">
             <Image 
-              src={logoPath} 
-              alt="Karvensen Logo" 
+              src={logoSrc} 
+              alt={`${logoText} Logo`} 
               width={200} 
               height={70}
               className="h-36 w-auto object-contain"
