@@ -35,6 +35,24 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'videoUrl',
+      title: 'Video URL',
+      type: 'string',
+      description: 'URL path to the video file (e.g., /Drone_Cinematic_Video.mp4)',
+    }),
+    defineField({
+      name: 'buttonText',
+      title: 'Button Text',
+      type: 'string',
+      description: 'Text for the call-to-action button',
+    }),
+    defineField({
+      name: 'buttonLink',
+      title: 'Button Link',
+      type: 'string',
+      description: 'URL for the call-to-action button',
+    }),
+    defineField({
       name: 'isActive',
       title: 'Active',
       type: 'boolean',

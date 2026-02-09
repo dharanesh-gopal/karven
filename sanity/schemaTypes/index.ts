@@ -25,6 +25,7 @@ import aboutHero from './aboutHero'
 import impactStat from './impactStat'
 import aboutPurpose from './aboutPurpose'
 import coreValue from './coreValue'
+import whyChooseSection from './whyChooseSection'
 import journeyMilestone from './journeyMilestone'
 import industryCard from './industryCard'
 import aboutGallery from './aboutGallery'
@@ -75,6 +76,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     heroSection,
     gallerySection,
     howWeWorkSection,
+    whyChooseSection,
     testimonialsSection,
     feature,
     stats,

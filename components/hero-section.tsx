@@ -7,11 +7,17 @@ import Link from "next/link"
 interface HeroData {
   title: string
   subtitle: string
+  videoUrl?: string
+  buttonText?: string
+  buttonLink?: string
 }
 
 const fallbackData: HeroData = {
   title: "From Fertile Fields to Secure Borders.",
-  subtitle: "We deploy advanced AI and drone technology to revolutionize precision agriculture and fortify national defense."
+  subtitle: "We deploy advanced AI and drone technology to revolutionize precision agriculture and fortify national defense.",
+  videoUrl: "/Drone_Cinematic_Video.mp4",
+  buttonText: "Explore",
+  buttonLink: "/services"
 }
 
 export function HeroSection() {
@@ -33,7 +39,7 @@ export function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover pointer-events-none -z-10"
       >
-        <source src="/Drone_Cinematic_Video.mp4" type="video/mp4" />
+        <source src={content.videoUrl || "/Drone_Cinematic_Video.mp4"} type="video/mp4" />
       </video>
 
       {/* Dark Overlay for text readability */}
@@ -53,14 +59,14 @@ export function HeroSection() {
 
       {/* Explore Section - Bottom Center */}
       <div className="relative z-10 pb-12">
-        <div className="text-center">
-          <p className="text-white text-lg font-medium tracking-wider mb-4">
-            Explore
+        <Link href={content.buttonLink || "/services"} className="block text-center group">
+          <p className="text-white text-lg font-medium tracking-wider mb-4 group-hover:text-primary transition-colors">
+            {content.buttonText || "Explore"}
           </p>
-          <div className="animate-bounce">
-            <ChevronDown className="h-8 w-8 text-white mx-auto" />
+          <div className="animate-bounce group-hover:scale-110 transition-transform">
+            <ChevronDown className="h-8 w-8 text-white mx-auto group-hover:text-primary transition-colors" />
           </div>
-        </div>
+        </Link>
       </div>
     </section>
   )
