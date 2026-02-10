@@ -19,17 +19,6 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'string',
-    }),
-    defineField({
-      name: 'icon',
-      title: 'Icon Name',
-      type: 'string',
-      description: 'Lucide icon name',
-    }),
-    defineField({
       name: 'order',
       title: 'Display Order',
       type: 'number',

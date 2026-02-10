@@ -6,6 +6,13 @@ import Image from "next/image"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
 
+interface StatData {
+  _id: string
+  label: string
+  value: string
+  order: number
+}
+
 interface GalleryImage {
   _key: string
   asset: {
@@ -55,6 +62,16 @@ export function FeaturesSection() {
     }`,
     {},
     fallbackData
+  )
+
+  // Fetch stats from Sanity
+  const { data: statsData } = useSanityData<StatData[]>(
+    `*[_type == "stats" && isActive == true] | order(order asc) {
+      _id,
+      label,
+      value,
+      order
+    }`
   )
 
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -162,18 +179,18 @@ export function FeaturesSection() {
             <div className="space-y-8 px-6">
               <div className="text-center">
                 <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
-                  50,000+
+                  {statsData?.[0]?.value || '50,000+'}
                 </div>
                 <div className="text-sm sm:text-base text-gray-300">
-                  Acres Scanned & Analyzed
+                  {statsData?.[0]?.label || 'Acres Scanned & Analyzed'}
                 </div>
               </div>
               <div className="text-center">
                 <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
-                  5TB+
+                  {statsData?.[1]?.value || '5TB+'}
                 </div>
                 <div className="text-sm sm:text-base text-gray-300">
-                  Aerial Data Processed
+                  {statsData?.[1]?.label || 'Aerial Data Processed'}
                 </div>
               </div>
             </div>
@@ -182,18 +199,18 @@ export function FeaturesSection() {
             <div className="space-y-8 px-6">
               <div className="text-center">
                 <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
-                  98%
+                  {statsData?.[2]?.value || '98%'}
                 </div>
                 <div className="text-sm sm:text-base text-gray-300">
-                  Accuracy in Defect Detection
+                  {statsData?.[2]?.label || 'Accuracy in Defect Detection'}
                 </div>
               </div>
               <div className="text-center">
                 <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
-                  500+
+                  {statsData?.[3]?.value || '500+'}
                 </div>
                 <div className="text-sm sm:text-base text-gray-300">
-                  AI Models Deployed
+                  {statsData?.[3]?.label || 'AI Models Deployed'}
                 </div>
               </div>
             </div>

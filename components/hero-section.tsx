@@ -7,7 +7,11 @@ import Link from "next/link"
 interface HeroData {
   title: string
   subtitle: string
-  videoUrl?: string
+  backgroundVideo?: {
+    asset?: {
+      url?: string
+    }
+  }
   buttonText?: string
   buttonLink?: string
 }
@@ -15,19 +19,32 @@ interface HeroData {
 const fallbackData: HeroData = {
   title: "From Fertile Fields to Secure Borders.",
   subtitle: "We deploy advanced AI and drone technology to revolutionize precision agriculture and fortify national defense.",
-  videoUrl: "/Drone_Cinematic_Video.mp4",
   buttonText: "Explore",
   buttonLink: "/services"
 }
 
 export function HeroSection() {
   const { data } = useSanityData<HeroData>(
-    '*[_type == "heroSection" && isActive == true][0]',
+    `*[_type == "heroSection" && isActive == true][0] {
+      title,
+      subtitle,
+      backgroundVideo {
+        asset->{
+          _id,
+          url
+        }
+      },
+      buttonText,
+      buttonLink
+    }`,
     {},
     fallbackData
   )
 
   const content = data || fallbackData
+  
+  // Get video URL from Sanity or use fallback
+  const videoUrl = content.backgroundVideo?.asset?.url || "/Drone_Cinematic_Video.mp4"
 
   return (
     <section className="relative overflow-hidden h-screen flex flex-col items-center justify-center isolate">
@@ -39,7 +56,7 @@ export function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover pointer-events-none -z-10"
       >
-        <source src={content.videoUrl || "/Drone_Cinematic_Video.mp4"} type="video/mp4" />
+        <source src={videoUrl} type="video/mp4" />
       </video>
 
       {/* Dark Overlay for text readability */}

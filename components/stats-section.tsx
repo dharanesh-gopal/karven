@@ -1,31 +1,21 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { TrendingUp, Users, Award, CheckCircle2, LucideIcon } from "lucide-react"
 import { useSanityData } from "@/hooks/useSanityData"
 
 interface StatData {
   _id: string
   label: string
   value: string
-  description?: string
-  icon?: string
   order: number
 }
 
 const fallbackStats = [
-  { _id: "1", icon: "Users", value: "150+", label: "Clients Worldwide", order: 1 },
-  { _id: "2", icon: "CheckCircle2", value: "500+", label: "Projects Completed", order: 2 },
-  { _id: "3", icon: "Award", value: "25+", label: "Industry Awards", order: 3 },
-  { _id: "4", icon: "TrendingUp", value: "98%", label: "Client Satisfaction", order: 4 }
+  { _id: "1", value: "150+", label: "Clients Worldwide", order: 1 },
+  { _id: "2", value: "500+", label: "Projects Completed", order: 2 },
+  { _id: "3", value: "25+", label: "Industry Awards", order: 3 },
+  { _id: "4", value: "98%", label: "Client Satisfaction", order: 4 }
 ]
-
-const iconMap: Record<string, LucideIcon> = {
-  Users,
-  CheckCircle2,
-  Award,
-  TrendingUp
-}
 
 export function StatsSection() {
   const [isVisible, setIsVisible] = useState(false)
@@ -62,7 +52,6 @@ export function StatsSection() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {stats.map((stat, index) => {
-            const Icon = stat.icon && iconMap[stat.icon] ? iconMap[stat.icon] : Users
             const numValue = parseInt(stat.value.replace(/\D/g, '')) || 0
             const suffix = stat.value.replace(/\d/g, '')
             
@@ -75,9 +64,6 @@ export function StatsSection() {
                   opacity: isVisible ? 1 : 0
                 }}
               >
-                <div className="inline-flex p-4 rounded-full bg-white/10 backdrop-blur-sm mb-4">
-                  <Icon className="h-8 w-8 text-white" />
-                </div>
                 <div className="text-5xl font-bold text-white mb-2">
                   {numValue > 0 ? (
                     <><Counter target={numValue} isVisible={isVisible} duration={2000} />{suffix}</>

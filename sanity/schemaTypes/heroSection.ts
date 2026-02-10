@@ -22,23 +22,26 @@ export default defineType({
       name: 'backgroundVideo',
       title: 'Background Video',
       type: 'file',
+      description: 'Upload your background video (MP4 recommended, max 50MB for best performance)',
       options: {
         accept: 'video/*',
       },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'backgroundImage',
       title: 'Background Image (Fallback)',
       type: 'image',
+      description: 'Shown while video loads or if video fails',
       options: {
         hotspot: true,
       },
     }),
     defineField({
       name: 'videoUrl',
-      title: 'Video URL',
+      title: 'Video URL (Deprecated)',
       type: 'string',
-      description: 'URL path to the video file (e.g., /Drone_Cinematic_Video.mp4)',
+      hidden: true, // Hide from UI but keep for old data
     }),
     defineField({
       name: 'buttonText',
