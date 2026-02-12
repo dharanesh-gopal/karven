@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export default defineType({
   name: 'testimonial',
@@ -36,13 +36,6 @@ export default defineType({
       options: {
         hotspot: true,
       },
-    }),
-    defineField({
-      name: 'rating',
-      title: 'Rating',
-      type: 'number',
-      validation: (rule) => rule.min(1).max(5).integer(),
-      initialValue: 5,
     }),
     defineField({
       name: 'featured',

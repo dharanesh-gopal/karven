@@ -67,22 +67,89 @@ interface AwardData {
   title: string
   subtitle: string
   image: any
-  badgeText: string
-  badgeColor: string
 }
 
 interface PartnerData {
   name: string
+  logo?: any
   displayText: string
   textColor: string
 }
+
 
 interface GroupCompanyData {
   name: string
   description: string
   websiteUrl: string
+  buttonText: string
+  buttonType: string
   image: any
 }
+
+interface LeadershipMemberData {
+  name: string
+  position: string
+  image: any
+  linkedinUrl?: string
+}
+
+interface BoardMemberData {
+  name: string
+  position: string
+  image: any
+  linkedinUrl?: string
+}
+
+interface AboutWelcomeSectionData {
+  iconTagline: string
+  mainTitle: string
+  companyName: string
+  companyTagline: string
+  paragraph1: string
+  founderName: string
+  paragraph2: string
+  sideText: string
+  stat1Value: string
+  stat1Label: string
+  stat2Value: string
+  stat2Label: string
+  stat3Value: string
+  stat3Label: string
+}
+
+interface AboutShapingFutureData {
+  title: string
+}
+
+interface AboutSectionHeaderData {
+  title: string
+  description?: string
+  badge?: string
+  footerText?: string
+}
+
+interface AboutScrollingBannerData {
+  text1: string
+  text1Color: string
+  text2: string
+  text2Color: string
+}
+
+interface AboutVideoSectionData {
+  badge: string
+  title: string
+  description: string
+  videoUrl: string
+  thumbnailImage?: any
+}
+
+interface AboutJoinUsSectionData {
+  title: string
+  description: string
+  buttonText: string
+  buttonLink: string
+}
+
 
 // Helper function to get icon component from icon name
 const getIconComponent = (iconName: string) => {
@@ -98,6 +165,7 @@ const getIconComponent = (iconName: string) => {
   return icons[iconName] || Users
 }
 
+
 // Custom hook for counting animation
 function useCountUp(end: number, duration: number = 2000, isVisible: boolean = false) {
   const [count, setCount] = useState(0)
@@ -111,7 +179,7 @@ function useCountUp(end: number, duration: number = 2000, isVisible: boolean = f
     const animate = (currentTime: number) => {
       if (startTime === null) startTime = currentTime
       const progress = Math.min((currentTime - startTime) / duration, 1)
-      
+
       setCount(Math.floor(progress * (end - startValue) + startValue))
 
       if (progress < 1) {
@@ -323,25 +391,11 @@ export default function AboutPage() {
     []
   )
 
-  const { data: boardMembers } = useSanityData<TeamMemberData[]>(
-    `*[_type == "teamMember" && category == "board" && isActive == true] | order(order asc){
-      name,
-      role,
-      category,
-      "image": image.asset,
-      linkedinUrl
-    }`,
-    {},
-    []
-  )
-
   const { data: awards } = useSanityData<AwardData[]>(
     `*[_type == "award" && isActive == true] | order(order asc){
       title,
       subtitle,
-      "image": image.asset,
-      badgeText,
-      badgeColor
+      "image": image.asset
     }`,
     {},
     []
@@ -350,6 +404,7 @@ export default function AboutPage() {
   const { data: partners } = useSanityData<PartnerData[]>(
     `*[_type == "partner" && isActive == true] | order(order asc){
       name,
+      "logo": logo.asset,
       displayText,
       textColor
     }`,
@@ -362,11 +417,221 @@ export default function AboutPage() {
       name,
       description,
       websiteUrl,
+      buttonText,
+      buttonType,
       "image": image.asset
     }`,
     {},
     []
   )
+
+  // New section data fetching
+  const { data: welcomeSection } = useSanityData<AboutWelcomeSectionData>(
+    `*[_type == "aboutWelcomeSection" && isActive == true][0]{
+      iconTagline,
+      mainTitle,
+      companyName,
+      companyTagline,
+      paragraph1,
+      founderName,
+      paragraph2,
+      sideText,
+      stat1Value,
+      stat1Label,
+      stat2Value,
+      stat2Label,
+      stat3Value,
+      stat3Label
+    }`,
+    {},
+    {
+      iconTagline: "Unlocking the Skies, Transforming Industries",
+      mainTitle: "Welcome to",
+      companyName: "KarVenSen",
+      companyTagline: "Aerial Innovations",
+      paragraph1: "Established in 2023, KarVenSen is a distinguished AI-First IT Software Services Company...",
+      founderName: "Karthika Venkatesan",
+      paragraph2: "we are driven by a passion for leveraging technology...",
+      sideText: "Aerial Innovations",
+      stat1Value: "1500+",
+      stat1Label: "DGCA Pilots Trained",
+      stat2Value: "40+",
+      stat2Label: "UAV Surveys",
+      stat3Value: "9+",
+      stat3Label: "Countries"
+    }
+  )
+
+  const { data: shapingFuture } = useSanityData<AboutShapingFutureData>(
+    `*[_type == "aboutShapingFuture" && isActive == true][0]{
+      title
+    }`,
+    {},
+    { title: "Shaping a Smarter, Sustainable Future with Technology" }
+  )
+
+  const { data: coreValuesHeader } = useSanityData<AboutSectionHeaderData>(
+    `*[_type == "aboutCoreValuesSection" && isActive == true][0]{
+      title,
+      description
+    }`,
+    {},
+    { title: "Our Core Values", description: "The principles that guide everything we do at KarVenSen" }
+  )
+
+  const { data: journeyHeader } = useSanityData<AboutSectionHeaderData>(
+    `*[_type == "aboutJourneySection" && isActive == true][0]{
+      title,
+      description
+    }`,
+    {},
+    { title: "Our Journey", description: "Key milestones in our growth story" }
+  )
+
+  const { data: industriesHeader } = useSanityData<AboutSectionHeaderData>(
+    `*[_type == "aboutIndustriesSection" && isActive == true][0]{
+      title,
+      description
+    }`,
+    {},
+    { title: "Industries We Cater To", description: "Complete UAV Hardware, Software and Service Solution..." }
+  )
+
+  const { data: scrollingBanner } = useSanityData<AboutScrollingBannerData>(
+    `*[_type == "aboutScrollingBanner" && isActive == true][0]{
+      text1,
+      text1Color,
+      text2,
+      text2Color
+    }`,
+    {},
+    { text1: "Aerial Innovations", text1Color: "yellow", text2: "A new Revolution", text2Color: "gray" }
+  )
+
+  const { data: videoSection } = useSanityData<AboutVideoSectionData>(
+    `*[_type == "aboutVideoSection" && isActive == true][0]{
+      badge,
+      title,
+      description,
+      videoUrl,
+      "thumbnailImage": thumbnailImage.asset
+    }`,
+    {},
+    {
+      badge: "Bringing AI Technology Closer to You!",
+      title: "We aspire to make the Indian skies more accessible and future generations more skillful.",
+      description: "Driven by a mission to shape aerial excellence...",
+      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+  )
+
+  const { data: partnersHeader } = useSanityData<AboutSectionHeaderData>(
+    `*[_type == "aboutPartnersSection" && isActive == true][0]{
+      title,
+      description
+    }`,
+    {},
+    { title: "Trusted by Industry Leaders", description: "Our growing clientele includes..." }
+  )
+
+  const { data: awardsHeader } = useSanityData<AboutSectionHeaderData>(
+    `*[_type == "aboutAwardsSection" && isActive == true][0]{
+      badge,
+      title,
+      description,
+      footerText
+    }`,
+    {},
+    {
+      badge: "Accolades",
+      title: "Awards and Recognitions: A Testament to Excellence",
+      description: "KarVenSen proudly holds prestigious recognitions...",
+      footerText: "These prestigious recognitions validate our commitment..."
+    }
+  )
+
+  const { data: leadershipHeader } = useSanityData<AboutSectionHeaderData>(
+    `*[_type == "aboutLeadershipSection" && isActive == true][0]{
+      badge,
+      title,
+      description
+    }`,
+    {},
+    {
+      badge: "Pioneers & Innovators",
+      title: "Leadership Team",
+      description: "Meet the innovators & leaders shaping and driving growth..."
+    }
+  )
+
+  const { data: boardHeader } = useSanityData<AboutSectionHeaderData>(
+    `*[_type == "aboutBoardSection" && isActive == true][0]{
+      badge,
+      title,
+      description
+    }`,
+    {},
+    {
+      badge: "Catalysts of Vision",
+      title: "Board of Directors",
+      description: "Our Board of Directors, the guiding force behind our trajectory..."
+    }
+  )
+
+  const { data: joinUsSection } = useSanityData<AboutJoinUsSectionData>(
+    `*[_type == "aboutJoinUsSection" && isActive == true][0]{
+      title,
+      description,
+      buttonText,
+      buttonLink
+    }`,
+    {},
+    {
+      title: "Join Us on the Journey: Explore, Learn, Soar",
+      description: "Explore the endless potential of drone technology...",
+      buttonText: "Join our team",
+      buttonLink: "/careers"
+    }
+  )
+
+  const { data: groupCompaniesHeader } = useSanityData<AboutSectionHeaderData>(
+    `*[_type == "aboutGroupCompaniesSection" && isActive == true][0]{
+      badge,
+      title,
+      description
+    }`,
+    {},
+    {
+      badge: "KarVenSen",
+      title: "Group Companies",
+      description: "Collaborations & integrations to make our skies more accessible..."
+    }
+  )
+
+
+  const { data: leadershipMembers } = useSanityData<LeadershipMemberData[]>(
+    `*[_type == "leadershipMember" && isActive == true] | order(order asc){
+      name,
+      position,
+      "image": image.asset,
+      linkedinUrl
+    }`,
+    {},
+    []
+  )
+
+  const { data: boardMembers } = useSanityData<BoardMemberData[]>(
+    `*[_type == "boardMember" && isActive == true] | order(order asc){
+      name,
+      position,
+      "image": image.asset,
+      linkedinUrl
+    }`,
+    {},
+    []
+  )
+
+
 
   // Gallery images array
   const galleryImages = [
@@ -402,11 +667,35 @@ export default function AboutPage() {
     galleryRef.ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
+  // Helper function to extract video ID and platform from URL
+  const getVideoInfo = (url: string) => {
+    if (!url) return null
+
+    // YouTube patterns
+    const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    const youtubeMatch = url.match(youtubeRegex)
+    if (youtubeMatch) {
+      return { platform: 'youtube', id: youtubeMatch[1] }
+    }
+
+    // Vimeo patterns
+    const vimeoRegex = /(?:vimeo\.com\/)(\d+)/
+    const vimeoMatch = url.match(vimeoRegex)
+    if (vimeoMatch) {
+      return { platform: 'vimeo', id: vimeoMatch[1] }
+    }
+
+    return null
+  }
+
   const handleVideoPlay = () => {
     setIsVideoPlaying(true)
-    // In a real implementation, you would trigger actual video playback here
-    alert('Video player would open here. You can integrate with YouTube, Vimeo, or a custom video player.')
   }
+
+  const handleCloseVideo = () => {
+    setIsVideoPlaying(false)
+  }
+
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length)
@@ -466,9 +755,8 @@ export default function AboutPage() {
       {/* Image Gallery Section - Auto-Rotating Carousel */}
       <section
         ref={galleryRef.ref}
-        className={`py-12 bg-white transition-all duration-1000 ${
-          galleryRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
+        className={`py-12 bg-white transition-all duration-1000 ${galleryRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
       >
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
@@ -478,11 +766,10 @@ export default function AboutPage() {
               {galleryImages.map((image, index) => (
                 <div
                   key={index}
-                  className={`absolute inset-0 transition-all duration-1000 ${
-                    index === currentImageIndex
-                      ? 'opacity-100 scale-100'
-                      : 'opacity-0 scale-110'
-                  }`}
+                  className={`absolute inset-0 transition-all duration-1000 ${index === currentImageIndex
+                    ? 'opacity-100 scale-100'
+                    : 'opacity-0 scale-110'
+                    }`}
                 >
                   <Image
                     src={image.src}
@@ -491,7 +778,7 @@ export default function AboutPage() {
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                  
+
                   {/* Image Caption */}
                   <div className="absolute bottom-8 left-8 right-8 text-white">
                     <h3 className="text-2xl md:text-3xl font-bold mb-2">{image.alt}</h3>
@@ -510,7 +797,7 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              
+
               <button
                 onClick={nextImage}
                 className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 z-10"
@@ -527,11 +814,10 @@ export default function AboutPage() {
                   <button
                     key={index}
                     onClick={() => goToImage(index)}
-                    className={`h-2 rounded-full transition-all ${
-                      index === currentImageIndex
-                        ? 'w-8 bg-red-600'
-                        : 'w-2 bg-white/60 hover:bg-white'
-                    }`}
+                    className={`h-2 rounded-full transition-all ${index === currentImageIndex
+                      ? 'w-8 bg-red-600'
+                      : 'w-2 bg-white/60 hover:bg-white'
+                      }`}
                     aria-label={`Go to image ${index + 1}`}
                   />
                 ))}
@@ -544,11 +830,10 @@ export default function AboutPage() {
                 <button
                   key={index}
                   onClick={() => goToImage(index)}
-                  className={`relative h-20 rounded-lg overflow-hidden transition-all ${
-                    index === currentImageIndex
-                      ? 'ring-4 ring-red-600 scale-105'
-                      : 'opacity-60 hover:opacity-100'
-                  }`}
+                  className={`relative h-20 rounded-lg overflow-hidden transition-all ${index === currentImageIndex
+                    ? 'ring-4 ring-red-600 scale-105'
+                    : 'opacity-60 hover:opacity-100'
+                    }`}
                 >
                   <Image
                     src={image.src}
@@ -564,11 +849,10 @@ export default function AboutPage() {
       </section>
 
       {/* Welcome Section with Icon */}
-      <section 
+      <section
         ref={heroRef.ref}
-        className={`relative py-20 border-y border-gray-200 bg-gray-50 overflow-visible transition-all duration-1000 ${
-          heroRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
+        className={`relative py-20 border-y border-gray-200 bg-gray-50 overflow-visible transition-all duration-1000 ${heroRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
       >
         {/* Vertical Side Text - Far Left Side */}
         <div className="hidden lg:block absolute left-10 xl:left-16 top-1/2 -translate-y-1/2 -rotate-90 origin-center whitespace-nowrap z-0">
@@ -587,29 +871,22 @@ export default function AboutPage() {
                   <Plane className="h-6 w-6 text-white" />
                 </div>
                 <p className="text-sm uppercase tracking-wider text-gray-500">
-                  Unlocking the Skies, Transforming Industries
+                  {welcomeSection?.iconTagline || "Unlocking the Skies, Transforming Industries"}
                 </p>
               </div>
-              
+
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
-                Welcome to
+                {welcomeSection?.mainTitle || "Welcome to"}
                 <br />
-                <span className="text-red-600">KarVenSen</span> Aerial Innovations
+                <span className="text-red-600">{welcomeSection?.companyName || "KarVenSen"}</span> {welcomeSection?.companyTagline || "Aerial Innovations"}
               </h2>
-              
+
               <p className="text-base text-gray-600 leading-relaxed max-w-3xl mx-auto">
-                Established in 2023, KarVenSen is a distinguished AI-First IT Software Services Company, standing at the
-                forefront of innovation in Artificial Intelligence, Drone Technology, Learning Management Systems (LMS),
-                Enterprise Resource Planning (ERP), Cloud Services, and Information Technology. Our core team comprises
-                seasoned professionals with expertise in cutting-edge technologies, including AI specialists, certified
-                drone pilots, and enterprise software architects.
+                {welcomeSection?.paragraph1 || "Established in 2023, KarVenSen is a distinguished AI-First IT Software Services Company..."}
               </p>
-              
+
               <p className="text-base text-gray-600 leading-relaxed max-w-3xl mx-auto">
-                Founded by <strong>Karthika Venkatesan</strong>, we are driven by a passion for leveraging technology
-                to solve real-world challenges. From precision agriculture using drones to enterprise-grade software
-                solutions and technical awareness programs, we are committed to making advanced technology accessible
-                and impactful across India and beyond.
+                Founded by <strong>{welcomeSection?.founderName || "Karthika Venkatesan"}</strong>, {welcomeSection?.paragraph2 || "we are driven by a passion for leveraging technology to solve real-world challenges..."}
               </p>
             </div>
           </div>
@@ -617,16 +894,16 @@ export default function AboutPage() {
           {/* Right Stats - Absolute positioned */}
           <div className="hidden lg:block absolute right-8 top-8 space-y-12">
             <div className="text-right">
-              <div className="text-7xl font-bold text-gray-200 mb-2">1500+</div>
-              <div className="text-gray-500 text-sm">DGCA Pilots Trained</div>
+              <div className="text-7xl font-bold text-gray-200 mb-2">{welcomeSection?.stat1Value || "1500+"}</div>
+              <div className="text-gray-500 text-sm">{welcomeSection?.stat1Label || "DGCA Pilots Trained"}</div>
             </div>
             <div className="text-right">
-              <div className="text-7xl font-bold text-gray-200 mb-2">40+</div>
-              <div className="text-gray-500 text-sm">UAV Surveys</div>
+              <div className="text-7xl font-bold text-gray-200 mb-2">{welcomeSection?.stat2Value || "40+"}</div>
+              <div className="text-gray-500 text-sm">{welcomeSection?.stat2Label || "UAV Surveys"}</div>
             </div>
             <div className="text-right">
-              <div className="text-7xl font-bold text-gray-200 mb-2">9+</div>
-              <div className="text-gray-500 text-sm">Countries</div>
+              <div className="text-7xl font-bold text-gray-200 mb-2">{welcomeSection?.stat3Value || "9+"}</div>
+              <div className="text-gray-500 text-sm">{welcomeSection?.stat3Label || "Countries"}</div>
             </div>
           </div>
         </div>
@@ -653,18 +930,17 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4 animate-fade-in">
-              Shaping a Smarter, Sustainable Future with Technology
+              {shapingFuture?.title || "Shaping a Smarter, Sustainable Future with Technology"}
             </h2>
           </div>
         </div>
       </section>
 
       {/* Purpose, Vision & Mission */}
-      <section 
+      <section
         ref={purposeRef.ref}
-        className={`py-20 border-b border-gray-200 bg-white transition-all duration-1000 ${
-          purposeRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
+        className={`py-20 border-b border-gray-200 bg-white transition-all duration-1000 ${purposeRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
       >
         <div className="container mx-auto px-4">
           <div className="grid gap-8 md:grid-cols-3 max-w-6xl mx-auto">
@@ -678,7 +954,7 @@ export default function AboutPage() {
                 {purposeData?.purposeDescription || "Building an Efficient & Sustainable World With Drone Technology, AI-Powered Software Solutions, and Cloud Services."}
               </p>
             </div>
-            
+
             {/* Vision */}
             <div className="border border-gray-200 rounded-2xl p-8 bg-white hover:shadow-xl hover:border-gray-400 hover:-translate-y-2 transition-all duration-300 animate-fade-in-up delay-100">
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
@@ -689,7 +965,7 @@ export default function AboutPage() {
                 {purposeData?.visionDescription || "We Aspire To Be The Most Trusted Global Technology & Services Company, delivering innovative drone solutions, enterprise software, and AI-driven platforms."}
               </p>
             </div>
-            
+
             {/* Mission */}
             <div className="border border-gray-200 rounded-2xl p-8 bg-white hover:shadow-xl hover:border-gray-400 hover:-translate-y-2 transition-all duration-300 animate-fade-in-up delay-200">
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
@@ -705,17 +981,16 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section 
+      <section
         ref={valuesRef.ref}
-        className={`py-20 bg-gray-50 border-t border-gray-200 transition-all duration-1000 ${
-          valuesRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
+        className={`py-20 bg-gray-50 border-t border-gray-200 transition-all duration-1000 ${valuesRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
       >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">Our Core Values</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">{coreValuesHeader?.title || "Our Core Values"}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              The principles that guide everything we do at KarVenSen
+              {coreValuesHeader?.description || "The principles that guide everything we do at KarVenSen"}
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto">
@@ -727,8 +1002,8 @@ export default function AboutPage() {
             ]).map((value, index) => {
               const IconComponent = getIconComponent(value.icon)
               return (
-                <div 
-                  key={value.title} 
+                <div
+                  key={value.title}
                   className="text-center bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-gray-400 hover:-translate-y-1 transition-all duration-300"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
@@ -745,16 +1020,15 @@ export default function AboutPage() {
       </section>
 
       {/* Journey Timeline */}
-      <section 
+      <section
         ref={journeyRef.ref}
-        className={`py-20 bg-white transition-all duration-1000 ${
-          journeyRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
+        className={`py-20 bg-white transition-all duration-1000 ${journeyRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
       >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">Our Journey</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Key milestones in our growth story</p>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">{journeyHeader?.title || "Our Journey"}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">{journeyHeader?.description || "Key milestones in our growth story"}</p>
           </div>
           <div className="max-w-3xl mx-auto">
             <div className="relative">
@@ -792,248 +1066,81 @@ export default function AboutPage() {
       {/* Industries We Cater To */}
       <section
         ref={industriesRef.ref}
-        className={`py-20 bg-gray-900 text-white relative overflow-hidden transition-all duration-1000 ${
-          industriesRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
+        className={`py-20 bg-gray-900 text-white relative overflow-hidden transition-all duration-1000 ${industriesRef.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}
       >
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">Industries We Cater To</h2>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{industriesHeader?.title || "Industries We Cater To"}</h2>
             <p className="text-gray-300 max-w-3xl mx-auto text-lg">
-              Complete UAV Hardware, Software and Service Solution. Expert level Data Analysis, Training & Consultancy.
+              {industriesHeader?.description || "Complete UAV Hardware, Software and Service Solution. Expert level Data Analysis, Training & Consultancy."}
             </p>
           </div>
-          
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5 max-w-7xl mx-auto">
-            {/* Row 1 - 5 cards */}
-            {/* Defence */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/dron in agri land.png"
-                alt="Defence"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Defence</h3>
-              </div>
-            </div>
 
-            {/* Infrastructure */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/infrastructure drone.png"
-                alt="Infrastructure"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Infrastructure</h3>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto">
+            {(industryCards && industryCards.length > 0 ? industryCards : [
+              { title: "Defence", image: null },
+              { title: "Infrastructure", image: null },
+              { title: "Energy", image: null },
+              { title: "Agriculture", image: null },
+              { title: "Education", image: null },
+              { title: "Urban Planning", image: null },
+              { title: "Mining", image: null },
+              { title: "Security", image: null },
+            ]).map((industry, index) => (
+              <div key={index} className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
+                {industry.image ? (
+                  <Image
+                    src={urlFor(industry.image).url()}
+                    alt={industry.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                ) : (
+                  <img
+                    src="/dron in agri land.png"
+                    alt={industry.title}
+                    className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                )}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold mb-2">{industry.title}</h3>
+                </div>
               </div>
-            </div>
-
-            {/* Energy */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/erp drone.png"
-                alt="Energy"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Energy</h3>
-              </div>
-            </div>
-
-            {/* Utilities */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/erp drone.png"
-                alt="Utilities"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Utilities</h3>
-              </div>
-            </div>
-
-            {/* Agriculture */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/dron in agri land.png"
-                alt="Agriculture"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Agriculture</h3>
-              </div>
-            </div>
-
-            {/* Row 2 - 5 cards */}
-            {/* Education */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/edu drone.png"
-                alt="Education"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Education</h3>
-              </div>
-            </div>
-
-            {/* Urban Planning */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/infrastructure drone.png"
-                alt="Urban Planning"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Urban Planning</h3>
-              </div>
-            </div>
-
-            {/* Mining */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/erp drone.png"
-                alt="Mining"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Mining</h3>
-              </div>
-            </div>
-
-            {/* Security */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/dron in agri land.png"
-                alt="Security"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Security</h3>
-              </div>
-            </div>
-
-            {/* Oil & Gas */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/erp drone.png"
-                alt="Oil & Gas"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Oil & Gas</h3>
-              </div>
-            </div>
-
-            {/* Row 3 - 5 cards */}
-            {/* Water Bodies */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/infrastructure drone.png"
-                alt="Water Bodies"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Water Bodies</h3>
-              </div>
-            </div>
-
-            {/* Insurance */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/edu drone.png"
-                alt="Insurance"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Insurance</h3>
-              </div>
-            </div>
-
-            {/* Environment */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/dron in agri land.png"
-                alt="Environment"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Environment</h3>
-              </div>
-            </div>
-
-            {/* Forest */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/erp drone.png"
-                alt="Forest"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Forest</h3>
-              </div>
-            </div>
-
-            {/* Disaster Management */}
-            <div className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-              <img
-                src="/infrastructure drone.png"
-                alt="Disaster Management"
-                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold mb-2">Disaster Management</h3>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-</section>
+      </section>
 
       {/* Large Text Banner Section - Aerial Innovations with Scrolling Animation */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white overflow-hidden relative">
         <div className="animate-scroll-x-fast whitespace-nowrap">
           <div className="inline-flex items-center gap-8 px-8">
             {/* First set */}
-            <h2 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight inline-block bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
-              Aerial Innovations
+            <h2 className={`text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight inline-block bg-gradient-to-r ${scrollingBanner?.text1Color === 'yellow' ? 'from-yellow-400 via-yellow-500 to-yellow-600' : scrollingBanner?.text1Color === 'red' ? 'from-red-400 via-red-500 to-red-600' : scrollingBanner?.text1Color === 'blue' ? 'from-blue-400 via-blue-500 to-blue-600' : 'from-gray-300 via-gray-400 to-gray-500'} bg-clip-text text-transparent`}>
+              {scrollingBanner?.text1 || "Aerial Innovations"}
             </h2>
             <div className="flex gap-4 inline-flex">
               <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-gray-300 to-gray-400"></div>
               <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-gray-300 to-gray-400"></div>
               <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-gray-300 to-gray-400"></div>
             </div>
-            <h2 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight inline-block bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent">
-              A new Revolution
+            <h2 className={`text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight inline-block bg-gradient-to-r ${scrollingBanner?.text2Color === 'yellow' ? 'from-yellow-400 via-yellow-500 to-yellow-600' : scrollingBanner?.text2Color === 'red' ? 'from-red-400 via-red-500 to-red-600' : scrollingBanner?.text2Color === 'blue' ? 'from-blue-400 via-blue-500 to-blue-600' : 'from-gray-300 via-gray-400 to-gray-500'} bg-clip-text text-transparent`}>
+              {scrollingBanner?.text2 || "A new Revolution"}
             </h2>
-            
+
             {/* Second set for seamless loop */}
-            <h2 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight inline-block bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
-              Aerial Innovations
+            <h2 className={`text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight inline-block bg-gradient-to-r ${scrollingBanner?.text1Color === 'yellow' ? 'from-yellow-400 via-yellow-500 to-yellow-600' : scrollingBanner?.text1Color === 'red' ? 'from-red-400 via-red-500 to-red-600' : scrollingBanner?.text1Color === 'blue' ? 'from-blue-400 via-blue-500 to-blue-600' : 'from-gray-300 via-gray-400 to-gray-500'} bg-clip-text text-transparent`}>
+              {scrollingBanner?.text1 || "Aerial Innovations"}
             </h2>
             <div className="flex gap-4 inline-flex">
               <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-gray-300 to-gray-400"></div>
               <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-gray-300 to-gray-400"></div>
               <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-gray-300 to-gray-400"></div>
             </div>
-            <h2 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight inline-block bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent">
-              A new Revolution
+            <h2 className={`text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight inline-block bg-gradient-to-r ${scrollingBanner?.text2Color === 'yellow' ? 'from-yellow-400 via-yellow-500 to-yellow-600' : scrollingBanner?.text2Color === 'red' ? 'from-red-400 via-red-500 to-red-600' : scrollingBanner?.text2Color === 'blue' ? 'from-blue-400 via-blue-500 to-blue-600' : 'from-gray-300 via-gray-400 to-gray-500'} bg-clip-text text-transparent`}>
+              {scrollingBanner?.text2 || "A new Revolution"}
             </h2>
           </div>
         </div>
@@ -1050,15 +1157,13 @@ export default function AboutPage() {
                   <div className="h-12 w-12 bg-red-600 rounded-lg flex items-center justify-center">
                     <Plane className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900">Bringing AI Technology Closer to You!</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">{videoSection?.badge || "Bringing AI Technology Closer to You!"}</h3>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  We aspire to make the Indian skies more accessible and future generations more skillful.
+                  {videoSection?.title || "We aspire to make the Indian skies more accessible and future generations more skillful."}
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Driven by a mission to shape aerial excellence, we focus on providing comprehensive drone solutions and AI-powered software across diverse sectors. 
-                  From industrial and enterprise applications to educational initiatives, KarVenSen aims to be a catalyst for positive change, 
-                  fostering innovation and skill development in the evolving landscape of technology.
+                  {videoSection?.description || "Driven by a mission to shape aerial excellence, we focus on providing comprehensive drone solutions and AI-powered software across diverse sectors..."}
                 </p>
               </div>
 
@@ -1077,7 +1182,7 @@ export default function AboutPage() {
                     aria-label="Play video"
                   >
                     <svg className="h-8 w-8 text-gray-900 ml-1 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
+                      <path d="M8 5v14l11-7z" />
                     </svg>
                   </button>
                 </div>
@@ -1092,105 +1197,44 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Trusted by Industry Leaders
+              {partnersHeader?.title || "Trusted by Industry Leaders"}
             </h2>
             <p className="text-gray-600 max-w-3xl mx-auto text-lg">
-              Our growing clientele includes government agencies, defense forces, and leading enterprises that rely on our drone solutions for innovation, efficiency, and mission-critical success.
+              {partnersHeader?.description || "Our growing clientele includes government agencies, defense forces, and leading enterprises that rely on our drone solutions for innovation, efficiency, and mission-critical success."}
             </p>
           </div>
 
-          {/* Client Logos Grid - 6 columns layout */}
+          {/* Client Logos Grid - Dynamic from Sanity */}
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
-              {/* Row 1 */}
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-600 font-bold text-xl">Capgemini</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-gray-800 font-bold text-xl">CYBAGE</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-700 font-semibold text-sm">TATA COMMUNICATIONS</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-600 font-bold text-lg">TATA STRIVE</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-purple-700 font-bold text-xl">Peregrine</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-red-600 font-bold text-2xl">EXIDE</span>
-              </div>
-
-              {/* Row 2 */}
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-700 font-bold text-2xl">adani</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center">
-                  <span className="text-yellow-400 text-xs font-bold">INDIAN ARMY</span>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center justify-items-center">
+              {(partners && partners.length > 0 ? partners : [
+                { name: "Capgemini", displayText: "Capgemini", textColor: "blue-600", logo: null },
+                { name: "CYBAGE", displayText: "CYBAGE", textColor: "gray-800", logo: null },
+                { name: "TATA COMMUNICATIONS", displayText: "TATA COMMUNICATIONS", textColor: "blue-700", logo: null },
+                { name: "TATA STRIVE", displayText: "TATA STRIVE", textColor: "blue-600", logo: null },
+                { name: "Peregrine", displayText: "Peregrine", textColor: "purple-700", logo: null },
+                { name: "EXIDE", displayText: "EXIDE", textColor: "red-600", logo: null },
+                { name: "adani", displayText: "adani", textColor: "blue-700", logo: null },
+                { name: "INDIAN ARMY", displayText: "INDIAN ARMY", textColor: "yellow-400", logo: null },
+                { name: "AIB TECH INDIA", displayText: "AIB TECH INDIA", textColor: "blue-600", logo: null },
+                { name: "Mahindra DEFENCE", displayText: "Mahindra DEFENCE", textColor: "red-700", logo: null },
+              ]).map((partner, index) => (
+                <div key={index} className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  {partner.logo ? (
+                    <Image
+                      src={urlFor(partner.logo).url()}
+                      alt={partner.name}
+                      width={120}
+                      height={60}
+                      className="object-contain max-h-12"
+                    />
+                  ) : (
+                    <span className={`text-${partner.textColor || 'gray-800'} font-bold text-lg`}>
+                      {partner.displayText || partner.name}
+                    </span>
+                  )}
                 </div>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-600 font-semibold text-sm">AIB TECH INDIA</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-red-700 font-bold text-lg">Mahindra DEFENCE</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-gray-800 font-bold text-xl">R FLY</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-red-600 font-bold text-lg">Shell ENERGY</span>
-              </div>
-
-              {/* Row 3 */}
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-600 font-bold text-sm">THE WORLD BANK</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-gray-900 font-bold text-xl">JGI JAIN</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-700 font-bold text-xl">JSW Steel</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-600 font-bold text-xl">seit</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-500 font-semibold text-sm">PrecisionAerial</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-900 font-bold text-lg">Reliance Industries</span>
-              </div>
-
-              {/* Row 4 */}
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-700 font-bold text-xl">HAL</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-red-600 font-bold text-lg">RAVIRAJ ENGINEERS</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-600 font-bold text-xl">ARAI</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-500 font-bold text-sm">BLUE OCEAN INFO TECHNOLOGIES</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-red-600 font-bold text-lg">DBA DRONE</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-blue-700 font-semibold text-sm">KALPA-TARU POWER</span>
-              </div>
-
-              {/* Row 5 - Last 4 logos centered */}
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 lg:col-start-2">
-                <span className="text-blue-600 font-bold text-xl">ManoIT</span>
-              </div>
-              <div className="h-20 w-full flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <span className="text-red-600 font-bold text-xl">schnell</span>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -1201,13 +1245,13 @@ export default function AboutPage() {
           {/* Header */}
           <div className="text-center">
             <div className="inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm font-semibold mb-6">
-              Accolades
+              {awardsHeader?.badge || "Accolades"}
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Awards and Recognitions: A Testament to Excellence
+              {awardsHeader?.title || "Awards and Recognitions: A Testament to Excellence"}
             </h2>
             <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-              KarVenSen proudly holds prestigious recognitions. Our accolades include:
+              {awardsHeader?.description || "KarVenSen proudly holds prestigious recognitions. Our accolades include:"}
             </p>
           </div>
         </div>
@@ -1219,149 +1263,70 @@ export default function AboutPage() {
               {/* First Set of Awards */}
               {[...Array(2)].map((_, setIndex) => (
                 <div key={setIndex} className="inline-flex items-center gap-8">
-                  {/* Award 1 - Asia Book of Records */}
-                  <div className="inline-block w-[500px] h-[350px] relative group rounded-2xl overflow-hidden border-2 border-red-600 hover:border-yellow-500 transition-all duration-300 hover:scale-105 shadow-2xl">
-                    <Image
-                      src="/indian-professional-man.png"
-                      alt="Asia Book of Records Recognition"
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg">
-                          <span className="text-white text-xs font-bold text-center leading-tight">ASIA<br/>RECORD</span>
-                        </div>
-                        <div className="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center shadow-lg">
-                          <span className="text-white text-xs font-bold text-center leading-tight">INDIA<br/>RECORD</span>
-                        </div>
+                  {(awards && awards.length > 0 ? awards : [
+                    {
+                      title: "ASIA & INDIA BOOK OF RECORDS",
+                      subtitle: "",
+                      image: null,
+                    },
+                    {
+                      title: "47th FOUNDATION DAY AWARD",
+                      subtitle: "Pune Management Association",
+                      image: null,
+                    },
+                    {
+                      title: "INNOVATION EXCELLENCE AWARD",
+                      subtitle: "Technology Leadership Recognition",
+                      image: null,
+                    },
+                    {
+                      title: "DRONE TECHNOLOGY PIONEER",
+                      subtitle: "Make in India Excellence",
+                      image: null,
+                    },
+                    {
+                      title: "AI INNOVATION AWARD",
+                      subtitle: "Educational Technology Excellence",
+                      image: null,
+                    },
+                    {
+                      title: "ENTERPRISE SOLUTIONS AWARD",
+                      subtitle: "Digital Transformation Leader",
+                      image: null,
+                    },
+                  ]).map((award, index) => (
+                    <div
+                      key={index}
+                      className="inline-block w-[500px] h-[350px] relative group rounded-2xl overflow-hidden border-2 border-red-600 hover:border-yellow-500 transition-all duration-300 hover:scale-105 shadow-2xl"
+                    >
+                      {award.image ? (
+                        <Image
+                          src={urlFor(award.image).url()}
+                          alt={award.title}
+                          fill
+                          className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"
+                        />
+                      ) : (
+                        <Image
+                          src="/indian-professional-man.png"
+                          alt={award.title}
+                          fill
+                          className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <h3 className="text-xl font-bold text-white">
+                          {award.title}
+                        </h3>
+                        {award.subtitle && (
+                          <p className="text-gray-300 text-sm mt-1">
+                            {award.subtitle}
+                          </p>
+                        )}
                       </div>
-                      <h3 className="text-xl font-bold text-white">
-                        ASIA & INDIA BOOK OF RECORDS
-                      </h3>
                     </div>
-                  </div>
-
-                  {/* Award 2 - PMA Excellence */}
-                  <div className="inline-block w-[500px] h-[350px] relative group rounded-2xl overflow-hidden border-2 border-red-600 hover:border-yellow-500 transition-all duration-300 hover:scale-105 shadow-2xl">
-                    <Image
-                      src="/indian-woman-professional.png"
-                      alt="PMA Excellence Award"
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="mb-4">
-                        <div className="inline-block bg-white px-4 py-2 rounded shadow-lg">
-                          <span className="text-gray-900 text-xl font-bold">PMA</span>
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-bold text-white">
-                        47th FOUNDATION DAY AWARD
-                      </h3>
-                      <p className="text-gray-300 text-sm mt-1">
-                        Pune Management Association
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Award 3 - Innovation Excellence */}
-                  <div className="inline-block w-[500px] h-[350px] relative group rounded-2xl overflow-hidden border-2 border-red-600 hover:border-yellow-500 transition-all duration-300 hover:scale-105 shadow-2xl">
-                    <Image
-                      src="/indian-professor-man.jpg"
-                      alt="Innovation Excellence Award"
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="mb-4">
-                        <div className="inline-block bg-gradient-to-r from-yellow-500 to-orange-500 px-4 py-2 rounded shadow-lg">
-                          <span className="text-white text-xl font-bold">★</span>
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-bold text-white">
-                        INNOVATION EXCELLENCE AWARD
-                      </h3>
-                      <p className="text-gray-300 text-sm mt-1">
-                        Technology Leadership Recognition
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Award 4 - Drone Technology Pioneer */}
-                  <div className="inline-block w-[500px] h-[350px] relative group rounded-2xl overflow-hidden border-2 border-red-600 hover:border-yellow-500 transition-all duration-300 hover:scale-105 shadow-2xl">
-                    <Image
-                      src="/drone-flying-over-farm-field-at-sunset.jpg"
-                      alt="Drone Technology Pioneer Award"
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="mb-4">
-                        <div className="inline-block bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 rounded shadow-lg">
-                          <span className="text-white text-xl font-bold">🚁</span>
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-bold text-white">
-                        DRONE TECHNOLOGY PIONEER
-                      </h3>
-                      <p className="text-gray-300 text-sm mt-1">
-                        Make in India Excellence
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Award 5 - AI Innovation */}
-                  <div className="inline-block w-[500px] h-[350px] relative group rounded-2xl overflow-hidden border-2 border-red-600 hover:border-yellow-500 transition-all duration-300 hover:scale-105 shadow-2xl">
-                    <Image
-                      src="/students-using-ai-learning-platform.jpg"
-                      alt="AI Innovation Award"
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="mb-4">
-                        <div className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 rounded shadow-lg">
-                          <span className="text-white text-xl font-bold">AI</span>
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-bold text-white">
-                        AI INNOVATION AWARD
-                      </h3>
-                      <p className="text-gray-300 text-sm mt-1">
-                        Educational Technology Excellence
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Award 6 - Enterprise Solutions */}
-                  <div className="inline-block w-[500px] h-[350px] relative group rounded-2xl overflow-hidden border-2 border-red-600 hover:border-yellow-500 transition-all duration-300 hover:scale-105 shadow-2xl">
-                    <Image
-                      src="/precision-agriculture-drone-mapping.jpg"
-                      alt="Enterprise Solutions Award"
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="mb-4">
-                        <div className="inline-block bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-2 rounded shadow-lg">
-                          <span className="text-white text-xl font-bold">⚡</span>
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-bold text-white">
-                        ENTERPRISE SOLUTIONS AWARD
-                      </h3>
-                      <p className="text-gray-300 text-sm mt-1">
-                        Digital Transformation Leader
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               ))}
             </div>
@@ -1372,7 +1337,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 mt-12">
           <div className="text-center">
             <p className="text-gray-400 text-lg">
-              These prestigious recognitions validate our commitment to innovation, excellence, and leadership in the drone technology sector.
+              {awardsHeader?.footerText || "These prestigious recognitions validate our commitment to innovation, excellence, and leadership in the drone technology sector."}
             </p>
           </div>
         </div>
@@ -1384,254 +1349,158 @@ export default function AboutPage() {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm font-semibold mb-6">
-              Pioneers & Innovators
+              {leadershipHeader?.badge || "Pioneers & Innovators"}
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Leadership Team
+              {leadershipHeader?.title || "Leadership Team"}
             </h2>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto">
-              Meet the innovators & leaders shaping and driving growth for the fastest growing industrial drone company.
+              {leadershipHeader?.description || "Meet the innovators & leaders shaping and driving growth for the fastest growing industrial drone company."}
             </p>
           </div>
 
-          {/* Team Grid */}
+          {/* Team Grid - Dynamic from Sanity */}
           <div className="max-w-7xl mx-auto">
-            {/* Row 1 - Top 3 Leaders */}
-            <div className="grid md:grid-cols-3 gap-12 mb-16">
-              {/* Leader 1 - Prateek Srivastava */}
-              <div className="group text-center">
-                <div className="relative w-64 h-64 mx-auto mb-6 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-professional-man.png"
-                    alt="Prateek Srivastava"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Prateek Srivastava</h3>
-                <p className="text-gray-600 mb-4">Founder & Managing Director</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </div>
+            {/* Get leadership members with fallback data */}
+            {(() => {
+              const teamData = leadershipMembers && leadershipMembers.length > 0 ? leadershipMembers : [
+                { name: "Prateek Srivastava", position: "Founder & Managing Director", image: null, linkedinUrl: "#" },
+                { name: "Amit Takte", position: "CTO", image: null, linkedinUrl: "#" },
+                { name: "Major General (Dr) Mandip Singh, SM, VSM (Retd)", position: "President – Strategic Alliances", image: null, linkedinUrl: "#" },
+                { name: "Karthika Venkatesan", position: "Chief Innovation Officer", image: null, linkedinUrl: "#" },
+                { name: "Rajesh Kumar", position: "VP Engineering", image: null, linkedinUrl: "#" },
+                { name: "Dr. Suresh Patel", position: "Head of Research", image: null, linkedinUrl: "#" },
+                { name: "Priya Sharma", position: "Director of Operations", image: null, linkedinUrl: "#" },
+              ]
 
-              {/* Leader 2 - Amit Takte */}
-              <div className="group text-center">
-                <div className="relative w-64 h-64 mx-auto mb-6 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-professor-man.jpg"
-                    alt="Amit Takte"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Amit Takte</h3>
-                <p className="text-gray-600 mb-4">CTO</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </div>
+              const fallbackImages = [
+                "/indian-professional-man.png",
+                "/indian-professor-man.jpg",
+                "/indian-professional-man.png",
+                "/indian-woman-professional.png",
+                "/indian-professional-man.png",
+                "/indian-professor-man.jpg",
+                "/indian-woman-professional.png",
+              ]
 
-              {/* Leader 3 - Major General */}
-              <div className="group text-center">
-                <div className="relative w-64 h-64 mx-auto mb-6 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-professional-man.png"
-                    alt="Major General (Dr) Mandip Singh"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Major General (Dr) Mandip Singh, SM, VSM (Retd)</h3>
-                <p className="text-gray-600 mb-4">President – Strategic Alliances</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
+              // Top 3 leaders (larger cards)
+              const topLeaders = teamData.slice(0, 3)
+              // Bottom 4 team members (smaller cards)
+              const otherMembers = teamData.slice(3, 7)
 
-            {/* Row 2 - Bottom 4 Team Members */}
-            <div className="grid md:grid-cols-4 gap-8">
-              {/* Team Member 4 */}
-              <div className="group text-center">
-                <div className="relative w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-woman-professional.png"
-                    alt="Team Member"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Karthika Venkatesan</h3>
-                <p className="text-gray-600 text-sm mb-3">Chief Innovation Officer</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-9 h-9 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-              </div>
+              return (
+                <>
+                  {/* Row 1 - Top 3 Leaders */}
+                  <div className="grid md:grid-cols-3 gap-12 mb-16">
+                    {topLeaders.map((member, index) => (
+                      <div key={index} className="group text-center">
+                        <div className="relative w-64 h-64 mx-auto mb-6 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                          <Image
+                            src={member.image ? urlFor(member.image).url() : fallbackImages[index]}
+                            alt={member.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{member.name}</h3>
+                        <p className="text-gray-600 mb-4">{member.position}</p>
+                        <a
+                          href={member.linkedinUrl || "#"}
+                          className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
+                          aria-label="LinkedIn Profile"
+                        >
+                          <Linkedin className="w-5 h-5" />
+                        </a>
+                      </div>
+                    ))}
+                  </div>
 
-              {/* Team Member 5 */}
-              <div className="group text-center">
-                <div className="relative w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-professional-man.png"
-                    alt="Team Member"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Rajesh Kumar</h3>
-                <p className="text-gray-600 text-sm mb-3">VP Engineering</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-9 h-9 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-              </div>
-
-              {/* Team Member 6 */}
-              <div className="group text-center">
-                <div className="relative w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-professor-man.jpg"
-                    alt="Team Member"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Dr. Suresh Patel</h3>
-                <p className="text-gray-600 text-sm mb-3">Head of Research</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-9 h-9 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-              </div>
-
-              {/* Team Member 7 */}
-              <div className="group text-center">
-                <div className="relative w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-woman-professional.png"
-                    alt="Team Member"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Priya Sharma</h3>
-                <p className="text-gray-600 text-sm mb-3">Director of Operations</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-9 h-9 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
+                  {/* Row 2 - Bottom 4 Team Members */}
+                  {otherMembers.length > 0 && (
+                    <div className="grid md:grid-cols-4 gap-8">
+                      {otherMembers.map((member, index) => (
+                        <div key={index} className="group text-center">
+                          <div className="relative w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                            <Image
+                              src={member.image ? urlFor(member.image).url() : fallbackImages[index + 3]}
+                              alt={member.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
+                          <p className="text-gray-600 text-sm mb-3">{member.position}</p>
+                          <a
+                            href={member.linkedinUrl || "#"}
+                            className="inline-flex items-center justify-center w-9 h-9 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
+                            aria-label="LinkedIn Profile"
+                          >
+                            <Linkedin className="w-4 h-4" />
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )
+            })()}
           </div>
         </div>
       </section>
-{/* Board of Directors Section */}
+      {/* Board of Directors Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm font-semibold mb-6">
-              Catalysts of Vision
+              {boardHeader?.badge || "Catalysts of Vision"}
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Board of Directors
+              {boardHeader?.title || "Board of Directors"}
             </h2>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto">
-              Our Board of Directors, the guiding force behind our trajectory, shaping the future of industrial drone innovation and driving unparalleled growth.
+              {boardHeader?.description || "Our Board of Directors, the guiding force behind our trajectory, shaping the future of industrial drone innovation and driving unparalleled growth."}
             </p>
           </div>
 
-          {/* Directors Grid - 3 Members */}
+          {/* Directors Grid - Dynamic from Sanity */}
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-3 gap-12">
-              {/* Director 1 - Prateek Srivastava */}
-              <div className="group text-center">
-                <div className="relative w-64 h-64 mx-auto mb-6 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-professional-man.png"
-                    alt="Prateek Srivastava"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Prateek Srivastava</h3>
-                <p className="text-gray-600 mb-4">Founder & Managing Director</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </div>
+              {(() => {
+                const boardData = boardMembers && boardMembers.length > 0 ? boardMembers : [
+                  { name: "Prateek Srivastava", position: "Founder & Managing Director", image: null, linkedinUrl: "#" },
+                  { name: "Nikita Srivastava", position: "Director & CFO", image: null, linkedinUrl: "#" },
+                  { name: "Mangina Srinivas Rao", position: "Independent Director", image: null, linkedinUrl: "#" },
+                ]
 
-              {/* Director 2 - Nikita Srivastava */}
-              <div className="group text-center">
-                <div className="relative w-64 h-64 mx-auto mb-6 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-woman-professional.png"
-                    alt="Nikita Srivastava"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Nikita Srivastava</h3>
-                <p className="text-gray-600 mb-4">Director & CFO</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </div>
+                const fallbackImages = [
+                  "/indian-professional-man.png",
+                  "/indian-woman-professional.png",
+                  "/indian-professor-man.jpg",
+                ]
 
-              {/* Director 3 - Mangina Srinivas Rao */}
-              <div className="group text-center">
-                <div className="relative w-64 h-64 mx-auto mb-6 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <Image
-                    src="/indian-professor-man.jpg"
-                    alt="Mangina Srinivas Rao"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Mangina Srinivas Rao</h3>
-                <p className="text-gray-600 mb-4">Independent Director</p>
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </div>
+                return boardData.map((member, index) => (
+                  <div key={index} className="group text-center">
+                    <div className="relative w-64 h-64 mx-auto mb-6 rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                      <Image
+                        src={member.image ? urlFor(member.image).url() : fallbackImages[index]}
+                        alt={member.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{member.name}</h3>
+                    <p className="text-gray-600 mb-4">{member.position}</p>
+                    <a
+                      href={member.linkedinUrl || "#"}
+                      className="inline-flex items-center justify-center w-10 h-10 bg-gray-900 hover:bg-red-600 text-white rounded-lg transition-colors duration-300"
+                      aria-label="LinkedIn Profile"
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                  </div>
+                ))
+              })()}
             </div>
           </div>
         </div>
@@ -1645,10 +1514,10 @@ export default function AboutPage() {
               {/* Left Content */}
               <div className="flex-1">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                  Join Us on the Journey: Explore, Learn, Soar
+                  {joinUsSection?.title || "Join Us on the Journey: Explore, Learn, Soar"}
                 </h2>
                 <p className="text-gray-600 text-lg">
-                  Explore the endless potential of drone technology, learn from the best in the field, and together, let's soar to new heights.
+                  {joinUsSection?.description || "Explore the endless potential of drone technology, learn from the best in the field, and together, let's soar to new heights."}
                 </p>
               </div>
 
@@ -1661,7 +1530,7 @@ export default function AboutPage() {
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
-                  <span>Join our team</span>
+                  <span>{joinUsSection?.buttonText || "Join our team"}</span>
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -1678,13 +1547,13 @@ export default function AboutPage() {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              KarVenSen
+              {groupCompaniesHeader?.badge || "KarVenSen"}
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Group Companies
+              {groupCompaniesHeader?.title || "Group Companies"}
             </h2>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto">
-              Collaborations & integrations to make our skies more accessible and the future generations more skillful.
+              {groupCompaniesHeader?.description || "Collaborations & integrations to make our skies more accessible and the future generations more skillful."}
             </p>
           </div>
 
@@ -1860,6 +1729,68 @@ export default function AboutPage() {
                 </div>
               </form>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Video Modal */}
+      {isVideoPlaying && videoSection?.videoUrl && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-fade-in"
+          onClick={handleCloseVideo}
+        >
+          <div
+            className="relative w-full max-w-5xl aspect-video bg-black rounded-xl shadow-2xl animate-scale-in overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={handleCloseVideo}
+              className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors"
+              aria-label="Close video"
+            >
+              <X className="h-6 w-6" />
+            </button>
+
+            {/* Video Embed */}
+            {(() => {
+              const videoInfo = getVideoInfo(videoSection.videoUrl)
+              if (!videoInfo) {
+                return (
+                  <div className="flex items-center justify-center h-full text-white">
+                    <p>Invalid video URL. Please use a YouTube or Vimeo link.</p>
+                  </div>
+                )
+              }
+
+              if (videoInfo.platform === 'youtube') {
+                return (
+                  <iframe
+                    className="w-full h-full"
+                    src={`https://www.youtube.com/embed/${videoInfo.id}?autoplay=1&rel=0`}
+                    title="Video Player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                )
+              }
+
+              if (videoInfo.platform === 'vimeo') {
+                return (
+                  <iframe
+                    className="w-full h-full"
+                    src={`https://player.vimeo.com/video/${videoInfo.id}?autoplay=1`}
+                    title="Video Player"
+                    frameBorder="0"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen
+                  />
+                )
+              }
+
+              return null
+            })()}
           </div>
         </div>
       )}

@@ -103,7 +103,7 @@ export function TestimonialsSection() {
   )
 
   const { data: testimonialsData } = useSanityData<Testimonial[]>(
-    sectionData?.showFeaturedOnly 
+    sectionData?.showFeaturedOnly
       ? `*[_type == "testimonial" && featured == true] | order(_createdAt desc) {
           _id,
           name,
@@ -143,7 +143,7 @@ export function TestimonialsSection() {
       scrollPosition += 0.5
       if (scrollContainer) {
         scrollContainer.scrollLeft = scrollPosition
-        
+
         // Reset to start when reaching the end
         if (scrollPosition >= scrollContainer.scrollWidth / 2) {
           scrollPosition = 0
@@ -180,11 +180,11 @@ export function TestimonialsSection() {
         </div>
 
         <div className="overflow-hidden min-h-[300px] relative">
-          <div 
+          <div
             ref={scrollRef}
             className="flex gap-6 overflow-x-auto"
-            style={{ 
-              scrollbarWidth: 'none', 
+            style={{
+              scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               WebkitOverflowScrolling: 'touch'
             }}
@@ -192,8 +192,8 @@ export function TestimonialsSection() {
             {/* Duplicate testimonials for seamless loop */}
             {testimonials && testimonials.length > 0 ? (
               [...testimonials, ...testimonials].map((testimonial, index) => (
-                <Card 
-                  key={`${testimonial._id}-${index}`} 
+                <Card
+                  key={`${testimonial._id}-${index}`}
                   className="relative flex-shrink-0 w-[380px] hover:shadow-lg transition-shadow bg-white border-gray-200"
                 >
                   <CardContent className="pt-8">
@@ -203,18 +203,20 @@ export function TestimonialsSection() {
                     </p>
                     <div className="flex items-center gap-3 border-t border-gray-200 pt-4">
                       <Avatar className="h-10 w-10">
-                      {testimonial.image?.asset ? (
-                        <AvatarImage 
-                          src={urlFor(testimonial.image.asset).width(80).height(80).url()} 
-                          alt={testimonial.name} 
-                        />
-                      ) : testimonial.avatar ? (
-                        <AvatarImage 
-                          src={testimonial.avatar} 
-                          alt={testimonial.name} 
-                        />
-                      ) : null}
-                      <AvatarFallback className="bg-blue-600 text-white">
+                        {(testimonial.image?.asset || testimonial.avatar) ? (
+                          <AvatarImage
+                            src={testimonial.image?.asset
+                              ? urlFor(testimonial.image.asset).width(80).height(80).url()
+                              : testimonial.avatar
+                            }
+                            alt={testimonial.name}
+                            onError={(e) => {
+                              // Hide image on error to show fallback
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        ) : null}
+                        <AvatarFallback className="bg-blue-600 text-white">
                           {testimonial.name[0]}
                         </AvatarFallback>
                       </Avatar>

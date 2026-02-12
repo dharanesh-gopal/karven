@@ -34,27 +34,6 @@ export default defineType({
       ],
     },
     {
-      name: 'badgeText',
-      type: 'string',
-      title: 'Badge Text',
-      description: 'Text shown in the badge (e.g., ASIA RECORD, PMA, AI, etc.)',
-    },
-    {
-      name: 'badgeColor',
-      type: 'string',
-      title: 'Badge Color',
-      description: 'Color for the badge background',
-      options: {
-        list: [
-          { title: 'Red', value: 'red' },
-          { title: 'Yellow', value: 'yellow' },
-          { title: 'Blue', value: 'blue' },
-          { title: 'Purple', value: 'purple' },
-          { title: 'White', value: 'white' },
-        ],
-      },
-    },
-    {
       name: 'order',
       type: 'number',
       title: 'Display Order',

@@ -30,16 +30,6 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'secondaryButtonText',
-      title: 'Secondary Button Text',
-      type: 'string',
-    }),
-    defineField({
-      name: 'secondaryButtonLink',
-      title: 'Secondary Button Link',
-      type: 'string',
-    }),
-    defineField({
       name: 'backgroundImage',
       title: 'Background Image',
       type: 'image',

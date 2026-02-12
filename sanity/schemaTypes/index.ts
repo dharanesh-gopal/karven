@@ -53,6 +53,22 @@ import socialMediaSection from './socialMediaSection'
 import navbarSettings from './navbarSettings'
 import serviceDetailPage from './serviceDetailPage'
 import legalPage from './legalPage'
+import aboutWelcomeSection from './aboutWelcomeSection'
+import aboutShapingFuture from './aboutShapingFuture'
+import aboutCoreValuesSection from './aboutCoreValuesSection'
+import aboutJourneySection from './aboutJourneySection'
+import aboutIndustriesSection from './aboutIndustriesSection'
+import aboutScrollingBanner from './aboutScrollingBanner'
+import aboutVideoSection from './aboutVideoSection'
+import aboutPartnersSection from './aboutPartnersSection'
+import aboutAwardsSection from './aboutAwardsSection'
+import aboutLeadershipSection from './aboutLeadershipSection'
+import aboutBoardSection from './aboutBoardSection'
+import aboutJoinUsSection from './aboutJoinUsSection'
+import aboutGroupCompaniesSection from './aboutGroupCompaniesSection'
+import leadershipMember from './leadershipMember'
+import boardMember from './boardMember'
+
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -61,7 +77,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     contactInfo,
     notification,
     footerSettings,
-    
+
     // Content
     service,
     blog,
@@ -71,7 +87,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     testimonial,
     project,
     settings,
-    
+
     // Homepage
     heroSection,
     gallerySection,
@@ -82,24 +98,40 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     stats,
     processStep,
     ctaSection,
-    
+
     // About Page
     aboutTagline,
     aboutHero,
+    aboutWelcomeSection,
     impactStat,
+    aboutShapingFuture,
     aboutPurpose,
+    aboutCoreValuesSection,
     coreValue,
+    aboutJourneySection,
     journeyMilestone,
+    aboutIndustriesSection,
     industryCard,
+    aboutScrollingBanner,
+    aboutVideoSection,
     aboutGallery,
-    teamMember,
-    award,
+    aboutPartnersSection,
     partner,
+    aboutAwardsSection,
+    award,
+    aboutLeadershipSection,
+    leadershipMember,
+    aboutBoardSection,
+    boardMember,
+    teamMember,
+    aboutJoinUsSection,
+    aboutGroupCompaniesSection,
     groupCompany,
-    
+
+
     // Services Page
     serviceItem,
-    
+
     // Training Page
     trainingHero,
     trainingProgram,
@@ -107,7 +139,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     trainingFaq,
     trainingCourse,
     upcomingProgram,
-    
+
     // Careers Page
     careerHero,
     careerValue,
@@ -116,18 +148,18 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     cultureImage,
     careerBenefit,
     jobOpening,
-    
+
     // Contact Page
     contactHero,
     officeLocation,
     socialMediaSection,
-    
+
     // Navigation & Structure
     navbarSettings,
-    
+
     // Service Detail Pages
     serviceDetailPage,
-    
+
     // Legal Pages
     legalPage,
   ],

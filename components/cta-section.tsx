@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react"
 import { ConsultationForm } from "@/components/consultation-form"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
+import { getFileUrl } from "@/sanity/lib/file"
 
 interface CTASectionData {
   title: string
@@ -20,8 +21,6 @@ interface CTASectionData {
   }
   backgroundVideo?: {
     asset: {
-      _ref: string
-      _type: string
       url?: string
     }
   }
@@ -46,8 +45,6 @@ export function CTASection() {
       },
       backgroundVideo {
         asset-> {
-          _ref,
-          _type,
           url
         }
       }
@@ -57,6 +54,18 @@ export function CTASection() {
   )
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
+
+  // Get the video URL using the helper
+  const videoUrl = ctaData?.backgroundVideo?.asset ? getFileUrl(ctaData.backgroundVideo.asset) : null
+
+  // Debug: Log the video URL
+  useEffect(() => {
+    console.log('=== CTA Section Debug ===')
+    console.log('Full CTA Data:', ctaData)
+    console.log('Background Video Asset:', ctaData?.backgroundVideo?.asset)
+    console.log('Constructed Video URL:', videoUrl)
+    console.log('========================')
+  }, [ctaData, videoUrl])
 
   useEffect(() => {
     const video = videoRef.current
@@ -85,7 +94,7 @@ export function CTASection() {
 
     // Play when video is ready
     video.addEventListener('loadeddata', playVideo)
-    
+
     // Resume play if paused (handles power-saving pause)
     video.addEventListener('pause', () => {
       if (!document.hidden) {
@@ -108,13 +117,14 @@ export function CTASection() {
       video.removeEventListener('loadeddata', playVideo)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [])
+  }, [videoUrl])
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-800 text-white relative overflow-hidden">
       {/* Background Video or Image */}
-      {ctaData?.backgroundVideo?.asset?.url ? (
+      {videoUrl ? (
         <video
+          key={videoUrl}
           ref={videoRef}
           loop
           muted
@@ -123,10 +133,10 @@ export function CTASection() {
           className="absolute inset-0 w-full h-full object-cover"
           style={{ pointerEvents: 'none' }}
         >
-          <source src={ctaData.backgroundVideo.asset.url} type="video/mp4" />
+          <source src={videoUrl} type="video/mp4" />
         </video>
       ) : ctaData?.backgroundImage?.asset ? (
-        <div 
+        <div
           className="absolute inset-0 w-full h-full bg-cover bg-center"
           style={{
             backgroundImage: `url(${urlFor(ctaData.backgroundImage.asset).width(1920).url()})`
@@ -134,6 +144,7 @@ export function CTASection() {
         />
       ) : (
         <video
+          key="fallback-video"
           ref={videoRef}
           loop
           muted
@@ -146,10 +157,10 @@ export function CTASection() {
           <source src="/drone video 2.mp4" type="video/mp4" />
         </video>
       )}
-      
+
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/50" />
-      
+
       <div className="container mx-auto px-6 md:px-8 lg:px-12 py-12 text-center relative z-10">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
           {ctaData?.title || "Ready to Innovate with Karvensen?"}
@@ -158,9 +169,9 @@ export function CTASection() {
           {ctaData?.description || "Let's discuss how our AI-driven solutions and drone technology can transform your operations. Join the future of intelligent automation."}
         </p>
         <div className="flex items-center justify-center">
-          <Button 
+          <Button
             onClick={() => setIsFormOpen(true)}
-            size="lg" 
+            size="lg"
             className="bg-white text-gray-900 hover:bg-gray-100 group"
           >
             <MessageSquare className="mr-2 h-4 w-4" />

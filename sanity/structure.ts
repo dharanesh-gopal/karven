@@ -1,4 +1,4 @@
-import type {StructureResolver} from 'sanity/structure'
+import type { StructureResolver } from 'sanity/structure'
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S) =>
@@ -8,7 +8,7 @@ export const structure: StructureResolver = (S) =>
       // ============================================
       // 📄 PAGES (Organized by Website Pages)
       // ============================================
-      
+
       // Homepage
       S.listItem()
         .title('🏠 Homepage')
@@ -32,19 +32,22 @@ export const structure: StructureResolver = (S) =>
                 .title('5. Process Steps')
                 .child(S.documentTypeList('processStep').title('Process Steps')),
               S.listItem()
-                .title('6. Testimonials Section')
+                .title('6. Testimonials Section Settings')
+                .child(S.document().schemaType('testimonialsSection').documentId('testimonialsSection')),
+              S.listItem()
+                .title('7. Testimonials (Individual Reviews)')
                 .child(S.documentTypeList('testimonial').title('Testimonials')),
               S.listItem()
-                .title('7. Gallery Section')
+                .title('8. Gallery Section')
                 .child(S.documentTypeList('gallerySection').title('Gallery Section')),
               S.listItem()
-                .title('8. CTA Section (Call to Action)')
+                .title('9. CTA Section (Call to Action)')
                 .child(S.documentTypeList('ctaSection').title('CTA Section')),
             ])
         ),
-      
+
       S.divider(),
-      
+
       // About Page
       S.listItem()
         .title('ℹ️ About Page')
@@ -59,40 +62,82 @@ export const structure: StructureResolver = (S) =>
                 .title('2. About Tagline')
                 .child(S.document().schemaType('aboutTagline').documentId('aboutTagline')),
               S.listItem()
-                .title('3. About Purpose')
-                .child(S.document().schemaType('aboutPurpose').documentId('aboutPurpose')),
+                .title('3. Welcome Section')
+                .child(S.document().schemaType('aboutWelcomeSection').documentId('aboutWelcomeSection')),
               S.listItem()
                 .title('4. Impact Stats')
                 .child(S.documentTypeList('impactStat').title('Impact Stats')),
               S.listItem()
-                .title('5. Core Values')
+                .title('5. Shaping Future Section')
+                .child(S.document().schemaType('aboutShapingFuture').documentId('aboutShapingFuture')),
+              S.listItem()
+                .title('6. About Purpose')
+                .child(S.document().schemaType('aboutPurpose').documentId('aboutPurpose')),
+              S.listItem()
+                .title('7. Core Values Section Header')
+                .child(S.document().schemaType('aboutCoreValuesSection').documentId('aboutCoreValuesSection')),
+              S.listItem()
+                .title('8. Core Values (Cards)')
                 .child(S.documentTypeList('coreValue').title('Core Values')),
               S.listItem()
-                .title('6. Journey Milestones (Timeline)')
+                .title('9. Journey Section Header')
+                .child(S.document().schemaType('aboutJourneySection').documentId('aboutJourneySection')),
+              S.listItem()
+                .title('10. Journey Milestones (Timeline)')
                 .child(S.documentTypeList('journeyMilestone').title('Journey Milestones')),
               S.listItem()
-                .title('7. Industry Cards')
+                .title('11. Industries Section Header')
+                .child(S.document().schemaType('aboutIndustriesSection').documentId('aboutIndustriesSection')),
+              S.listItem()
+                .title('12. Industry Cards')
                 .child(S.documentTypeList('industryCard').title('Industry Cards')),
               S.listItem()
-                .title('8. Team Members')
-                .child(S.documentTypeList('teamMember').title('Team Members')),
+                .title('13. Scrolling Text Banner')
+                .child(S.document().schemaType('aboutScrollingBanner').documentId('aboutScrollingBanner')),
               S.listItem()
-                .title('9. Gallery Images')
+                .title('14. Video Section')
+                .child(S.document().schemaType('aboutVideoSection').documentId('aboutVideoSection')),
+              S.listItem()
+                .title('15. Gallery Images')
                 .child(S.documentTypeList('aboutGallery').title('Gallery')),
               S.listItem()
-                .title('10. Awards & Recognition')
-                .child(S.documentTypeList('award').title('Awards')),
+                .title('16. Partners Section Header')
+                .child(S.document().schemaType('aboutPartnersSection').documentId('aboutPartnersSection')),
               S.listItem()
-                .title('11. Partners & Clients')
+                .title('17. Partners & Clients')
                 .child(S.documentTypeList('partner').title('Partners')),
               S.listItem()
-                .title('12. Group Companies')
+                .title('18. Awards Section Header')
+                .child(S.document().schemaType('aboutAwardsSection').documentId('aboutAwardsSection')),
+              S.listItem()
+                .title('19. Awards & Recognition')
+                .child(S.documentTypeList('award').title('Awards')),
+              S.listItem()
+                .title('20. Leadership Section Header')
+                .child(S.document().schemaType('aboutLeadershipSection').documentId('aboutLeadershipSection')),
+              S.listItem()
+                .title('21. Leadership Team Members')
+                .child(S.documentTypeList('leadershipMember').title('Leadership Team')),
+              S.listItem()
+                .title('22. Board Section Header')
+                .child(S.document().schemaType('aboutBoardSection').documentId('aboutBoardSection')),
+              S.listItem()
+                .title('23. Board of Directors')
+                .child(S.documentTypeList('boardMember').title('Board Members')),
+              S.listItem()
+                .title('24. Join Us Section')
+                .child(S.document().schemaType('aboutJoinUsSection').documentId('aboutJoinUsSection')),
+              S.listItem()
+                .title('25. Group Companies Section Header')
+                .child(S.document().schemaType('aboutGroupCompaniesSection').documentId('aboutGroupCompaniesSection')),
+              S.listItem()
+                .title('26. Group Companies')
                 .child(S.documentTypeList('groupCompany').title('Group Companies')),
             ])
         ),
-      
+
       S.divider(),
-      
+
       // Services Page
       S.listItem()
         .title('💼 Services Page')
@@ -111,9 +156,9 @@ export const structure: StructureResolver = (S) =>
                 .child(S.documentTypeList('serviceItem').title('Service Items')),
             ])
         ),
-      
+
       S.divider(),
-      
+
       // Training Page
       S.listItem()
         .title('🎓 Training Page')
@@ -141,9 +186,9 @@ export const structure: StructureResolver = (S) =>
                 .child(S.documentTypeList('trainingFaq').title('Training FAQs')),
             ])
         ),
-      
+
       S.divider(),
-      
+
       // Blog Page
       S.listItem()
         .title('📝 Blog Page')
@@ -162,9 +207,9 @@ export const structure: StructureResolver = (S) =>
                 .child(S.documentTypeList('category').title('Categories')),
             ])
         ),
-      
+
       S.divider(),
-      
+
       // Careers Page
       S.listItem()
         .title('💼 Careers Page')
@@ -195,9 +240,9 @@ export const structure: StructureResolver = (S) =>
                 .child(S.documentTypeList('careerTestimonial').title('Career Testimonials')),
             ])
         ),
-      
+
       S.divider(),
-      
+
       // Contact Page
       S.listItem()
         .title('📞 Contact Page')
@@ -216,16 +261,16 @@ export const structure: StructureResolver = (S) =>
                 .child(S.document().schemaType('socialMediaSection').documentId('socialMediaSection')),
             ])
         ),
-      
+
       S.divider(),
-      
+
       // Projects
       S.listItem()
         .title('📂 Projects Portfolio')
         .child(S.documentTypeList('project').title('All Projects')),
-      
+
       S.divider(),
-      
+
       // Legal Pages
       S.listItem()
         .title('📄 Legal Pages')
@@ -238,14 +283,14 @@ export const structure: StructureResolver = (S) =>
                 .child(S.documentTypeList('legalPage').title('Legal Pages')),
             ])
         ),
-      
+
       S.divider(),
       S.divider(),
-      
+
       // ============================================
       // ⚙️ SITE-WIDE SETTINGS (Affects All Pages)
       // ============================================
-      
+
       S.listItem()
         .title('⚙️ Global Settings')
         .child(

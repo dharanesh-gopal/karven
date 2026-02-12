@@ -23,6 +23,25 @@ export default defineType({
       title: 'Website URL',
     },
     {
+      name: 'buttonText',
+      type: 'string',
+      title: 'Button Text',
+      description: 'Text for the button (e.g., "Learn More" or "Visit Website")',
+    },
+    {
+      name: 'buttonType',
+      type: 'string',
+      title: 'Button Type',
+      description: 'Style of the button',
+      options: {
+        list: [
+          { title: 'Link Style (Learn More)', value: 'link' },
+          { title: 'Button Style (Visit Website)', value: 'button' },
+        ],
+      },
+      initialValue: 'link',
+    },
+    {
       name: 'image',
       type: 'image',
       title: 'Company Image',

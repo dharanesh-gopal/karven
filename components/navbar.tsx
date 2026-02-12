@@ -13,75 +13,12 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
-import { Menu, Cpu, Plane, BookOpen, Cloud, Server, GraduationCap } from "lucide-react"
+import { Menu } from "lucide-react"
 import Image from "next/image"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
 
-// Fallback data
-const fallbackServices = [
-  {
-    title: "AI Software Development",
-    href: "/services#ai-software",
-    description: "Custom AI and machine learning solutions",
-    icon: "Cpu",
-  },
-  {
-    title: "Drone Technology",
-    href: "/services#drone-technology",
-    description: "Agricultural drone systems for farmers",
-    icon: "Plane",
-  },
-  {
-    title: "LMS Solutions",
-    href: "/services#lms",
-    description: "Modern learning management systems",
-    icon: "BookOpen"
-  },
-  {
-    title: "ERP Systems",
-    href: "/services#erp",
-    description: "Enterprise resource planning solutions",
-    icon: "Server"
-  },
-  {
-    title: "Cloud Infrastructure",
-    href: "/services#cloud",
-    description: "Scalable cloud and DevOps solutions",
-    icon: "Cloud"
-  },
-]
 
-const fallbackTraining = [
-  {
-    title: "Farmer Programs",
-    href: "/training#farmers",
-    description: "Drone awareness for agriculture",
-    icon: "Plane"
-  },
-  {
-    title: "School Workshops",
-    href: "/training#schools",
-    description: "Technical education for students",
-    icon: "GraduationCap",
-  },
-  {
-    title: "Professional Training",
-    href: "/training#professional",
-    description: "Skill development programs",
-    icon: "BookOpen",
-  },
-]
-
-// Icon mapping
-const iconMap: Record<string, any> = {
-  Cpu,
-  Plane,
-  BookOpen,
-  Cloud,
-  Server,
-  GraduationCap,
-}
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
@@ -99,28 +36,11 @@ export function Navbar() {
             url
           }
         }
-      },
-      serviceDropdown[] | order(order asc),
-      trainingDropdown[] | order(order asc)
+      }
     }`,
     {},
     null
   )
-
-  // Use Sanity data or fallback
-  const services = navbarData?.serviceDropdown?.length > 0 
-    ? navbarData.serviceDropdown.map((item: any) => ({
-        ...item,
-        icon: iconMap[item.icon] || Cpu
-      }))
-    : fallbackServices.map(item => ({ ...item, icon: iconMap[item.icon] }))
-
-  const training = navbarData?.trainingDropdown?.length > 0
-    ? navbarData.trainingDropdown.map((item: any) => ({
-        ...item,
-        icon: iconMap[item.icon] || BookOpen
-      }))
-    : fallbackTraining.map(item => ({ ...item, icon: iconMap[item.icon] }))
 
   // Get logo image URL from Sanity or use fallback
   const logoSrc = navbarData?.logo?.image?.asset
@@ -137,10 +57,10 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative h-12 w-auto flex items-center">
-            <Image 
-              src={logoSrc} 
-              alt={`${logoText} Logo`} 
-              width={150} 
+            <Image
+              src={logoSrc}
+              alt={`${logoText} Logo`}
+              width={150}
               height={48}
               className="h-full w-auto object-contain max-h-12"
               priority
@@ -219,58 +139,58 @@ export function Navbar() {
                   Navigate to different sections of the website
                 </SheetDescription>
                 <nav className="flex flex-col gap-6 mt-12">
-                <Link
-                  href="/"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/about"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
-                >
-                  About
-                </Link>
-                <Link
-                  href="/services"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
-                >
-                  Services
-                </Link>
-                <Link
-                  href="/training"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
-                >
-                  Training
-                </Link>
-                <Link
-                  href="/blog"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
-                >
-                  Blog
-                </Link>
-                <Link
-                  href="/careers"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
-                >
-                  Careers
-                </Link>
-                <Link
-                  href="/contact"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
-                >
-                  Contact
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
+                  <Link
+                    href="/"
+                    onClick={() => setOpen(false)}
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                  >
+                    Home
+                  </Link>
+                  <Link
+                    href="/about"
+                    onClick={() => setOpen(false)}
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                  >
+                    About
+                  </Link>
+                  <Link
+                    href="/services"
+                    onClick={() => setOpen(false)}
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                  >
+                    Services
+                  </Link>
+                  <Link
+                    href="/training"
+                    onClick={() => setOpen(false)}
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                  >
+                    Training
+                  </Link>
+                  <Link
+                    href="/blog"
+                    onClick={() => setOpen(false)}
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                  >
+                    Blog
+                  </Link>
+                  <Link
+                    href="/careers"
+                    onClick={() => setOpen(false)}
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                  >
+                    Careers
+                  </Link>
+                  <Link
+                    href="/contact"
+                    onClick={() => setOpen(false)}
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                  >
+                    Contact
+                  </Link>
+                </nav>
+              </SheetContent>
+            </Sheet>
           )}
         </div>
       </div>
