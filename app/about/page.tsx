@@ -140,8 +140,18 @@ interface AboutVideoSectionData {
   title: string
   description: string
   videoUrl: string
-  thumbnailImage?: any
 }
+
+interface AboutContactFormData {
+  headerText: string
+  namePlaceholder: string
+  emailPlaceholder: string
+  messagePlaceholder: string
+  submitButtonText: string
+  floatingButtonText: string
+  poweredByText: string
+}
+
 
 interface AboutJoinUsSectionData {
   title: string
@@ -608,6 +618,27 @@ export default function AboutPage() {
     }
   )
 
+  const { data: contactFormData } = useSanityData<AboutContactFormData>(
+    `*[_type == "aboutContactForm" && isActive == true][0]{
+      headerText,
+      namePlaceholder,
+      emailPlaceholder,
+      messagePlaceholder,
+      submitButtonText,
+      floatingButtonText,
+      poweredByText
+    }`,
+    {},
+    {
+      headerText: 'Please fill out the form below and we will get back to you as soon as possible.',
+      namePlaceholder: '* Name',
+      emailPlaceholder: '* Email',
+      messagePlaceholder: '* Message',
+      submitButtonText: 'Send Message',
+      floatingButtonText: 'Send message',
+      poweredByText: 'Powered by tawk.to'
+    }
+  )
 
   const { data: leadershipMembers } = useSanityData<LeadershipMemberData[]>(
     `*[_type == "leadershipMember" && isActive == true] | order(order asc){
@@ -716,7 +747,7 @@ export default function AboutPage() {
         onClick={() => setIsContactFormOpen(true)}
         className="fixed bottom-8 right-8 z-50 bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-md shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
       >
-        Send message
+        {contactFormData?.floatingButtonText || "Send message"}
       </button>
 
       {/* Tagline Section */}
@@ -1559,75 +1590,84 @@ export default function AboutPage() {
 
           {/* Companies Grid */}
           <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
-            {/* Company 1 - KarVenSen Aerospace */}
-            <div className="group relative bg-gradient-to-br from-gray-50 to-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-              <div className="grid md:grid-cols-2 gap-0">
-                {/* Left Content */}
-                <div className="p-10 flex flex-col justify-center">
-                  <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                    KarVenSen Aerospace Private Limited
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-6">
-                    Powering aerial intelligence worldwide
-                  </p>
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-semibold group/link"
-                  >
-                    <span>Learn More</span>
-                    <svg className="w-5 h-5 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </a>
-                </div>
+            {(() => {
+              // Use Sanity data or fallback to hardcoded data
+              const companiesData = groupCompanies && groupCompanies.length > 0 ? groupCompanies : [
+                {
+                  name: "KarVenSen Aerospace Private Limited",
+                  description: "Powering aerial intelligence worldwide",
+                  websiteUrl: "#",
+                  buttonText: "Learn More",
+                  buttonType: "link",
+                  image: null
+                },
+                {
+                  name: "KarVenSen Technologies",
+                  description: "Drone training, manufacturing & analytics",
+                  websiteUrl: "#",
+                  buttonText: "Visit Website",
+                  buttonType: "button",
+                  image: null
+                }
+              ]
 
-                {/* Right Image */}
-                <div className="relative h-64 md:h-full">
-                  <Image
-                    src="/gov karvensen.png"
-                    alt="KarVenSen Aerospace Team"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent" />
-                </div>
-              </div>
-            </div>
+              const fallbackImages = [
+                "/gov karvensen.png",
+                "/indian-woman-professional.png",
+                "/indian-professional-man.png",
+                "/staff teaches to std.png"
+              ]
 
-            {/* Company 2 - KarVenSen Technologies */}
-            <div className="group relative bg-gradient-to-br from-gray-50 to-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-              <div className="grid md:grid-cols-2 gap-0">
-                {/* Left Content */}
-                <div className="p-10 flex flex-col justify-center">
-                  <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                    KarVenSen Technologies
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-6">
-                    Drone training, manufacturing & analytics
-                  </p>
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-3 px-6 py-3 bg-gray-900 hover:bg-red-600 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl w-fit"
-                  >
-                    <span>Visit Website</span>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </a>
-                </div>
+              return companiesData.map((company, index) => (
+                <div key={index} className="group relative bg-gradient-to-br from-gray-50 to-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
+                  <div className="grid md:grid-cols-2 gap-0">
+                    {/* Left Content */}
+                    <div className="p-10 flex flex-col justify-center">
+                      <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                        {company.name}
+                      </h3>
+                      <p className="text-gray-600 text-lg mb-6">
+                        {company.description}
+                      </p>
 
-                {/* Right Image */}
-                <div className="relative h-64 md:h-full">
-                  <Image
-                    src="/indian-woman-professional.png"
-                    alt="KarVenSen Technologies"
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent" />
+                      {/* Dynamic button based on buttonType */}
+                      {company.buttonType === 'button' ? (
+                        <a
+                          href={company.websiteUrl || "#"}
+                          className="inline-flex items-center gap-3 px-6 py-3 bg-gray-900 hover:bg-red-600 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl w-fit"
+                        >
+                          <span>{company.buttonText || "Visit Website"}</span>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </a>
+                      ) : (
+                        <a
+                          href={company.websiteUrl || "#"}
+                          className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-semibold group/link"
+                        >
+                          <span>{company.buttonText || "Learn More"}</span>
+                          <svg className="w-5 h-5 group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+
+                    {/* Right Image */}
+                    <div className="relative h-64 md:h-full">
+                      <Image
+                        src={company.image ? urlFor(company.image).url() : fallbackImages[index % fallbackImages.length]}
+                        alt={company.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              ))
+            })()}
           </div>
         </div>
       </section>
@@ -1646,7 +1686,7 @@ export default function AboutPage() {
                 <X className="h-6 w-6" />
               </button>
               <p className="text-lg font-normal text-center pr-8">
-                Please fill out the form below and we will get back to you as soon as possible.
+                {contactFormData?.headerText || "Please fill out the form below and we will get back to you as soon as possible."}
               </p>
             </div>
 
@@ -1662,7 +1702,7 @@ export default function AboutPage() {
                 <div className="mb-4">
                   <input
                     type="text"
-                    placeholder="* Name"
+                    placeholder={contactFormData?.namePlaceholder || "* Name"}
                     required
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50"
                   />
@@ -1672,7 +1712,7 @@ export default function AboutPage() {
                 <div className="mb-4">
                   <input
                     type="email"
-                    placeholder="* Email"
+                    placeholder={contactFormData?.emailPlaceholder || "* Email"}
                     required
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50"
                   />
@@ -1681,7 +1721,7 @@ export default function AboutPage() {
                 {/* Message Field */}
                 <div className="mb-6">
                   <textarea
-                    placeholder="* Message"
+                    placeholder={contactFormData?.messagePlaceholder || "* Message"}
                     required
                     rows={4}
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent resize-none bg-gray-50"
@@ -1694,7 +1734,7 @@ export default function AboutPage() {
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 mb-6"
                 >
                   <Send className="h-5 w-5" />
-                  Submit
+                  {contactFormData?.submitButtonText || "Send Message"}
                 </button>
 
                 {/* Footer Icons */}
@@ -1724,7 +1764,7 @@ export default function AboutPage() {
                     className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
                   >
                     <span className="text-green-600">🔒</span>
-                    <span>Powered by tawk.to</span>
+                    <span>{contactFormData?.poweredByText || "Powered by tawk.to"}</span>
                   </a>
                 </div>
               </form>

@@ -21,6 +21,14 @@ interface FooterData {
     name: string
     url: string
   }>
+  legalLinks?: {
+    contactUsText?: string
+    contactUsUrl?: string
+    termsText?: string
+    termsUrl?: string
+    privacyText?: string
+    privacyUrl?: string
+  }
 }
 
 const fallbackFooterData: FooterData = {
@@ -74,7 +82,8 @@ export function Footer() {
       email,
       socialMedia,
       copyrightText,
-      groupCompanies
+      groupCompanies,
+      legalLinks
     }`,
     {},
     fallbackFooterData
@@ -215,14 +224,14 @@ export function Footer() {
                 </>
               )}
               <span className="text-gray-400">|</span>
-              <Link href="/contact" className="hover:text-gray-900 transition-colors">
-                Contact Us
+              <Link href={footerData?.legalLinks?.contactUsUrl || "/contact"} className="hover:text-gray-900 transition-colors">
+                {footerData?.legalLinks?.contactUsText || "Contact Us"}
               </Link>
-              <Link href="/terms" className="hover:text-gray-900 transition-colors">
-                Terms of Service
+              <Link href={footerData?.legalLinks?.termsUrl || "/terms"} className="hover:text-gray-900 transition-colors">
+                {footerData?.legalLinks?.termsText || "Terms of Service"}
               </Link>
-              <Link href="/privacy" className="hover:text-gray-900 transition-colors">
-                Privacy Policy
+              <Link href={footerData?.legalLinks?.privacyUrl || "/privacy"} className="hover:text-gray-900 transition-colors">
+                {footerData?.legalLinks?.privacyText || "Privacy Policy"}
               </Link>
             </div>
           </div>

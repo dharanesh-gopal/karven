@@ -1,4 +1,4 @@
-import { fetchSanityData } from '@/hooks/useSanityData'
+import { fetchSanityData } from '@/lib/fetchSanityData'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArrowRight } from 'lucide-react'
@@ -79,7 +79,7 @@ export default async function ServicesPage() {
                     <p className="text-blue-600 font-medium mb-4">{service.tagline}</p>
                   )}
                   <p className="text-gray-600 mb-4">{service.description}</p>
-                  
+
                   {service.features && service.features.length > 0 && (
                     <div className="space-y-2 mb-6">
                       {service.features.slice(0, 3).map((feature, idx) => (

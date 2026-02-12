@@ -34,6 +34,7 @@ import award from './award'
 import partner from './partner'
 import groupCompany from './groupCompany'
 import serviceItem from './serviceItem'
+import servicesPage from './servicesPage'
 import upcomingProgram from './upcomingProgram'
 import trainingHero from './trainingHero'
 import trainingProgram from './trainingProgram'
@@ -68,6 +69,7 @@ import aboutJoinUsSection from './aboutJoinUsSection'
 import aboutGroupCompaniesSection from './aboutGroupCompaniesSection'
 import leadershipMember from './leadershipMember'
 import boardMember from './boardMember'
+import aboutContactForm from './aboutContactForm'
 
 
 export const schema: { types: SchemaTypeDefinition[] } = {
@@ -77,6 +79,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     contactInfo,
     notification,
     footerSettings,
+    aboutContactForm,
 
     // Content
     service,
@@ -130,6 +133,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 
 
     // Services Page
+    servicesPage,
     serviceItem,
 
     // Training Page

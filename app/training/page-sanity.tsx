@@ -1,4 +1,4 @@
-import { fetchSanityData } from '@/hooks/useSanityData'
+import { fetchSanityData } from '@/lib/fetchSanityData'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArrowRight, Calendar, Clock } from 'lucide-react'

@@ -20,3 +20,25 @@ export async function getSiteSettings() {
     return null
   }
 }
+
+/**
+ * Fetch services page content
+ */
+export async function getServicesPageContent() {
+  try {
+    const query = `*[_type == "servicesPage"][0]{
+      hero,
+      droneSection,
+      softwareSection,
+      educationSection,
+      ctaSection,
+      seo
+    }`
+    
+    const content = await client.fetch(query)
+    return content
+  } catch (error) {
+    console.error('Error fetching services page content:', error)
+    return null
+  }
+}

@@ -62,6 +62,50 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'legalLinks',
+      title: 'Legal Links',
+      type: 'object',
+      description: 'Links for Contact Us, Terms of Service, and Privacy Policy',
+      fields: [
+        {
+          name: 'contactUsText',
+          type: 'string',
+          title: 'Contact Us Text',
+          initialValue: 'Contact Us',
+        },
+        {
+          name: 'contactUsUrl',
+          type: 'string',
+          title: 'Contact Us URL',
+          initialValue: '/contact',
+        },
+        {
+          name: 'termsText',
+          type: 'string',
+          title: 'Terms of Service Text',
+          initialValue: 'Terms of Service',
+        },
+        {
+          name: 'termsUrl',
+          type: 'string',
+          title: 'Terms of Service URL',
+          initialValue: '/terms',
+        },
+        {
+          name: 'privacyText',
+          type: 'string',
+          title: 'Privacy Policy Text',
+          initialValue: 'Privacy Policy',
+        },
+        {
+          name: 'privacyUrl',
+          type: 'string',
+          title: 'Privacy Policy URL',
+          initialValue: '/privacy',
+        },
+      ],
+    }),
   ],
   preview: {
     prepare() {
