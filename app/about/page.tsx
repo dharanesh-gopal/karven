@@ -51,6 +51,7 @@ interface IndustryCardData {
 }
 
 interface AboutGalleryData {
+  title: string
   images: Array<{ asset: any; alt: string; caption?: string }>
   autoplayInterval: number
 }
@@ -382,11 +383,12 @@ export default function AboutPage() {
 
   const { data: galleryData } = useSanityData<AboutGalleryData>(
     `*[_type == "aboutGallery" && isActive == true][0]{
+      title,
       images[]{"asset": asset, alt, caption},
       autoplayInterval
     }`,
     {},
-    { images: [], autoplayInterval: 3000 }
+    { title: "", images: [], autoplayInterval: 3000 }
   )
 
   const { data: leadershipTeam } = useSanityData<TeamMemberData[]>(
@@ -664,15 +666,21 @@ export default function AboutPage() {
 
 
 
-  // Gallery images array
-  const galleryImages = [
-    { src: "/indian-professional-man.png", alt: "KarVenSen Team - Drone Training" },
-    { src: "/indian-woman-professional.png", alt: "KarVenSen Team - Software Development" },
-    { src: "/indian-professor-man.jpg", alt: "KarVenSen Team - AI Research" },
-    { src: "/staff teaches to std.png", alt: "KarVenSen Team - Education" },
-    { src: "/drone-flying-over-farm-field-at-sunset.jpg", alt: "KarVenSen - Drone Operations" },
-    { src: "/dron in agri land.png", alt: "KarVenSen - Agriculture Solutions" },
-  ]
+  // Get gallery images from Sanity or use fallback
+  const galleryImages = galleryData?.images?.length > 0 
+    ? galleryData.images.map(img => ({
+        src: img.asset ? urlFor(img.asset).url() : "",
+        alt: img.alt || "KarVenSen team member",
+        caption: img.caption
+      }))
+    : [
+        { src: "/indian-professional-man.png", alt: "KarVenSen team member in professional setting", caption: "Professional drone training programs" },
+        { src: "/indian-woman-professional.png", alt: "KarVenSen software developer", caption: "Innovative software solutions" },
+        { src: "/indian-professor-man.jpg", alt: "KarVenSen AI researcher", caption: "Cutting-edge AI research" },
+        { src: "/staff teaches to std.png", alt: "KarVenSen instructor teaching students", caption: "Comprehensive educational programs" },
+        { src: "/drone-flying-over-farm-field-at-sunset.jpg", alt: "Drone flying over agricultural field", caption: "Advanced drone operations" },
+        { src: "/dron in agri land.png", alt: "Agricultural drone in farming field", caption: "Smart agriculture solutions" },
+      ]
 
   useEffect(() => {
     // Trigger animation on page load
@@ -687,12 +695,13 @@ export default function AboutPage() {
 
   // Auto-rotate gallery images
   useEffect(() => {
+    const intervalTime = galleryData?.autoplayInterval || 3000
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length)
-    }, 3000) // Change image every 3 seconds
+    }, intervalTime)
 
     return () => clearInterval(interval)
-  }, [galleryImages.length])
+  }, [galleryImages.length, galleryData?.autoplayInterval])
 
   const scrollToSection = () => {
     galleryRef.ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -791,6 +800,16 @@ export default function AboutPage() {
       >
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
+            {/* Gallery Title */}
+            {galleryData?.title && (
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  {galleryData.title}
+                </h2>
+                <div className="w-20 h-1 bg-red-600 mx-auto"></div>
+              </div>
+            )}
+            
             {/* Main Carousel */}
             <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden group">
               {/* Images */}
@@ -812,7 +831,9 @@ export default function AboutPage() {
 
                   {/* Image Caption */}
                   <div className="absolute bottom-8 left-8 right-8 text-white">
-                    <h3 className="text-2xl md:text-3xl font-bold mb-2">{image.alt}</h3>
+                    {image.caption && (
+                      <h3 className="text-2xl md:text-3xl font-bold mb-2">{image.caption}</h3>
+                    )}
                     <div className="h-1 w-20 bg-red-600"></div>
                   </div>
                 </div>
@@ -888,7 +909,7 @@ export default function AboutPage() {
         {/* Vertical Side Text - Far Left Side */}
         <div className="hidden lg:block absolute left-10 xl:left-16 top-1/2 -translate-y-1/2 -rotate-90 origin-center whitespace-nowrap z-0">
           <div className="flex items-center gap-6">
-            <span className="text-5xl xl:text-6xl font-bold text-gray-200 tracking-wider">Aerial Innovations</span>
+            <span className="text-5xl xl:text-6xl font-bold text-gray-200 tracking-wider">{welcomeSection?.sideText || "Aerial Innovations"}</span>
           </div>
         </div>
 
