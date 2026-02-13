@@ -28,10 +28,34 @@ export async function getServicesPageContent() {
   try {
     const query = `*[_type == "servicesPage"][0]{
       hero,
-      droneSection,
-      softwareSection,
-      educationSection,
-      ctaSection,
+      droneSection{
+        ...,
+        "image": image.asset,
+        learnMoreText,
+        titleIcon,
+        badge1Icon,
+        badge2Icon
+      },
+      softwareSection{
+        ...,
+        "image": image.asset,
+        learnMoreText,
+        titleIcon,
+        badge1Icon,
+        badge2Icon
+      },
+      educationSection{
+        ...,
+        "image": image.asset,
+        learnMoreText,
+        titleIcon,
+        badge1Icon,
+        badge2Icon
+      },
+      ctaSection{
+        ...,
+        ctaIcon
+      },
       seo
     }`
     

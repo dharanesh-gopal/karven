@@ -40,6 +40,13 @@ export default defineType({
           initialValue: 'Drone Technology Services',
         },
         {
+          name: 'titleIcon',
+          title: 'Title Icon',
+          type: 'string',
+          description: 'Icon for the service title section',
+          initialValue: 'Drone',
+        },
+        {
           name: 'image',
           title: 'Section Image',
           type: 'image',
@@ -66,10 +73,32 @@ export default defineType({
           initialValue: '/contact?enquiry=drone-services',
         },
         {
+          name: 'learnMoreText',
+          title: 'Learn More Text',
+          type: 'string',
+          initialValue: 'Learn More',
+        },
+        {
           name: 'badge1Label',
           title: 'Badge 1 Label',
           type: 'string',
           initialValue: 'Premium',
+        },
+        {
+          name: 'badge1Icon',
+          title: 'Badge 1 Icon',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Drone', value: 'Drone' },
+              { title: 'Camera', value: 'Camera' },
+              { title: 'Video', value: 'Video' },
+              { title: 'Cpu', value: 'Cpu' },
+              { title: 'Cloud', value: 'Cloud' },
+              { title: 'GraduationCap', value: 'GraduationCap' },
+            ],
+          },
+          initialValue: 'Drone',
         },
         {
           name: 'badge1Text',
@@ -89,6 +118,20 @@ export default defineType({
           type: 'string',
           initialValue: 'Excellence',
         },
+        {
+          name: 'badge2Icon',
+          title: 'Badge 2 Icon',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'CheckCircle2', value: 'CheckCircle2' },
+              { title: 'Shield', value: 'Shield' },
+              { title: 'Target', value: 'Target' },
+              { title: 'Zap', value: 'Zap' },
+            ],
+          },
+          initialValue: 'CheckCircle2',
+        },
       ],
     }),
 
@@ -103,6 +146,13 @@ export default defineType({
           title: 'Section Title',
           type: 'string',
           initialValue: 'AI & Software Services',
+        },
+        {
+          name: 'titleIcon',
+          title: 'Title Icon',
+          type: 'string',
+          description: 'Icon for the service title section',
+          initialValue: 'Cpu',
         },
         {
           name: 'image',
@@ -131,6 +181,12 @@ export default defineType({
           initialValue: '/contact',
         },
         {
+          name: 'learnMoreText',
+          title: 'Learn More Text',
+          type: 'string',
+          initialValue: 'Learn More',
+        },
+        {
           name: 'badge1Label',
           title: 'Badge 1 Label',
           type: 'string',
@@ -143,6 +199,22 @@ export default defineType({
           initialValue: 'AI Solutions',
         },
         {
+          name: 'badge1Icon',
+          title: 'Badge 1 Icon',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Cpu', value: 'Cpu' },
+              { title: 'Camera', value: 'Camera' },
+              { title: 'Video', value: 'Video' },
+              { title: 'Drone', value: 'Drone' },
+              { title: 'Cloud', value: 'Cloud' },
+              { title: 'GraduationCap', value: 'GraduationCap' },
+            ],
+          },
+          initialValue: 'Cpu',
+        },
+        {
           name: 'badge2Label',
           title: 'Badge 2 Label',
           type: 'string',
@@ -153,6 +225,20 @@ export default defineType({
           title: 'Badge 2 Text',
           type: 'string',
           initialValue: 'Results',
+        },
+        {
+          name: 'badge2Icon',
+          title: 'Badge 2 Icon',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'CheckCircle2', value: 'CheckCircle2' },
+              { title: 'Shield', value: 'Shield' },
+              { title: 'Target', value: 'Target' },
+              { title: 'Zap', value: 'Zap' },
+            ],
+          },
+          initialValue: 'CheckCircle2',
         },
       ],
     }),
@@ -168,6 +254,13 @@ export default defineType({
           title: 'Section Title',
           type: 'string',
           initialValue: 'Educational Programs',
+        },
+        {
+          name: 'titleIcon',
+          title: 'Title Icon',
+          type: 'string',
+          description: 'Icon for the service title section',
+          initialValue: 'GraduationCap',
         },
         {
           name: 'image',
@@ -196,6 +289,12 @@ export default defineType({
           initialValue: '/contact',
         },
         {
+          name: 'learnMoreText',
+          title: 'Learn More Text',
+          type: 'string',
+          initialValue: 'Learn More',
+        },
+        {
           name: 'badge1Label',
           title: 'Badge 1 Label',
           type: 'string',
@@ -208,6 +307,22 @@ export default defineType({
           initialValue: 'Training',
         },
         {
+          name: 'badge1Icon',
+          title: 'Badge 1 Icon',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'GraduationCap', value: 'GraduationCap' },
+              { title: 'Camera', value: 'Camera' },
+              { title: 'Video', value: 'Video' },
+              { title: 'Drone', value: 'Drone' },
+              { title: 'Cpu', value: 'Cpu' },
+              { title: 'Cloud', value: 'Cloud' },
+            ],
+          },
+          initialValue: 'GraduationCap',
+        },
+        {
           name: 'badge2Label',
           title: 'Badge 2 Label',
           type: 'string',
@@ -218,6 +333,20 @@ export default defineType({
           title: 'Badge 2 Text',
           type: 'string',
           initialValue: 'Programs',
+        },
+        {
+          name: 'badge2Icon',
+          title: 'Badge 2 Icon',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'CheckCircle2', value: 'CheckCircle2' },
+              { title: 'Shield', value: 'Shield' },
+              { title: 'Target', value: 'Target' },
+              { title: 'Zap', value: 'Zap' },
+            ],
+          },
+          initialValue: 'CheckCircle2',
         },
       ],
     }),
@@ -274,6 +403,22 @@ export default defineType({
             { text: '40+ UAV Surveys' },
             { text: 'Industry Leading' },
           ],
+        },
+        {
+          name: 'ctaIcon',
+          title: 'CTA Icon',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Drone', value: 'Drone' },
+              { title: 'Cpu', value: 'Cpu' },
+              { title: 'GraduationCap', value: 'GraduationCap' },
+              { title: 'Camera', value: 'Camera' },
+              { title: 'Cloud', value: 'Cloud' },
+              { title: 'CheckCircle2', value: 'CheckCircle2' },
+            ],
+          },
+          initialValue: 'Drone',
         },
       ],
     }),

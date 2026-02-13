@@ -146,6 +146,9 @@ export const structure: StructureResolver = (S) =>
             .title('Services - All Content')
             .items([
               S.listItem()
+                .title('0. Services Page Settings (Main Page)')
+                .child(S.document().schemaType('servicesPage').documentId('servicesPage')),
+              S.listItem()
                 .title('1. All Services (Main List)')
                 .child(S.documentTypeList('service').title('Services')),
               S.listItem()

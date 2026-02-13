@@ -18,6 +18,11 @@ import {
   GraduationCap,
   Plane,
   Server,
+  Map,
+  Ruler,
+  Shield,
+  Target,
+  Zap,
 } from 'lucide-react'
 
 interface ServiceItemData {
@@ -54,6 +59,11 @@ const getServiceIcon = (iconName: string) => {
     GraduationCap,
     Plane,
     Server,
+    Map,
+    Ruler,
+    Shield,
+    Target,
+    Zap,
   }
   return icons[iconName] || Camera
 }

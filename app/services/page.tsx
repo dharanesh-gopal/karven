@@ -5,6 +5,23 @@ import {
   GraduationCap,
   CheckCircle2,
   ArrowRight,
+  Camera,
+  Video,
+  Sprout,
+  Package,
+  Microchip,
+  Box,
+  BarChart3,
+  Radio,
+  Cloud,
+  BookOpen,
+  Plane,
+  Server,
+  Map,
+  Ruler,
+  Shield,
+  Target,
+  Zap,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -13,6 +30,33 @@ import { fetchSanityData } from "@/lib/fetchSanityData"
 import { getServicesPageContent } from "@/sanity/lib/queries"
 import { urlFor } from "@/sanity/lib/image"
 import { ServicesList } from "@/components/services-list"
+
+// Helper function to get icon component from icon name
+function getSectionIcon(iconName: string | undefined, fallback: string = "Camera") {
+  const icons: Record<string, React.ComponentType<{ className?: string }>> = {
+    Drone: DroneIcon,
+    Camera,
+    Video,
+    Sprout,
+    Package,
+    Microchip,
+    Box,
+    BarChart3,
+    Radio,
+    Cpu,
+    Cloud,
+    BookOpen,
+    GraduationCap,
+    Plane,
+    Server,
+    Map,
+    Ruler,
+    Shield,
+    Target,
+    Zap,
+  }
+  return icons[iconName || fallback] || Camera
+}
 
 interface ServiceItemData {
   title: string
@@ -255,7 +299,32 @@ export default async function ServicesPage() {
     'training': '/services/educational-programs',
   }
 
-  // Get image URLs from Sanity or use defaults
+  // Get section icons from Sanity or use defaults
+  const droneTitleIconName = content.droneSection?.titleIcon || "Drone"
+  const DroneTitleIcon = getSectionIcon(droneTitleIconName, "Drone")
+  const droneBadge1IconName = content.droneSection?.badge1Icon || "Drone"
+  const DroneBadge1Icon = getSectionIcon(droneBadge1IconName, "Drone")
+  const droneBadge2IconName = content.droneSection?.badge2Icon || "CheckCircle2"
+  const DroneBadge2Icon = getSectionIcon(droneBadge2IconName, "CheckCircle2")
+  
+  const softwareTitleIconName = content.softwareSection?.titleIcon || "Cpu"
+  const SoftwareTitleIcon = getSectionIcon(softwareTitleIconName, "Cpu")
+  const softwareBadge1IconName = content.softwareSection?.badge1Icon || "Cpu"
+  const SoftwareBadge1Icon = getSectionIcon(softwareBadge1IconName, "Cpu")
+  const softwareBadge2IconName = content.softwareSection?.badge2Icon || "CheckCircle2"
+  const SoftwareBadge2Icon = getSectionIcon(softwareBadge2IconName, "CheckCircle2")
+  
+  const educationTitleIconName = content.educationSection?.titleIcon || "GraduationCap"
+  const EducationTitleIcon = getSectionIcon(educationTitleIconName, "GraduationCap")
+  const educationBadge1IconName = content.educationSection?.badge1Icon || "GraduationCap"
+  const EducationBadge1Icon = getSectionIcon(educationBadge1IconName, "GraduationCap")
+  const educationBadge2IconName = content.educationSection?.badge2Icon || "CheckCircle2"
+  const EducationBadge2Icon = getSectionIcon(educationBadge2IconName, "CheckCircle2")
+  
+  // CTA Section Icon
+  const ctaIconName = content.ctaSection?.ctaIcon || "Drone"
+  const CtaSectionIcon = getSectionIcon(ctaIconName, "Drone")
+  
   const droneImage = content.droneSection?.image
     ? urlFor(content.droneSection.image).width(800).height(600).url()
     : 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&h=600&fit=crop'
@@ -306,7 +375,7 @@ export default async function ServicesPage() {
                   <div className="relative bg-white rounded-2xl shadow-2xl p-4 border-2 border-red-100 hover:border-red-300 transition-all duration-300 hover:scale-110">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center">
-                        <DroneIcon className="w-6 h-6 text-white" />
+                        <DroneBadge1Icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 font-medium">
@@ -326,7 +395,7 @@ export default async function ServicesPage() {
                   <div className="relative bg-white rounded-2xl shadow-2xl p-4 border-2 border-blue-100 hover:border-blue-300 transition-all duration-300 hover:scale-110">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
-                        <CheckCircle2 className="w-6 h-6 text-white" />
+                        <DroneBadge2Icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 font-medium">
@@ -362,9 +431,9 @@ export default async function ServicesPage() {
                     {content.droneSection?.imageTitle || "Premier Consultancy for Drone Projects"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-red-300 transition-colors">
-                    <span className="font-semibold">Learn More</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                  </div>
+                      <span className="font-semibold">{content.droneSection?.learnMoreText || "Learn More"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                    </div>
                 </div>
 
                 {/* Animated Border Effect */}
@@ -379,7 +448,7 @@ export default async function ServicesPage() {
                   <div className="relative">
                     <div className="absolute inset-0 bg-red-600/20 blur-xl rounded-full animate-pulse" />
                     <div className="relative w-16 h-16 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center shadow-lg shadow-red-600/50 transform hover:scale-110 hover:rotate-6 transition-all duration-300">
-                      <DroneIcon className="w-8 h-8 text-white animate-float" />
+                      <DroneTitleIcon className="w-8 h-8 text-white animate-float" />
                     </div>
                   </div>
                 </div>
@@ -408,7 +477,7 @@ export default async function ServicesPage() {
                   <div className="relative bg-white rounded-2xl shadow-2xl p-4 border-2 border-blue-100 hover:border-blue-300 transition-all duration-300 hover:scale-110">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
-                        <Cpu className="w-6 h-6 text-white" />
+                        <SoftwareBadge1Icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 font-medium">
@@ -428,7 +497,7 @@ export default async function ServicesPage() {
                   <div className="relative bg-white rounded-2xl shadow-2xl p-4 border-2 border-green-100 hover:border-green-300 transition-all duration-300 hover:scale-110">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center">
-                        <CheckCircle2 className="w-6 h-6 text-white" />
+                        <SoftwareBadge2Icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 font-medium">
@@ -464,9 +533,9 @@ export default async function ServicesPage() {
                     {content.softwareSection?.imageTitle || "Cutting-Edge AI & Software Solutions"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-blue-300 transition-colors">
-                    <span className="font-semibold">Learn More</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                  </div>
+                      <span className="font-semibold">{content.softwareSection?.learnMoreText || "Learn More"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                    </div>
                 </div>
 
                 {/* Animated Border Effect */}
@@ -481,7 +550,7 @@ export default async function ServicesPage() {
                   <div className="relative">
                     <div className="absolute inset-0 bg-blue-600/20 blur-xl rounded-full animate-pulse" />
                     <div className="relative w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/50 transform hover:scale-110 hover:rotate-6 transition-all duration-300">
-                      <Cpu className="w-8 h-8 text-white animate-float" />
+                      <SoftwareTitleIcon className="w-8 h-8 text-white animate-float" />
                     </div>
                   </div>
                 </div>
@@ -510,7 +579,7 @@ export default async function ServicesPage() {
                   <div className="relative bg-white rounded-2xl shadow-2xl p-4 border-2 border-purple-100 hover:border-purple-300 transition-all duration-300 hover:scale-110">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center">
-                        <GraduationCap className="w-6 h-6 text-white" />
+                        <EducationBadge1Icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 font-medium">
@@ -530,7 +599,7 @@ export default async function ServicesPage() {
                   <div className="relative bg-white rounded-2xl shadow-2xl p-4 border-2 border-orange-100 hover:border-orange-300 transition-all duration-300 hover:scale-110">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-orange-600 to-orange-700 rounded-xl flex items-center justify-center">
-                        <CheckCircle2 className="w-6 h-6 text-white" />
+                        <EducationBadge2Icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 font-medium">
@@ -566,9 +635,9 @@ export default async function ServicesPage() {
                     {content.educationSection?.imageTitle || "Empowering Through Education & Training"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-purple-300 transition-colors">
-                    <span className="font-semibold">Learn More</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                  </div>
+                      <span className="font-semibold">{content.educationSection?.learnMoreText || "Learn More"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                    </div>
                 </div>
 
                 {/* Animated Border Effect */}
@@ -583,7 +652,7 @@ export default async function ServicesPage() {
                   <div className="relative">
                     <div className="absolute inset-0 bg-purple-600/20 blur-xl rounded-full animate-pulse" />
                     <div className="relative w-16 h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-600/50 transform hover:scale-110 hover:rotate-6 transition-all duration-300">
-                      <GraduationCap className="w-8 h-8 text-white animate-float" />
+                      <EducationTitleIcon className="w-8 h-8 text-white animate-float" />
                     </div>
                   </div>
                 </div>
@@ -614,7 +683,7 @@ export default async function ServicesPage() {
             <div className="relative">
               <div className="absolute inset-0 bg-white/30 blur-2xl rounded-full animate-pulse" />
               <div className="relative w-20 h-20 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center border-2 border-white/30 shadow-2xl">
-                <DroneIcon className="w-10 h-10 text-white animate-float" />
+                <CtaSectionIcon className="w-10 h-10 text-white animate-float" />
               </div>
             </div>
           </div>
