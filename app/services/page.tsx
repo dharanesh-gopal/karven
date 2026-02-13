@@ -30,6 +30,27 @@ import { fetchSanityData } from "@/lib/fetchSanityData"
 import { getServicesPageContent } from "@/sanity/lib/queries"
 import { urlFor } from "@/sanity/lib/image"
 import { ServicesList } from "@/components/services-list"
+import { generateSEOMetadata, generateServiceStructuredData, generateBreadcrumbStructuredData } from "@/lib/seo-utils"
+
+// Generate metadata for SEO
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const pageContent = await getServicesPageContent()
+    
+    return generateSEOMetadata({
+      seo: pageContent?.seo,
+      fallbackTitle: "Our Services | KarVenSen - AI & Drone Solutions",
+      fallbackDescription: "Explore KarVenSen's comprehensive services in drone technology, AI software development, cloud services, and advanced educational programs. Transform your business with cutting-edge solutions.",
+      path: "/services",
+    })
+  } catch (error) {
+    console.error("Error generating metadata:", error)
+    return {
+      title: "Our Services | KarVenSen - AI & Drone Solutions",
+      description: "Explore KarVenSen's comprehensive services in drone technology, AI software development, cloud services, and advanced educational programs.",
+    }
+  }
+}
 
 // Helper function to get icon component from icon name
 function getSectionIcon(iconName: string | undefined, fallback: string = "Camera") {
@@ -721,6 +742,31 @@ export default async function ServicesPage() {
           )}
         </div>
       </section>
+
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            generateBreadcrumbStructuredData([
+              { name: 'Home', url: 'https://karvensen.com' },
+              { name: 'Services', url: 'https://karvensen.com/services' },
+            ])
+          ),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            generateServiceStructuredData({
+              name: 'KarVenSen Professional Services',
+              description: 'Comprehensive AI, Drone Technology, Software Development, Cloud Services, and Educational Programs',
+              url: 'https://karvensen.com/services',
+            })
+          ),
+        }}
+      />
     </div>
   )
 }

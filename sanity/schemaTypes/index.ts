@@ -70,10 +70,14 @@ import aboutGroupCompaniesSection from './aboutGroupCompaniesSection'
 import leadershipMember from './leadershipMember'
 import boardMember from './boardMember'
 import aboutContactForm from './aboutContactForm'
+import seoObject from './seoObject'
 
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
+    // Reusable Objects
+    seoObject,
+
     // Site-wide
     siteSettings,
     contactInfo,

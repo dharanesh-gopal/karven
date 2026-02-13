@@ -314,6 +314,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const { courseId } = use(params)
   const [showEnrollForm, setShowEnrollForm] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -328,7 +329,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   })
 
   // Fetch course data from CMS
-  const { data: courses } = useSanityData<any[]>(
+  const { data: courses, isLoading: sanityLoading } = useSanityData<any[]>(
     `*[_type == "trainingCourse" && slug.current == $slug && isActive == true]{
       title,
       subtitle,
@@ -345,18 +346,31 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
       included
     }`,
     { slug: courseId },
-    []
+    null
   )
 
-  // Get course data or fallback
-  const course = courses && courses.length > 0 
+  // Get course data - prioritize Sanity data, then fallback to hardcoded
+  const course = (courses && courses.length > 0) 
     ? courses[0]
     : coursesData[courseId as keyof typeof coursesData]
 
   useEffect(() => {
     // Close enrollment form when courseId changes
     setShowEnrollForm(false)
+    setIsLoading(false)
   }, [courseId])
+
+  // Show loading state while checking for course
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading course details...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!course) {
     notFound()

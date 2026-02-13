@@ -41,7 +41,10 @@ interface TrainingCourseData {
   description: string
   image: any
   duration: string
-  detailsLink: string
+  slug?: {
+    current: string
+  }
+  detailsLink?: string
 }
 
 // Upcoming Programs Grid Component
@@ -248,7 +251,7 @@ export default function TrainingPage() {
       description,
       "image": image.asset,
       duration,
-      detailsLink
+      slug
     }`,
     {},
     []
@@ -287,7 +290,7 @@ export default function TrainingPage() {
       description: "A comprehensive program designed to offer a blend of theoretical education and hands-on practical experience.",
       image: null,
       duration: "8 Days",
-      detailsLink: "/training/courses/course-a",
+      slug: { current: "course-a" },
     },
     {
       title: "Course B | Small and Medium Class Drone Training",
@@ -295,7 +298,7 @@ export default function TrainingPage() {
       description: "For those looking to master both small and medium drones, this course offers in-depth training in both theory and practice.",
       image: null,
       duration: "13 days",
-      detailsLink: "/training/courses/course-b",
+      slug: { current: "course-b" },
     },
     {
       title: "Course C | Educational Drone Workshop",
@@ -303,7 +306,7 @@ export default function TrainingPage() {
       description: "Designed for schools and colleges, this workshop introduces students to drone technology, coding, and practical applications.",
       image: null,
       duration: "3-5 Days",
-      detailsLink: "/training/courses/course-c",
+      slug: { current: "course-c" },
     },
     {
       title: "Course D | Agricultural Drone Operations",
@@ -311,11 +314,30 @@ export default function TrainingPage() {
       description: "Specialized training for farmers and agriculture professionals on using drones for crop monitoring, spraying, and field analysis.",
       image: null,
       duration: "6 Days",
-      detailsLink: "/training/courses/course-d",
+      slug: { current: "course-d" },
     },
   ]
 
-  const activeCourses = (coursesData && coursesData.length > 0) ? coursesData : fallbackCourses
+  // Use fallback courses if Sanity data is empty OR if courses don't have correct slugs
+  // Only accept courses with slugs matching: course-a, course-b, course-c, course-d
+  const validSlugs = ['course-a', 'course-b', 'course-c', 'course-d']
+  const hasValidCourses = coursesData && 
+    coursesData.length > 0 && 
+    coursesData.every(c => c.slug?.current && validSlugs.includes(c.slug.current))
+  
+  const activeCourses = hasValidCourses ? coursesData : fallbackCourses
+
+  // Debug: Check what courses are being used
+  useEffect(() => {
+    console.log('🎓 Training Courses:', {
+      sanityData: coursesData,
+      hasValidSlugs: hasValidCourses,
+      usingSanity: hasValidCourses,
+      usingFallback: !hasValidCourses,
+      activeCourses: activeCourses,
+      courseLinks: activeCourses.map(c => `/training/courses/${c.slug?.current}`)
+    })
+  }, [coursesData, activeCourses, hasValidCourses])
 
   const mediaItems = [
     {
@@ -505,12 +527,29 @@ export default function TrainingPage() {
                     <p className="text-gray-700">
                       <span className="font-semibold">Duration:</span> {course.duration}
                     </p>
-                    <Link 
-                      href={course.detailsLink}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
-                    >
-                      Learn More
-                    </Link>
+                    {course.slug?.current ? (
+                      <Link 
+                        href={`/training/courses/${course.slug.current}`}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
+                      >
+                        Learn More
+                      </Link>
+                    ) : course.detailsLink ? (
+                      <Link 
+                        href={course.detailsLink}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
+                      >
+                        Learn More
+                      </Link>
+                    ) : (
+                      <button 
+                        disabled
+                        className="bg-gray-400 text-white px-6 py-2 rounded-full text-sm font-medium cursor-not-allowed"
+                        title="Course link not configured"
+                      >
+                        Coming Soon
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

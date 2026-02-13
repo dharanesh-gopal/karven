@@ -427,20 +427,8 @@ export default defineType({
     defineField({
       name: 'seo',
       title: 'SEO Settings',
-      type: 'object',
-      fields: [
-        {
-          name: 'metaTitle',
-          title: 'Meta Title',
-          type: 'string',
-        },
-        {
-          name: 'metaDescription',
-          title: 'Meta Description',
-          type: 'text',
-          rows: 3,
-        },
-      ],
+      type: 'seoObject',
+      description: 'Search Engine Optimization settings for the services page',
     }),
   ],
   preview: {

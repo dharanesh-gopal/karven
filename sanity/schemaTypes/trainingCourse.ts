@@ -16,6 +16,7 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
+      description: 'URL-friendly identifier (e.g., "course-a", "course-b"). This determines the course URL: /training/courses/[slug]',
       options: {
         source: 'title',
       },
@@ -137,10 +138,10 @@ export default defineType({
     },
     {
       name: 'detailsLink',
-      title: 'Details Page Link',
+      title: 'Details Page Link (Deprecated)',
       type: 'string',
-      description: 'Link to course details page (e.g., "/training/courses/course-a")',
-      validation: (Rule) => Rule.required(),
+      description: '⚠️ DEPRECATED: This field is no longer used. The URL is automatically generated from the slug field above.',
+      readOnly: true,
     },
     {
       name: 'order',
