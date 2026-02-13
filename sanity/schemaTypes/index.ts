@@ -1,6 +1,5 @@
 import { type SchemaTypeDefinition } from 'sanity'
 
-import service from './service'
 import blog from './blog'
 import author from './author'
 import category from './category'
@@ -41,6 +40,13 @@ import trainingProgram from './trainingProgram'
 import trainingStat from './trainingStat'
 import trainingFaq from './trainingFaq'
 import trainingCourse from './trainingCourse'
+import enrollPage from './enrollPage'
+import trainingPageSettings from './trainingPageSettings'
+import onFieldAction from './onFieldAction'
+import trustedPartner from './trustedPartner'
+import whyTrainWithUs from './whyTrainWithUs'
+import whatSetsUsApart from './whatSetsUsApart'
+import careerOpportunity from './careerOpportunity'
 import careerHero from './careerHero'
 import careerValue from './careerValue'
 import hiringStep from './hiringStep'
@@ -86,7 +92,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     aboutContactForm,
 
     // Content
-    service,
+
     blog,
     author,
     category,
@@ -141,12 +147,19 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     serviceItem,
 
     // Training Page
+    trainingPageSettings,
     trainingHero,
     trainingProgram,
     trainingStat,
     trainingFaq,
     trainingCourse,
+    enrollPage,
     upcomingProgram,
+    onFieldAction,
+    trustedPartner,
+    whyTrainWithUs,
+    whatSetsUsApart,
+    careerOpportunity,
 
     // Careers Page
     careerHero,

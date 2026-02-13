@@ -65,31 +65,11 @@ export default defineType({
       },
     },
     {
-      name: 'tagline',
-      type: 'string',
-      title: 'Tagline',
-      description: 'Short tagline (optional, mainly for software services)',
-    },
-    {
       name: 'description',
       type: 'text',
       title: 'Description',
       rows: 3,
       validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'features',
-      type: 'array',
-      title: 'Features',
-      description: 'List of key features (for detailed services)',
-      of: [{ type: 'string' }],
-    },
-    {
-      name: 'applications',
-      type: 'array',
-      title: 'Applications',
-      description: 'Use cases or applications (for detailed services)',
-      of: [{ type: 'string' }],
     },
     {
       name: 'order',

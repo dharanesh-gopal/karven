@@ -3,10 +3,20 @@
 import { use, useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { CheckCircle, Clock, Calendar, Users, Award, ArrowLeft, DollarSign, X } from "lucide-react"
+import { CheckCircle, Clock, Calendar, Users, Award, ArrowLeft, DollarSign, X, Medal, Trophy, BadgeCheck, ShieldCheck, Star } from "lucide-react"
 import { notFound } from "next/navigation"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
+
+// Icon mapping for dynamic certification icons
+const iconMap: Record<string, any> = {
+  Award,
+  Medal,
+  Trophy,
+  BadgeCheck,
+  ShieldCheck,
+  Star,
+}
 
 const coursesData = {
   "course-a": {
@@ -333,19 +343,64 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
     `*[_type == "trainingCourse" && slug.current == $slug && isActive == true]{
       title,
       subtitle,
+      descriptionTitle,
       description,
       "image": image.asset,
       duration,
       price,
       level,
       maxStudents,
+      certificationIcon,
       certification,
-      highlights,
-      curriculum,
-      prerequisites,
-      included
+      certificationSubtext,
+      highlightsTitle,
+      "highlights": highlightsList,
+      curriculumTitle,
+      "curriculum": curriculumList,
+      prerequisitesTitle,
+      "prerequisites": prerequisitesList,
+      includedTitle,
+      "included": includedList,
+      doubtsTitle,
+      doubtsMessage,
+      contactUsText,
+      contactUsLink,
+      enrollNowText,
+      enrollNowLink
     }`,
     { slug: courseId },
+    null
+  )
+
+  // Fetch enrollment page data from CMS
+  const { data: enrollPageData } = useSanityData<any[]>(
+    `*[_type == "enrollPage" && isActive == true][0]{
+      title,
+      subtitle,
+      fullNameLabel,
+      fullNamePlaceholder,
+      emailLabel,
+      emailPlaceholder,
+      phoneLabel,
+      phonePlaceholder,
+      addressLabel,
+      addressPlaceholder,
+      cityLabel,
+      stateLabel,
+      pincodeLabel,
+      educationLabel,
+      educationOptions,
+      experienceLabel,
+      experienceOptions,
+      messageLabel,
+      messagePlaceholder,
+      submitButtonText,
+      submitButtonLoadingText,
+      successTitle,
+      successMessage,
+      successNote
+    }`,
+    {},
     null
   )
 
@@ -353,6 +408,48 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const course = (courses && courses.length > 0) 
     ? courses[0]
     : coursesData[courseId as keyof typeof coursesData]
+
+  // Get enrollment page data with fallbacks
+  const enrollData = enrollPageData || {
+    title: 'Enroll in Course',
+    subtitle: 'Fill out the form below to enroll in this course',
+    fullNameLabel: 'Full Name',
+    fullNamePlaceholder: 'Enter your full name',
+    emailLabel: 'Email Address',
+    emailPlaceholder: 'your@email.com',
+    phoneLabel: 'Phone Number',
+    phonePlaceholder: '+91 1234567890',
+    addressLabel: 'Address',
+    addressPlaceholder: 'Street address',
+    cityLabel: 'City',
+    stateLabel: 'State',
+    pincodeLabel: 'Pincode',
+    educationLabel: 'Highest Education',
+    educationOptions: [
+      { label: '10th Pass', value: '10th' },
+      { label: '12th Pass', value: '12th' },
+      { label: 'Diploma', value: 'diploma' },
+      { label: 'Graduate', value: 'graduate' },
+      { label: 'Post Graduate', value: 'postgraduate' },
+      { label: 'Other', value: 'other' },
+    ],
+    experienceLabel: 'Prior Drone Experience',
+    experienceOptions: [
+      { label: 'No Experience', value: 'none' },
+      { label: 'Beginner (0-6 months)', value: 'beginner' },
+      { label: 'Intermediate (6-12 months)', value: 'intermediate' },
+      { label: 'Advanced (1+ year)', value: 'advanced' },
+    ],
+    messageLabel: 'Additional Information (Optional)',
+    messagePlaceholder: 'Any special requirements or questions?',
+    submitButtonText: 'Submit Enrollment',
+    sucessTitle: 'Enrollment Submitted!',
+    successMessage: 'Our team will contact you shortly with payment details and further instructions.',
+    successNote: '* Our team will contact you with payment details and further instructions',
+  }
+
+  // Get the certification icon component
+  const CertificationIcon = course ? (iconMap[course.certificationIcon] || Award) : Award
 
   useEffect(() => {
     // Close enrollment form when courseId changes
@@ -482,7 +579,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
 
               {/* Description */}
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Course Description</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{course.descriptionTitle || 'Course Description'}</h2>
                 <p className="text-gray-600 leading-relaxed">
                   {course.description}
                 </p>
@@ -490,7 +587,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
 
               {/* What You'll Learn */}
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">What You'll Learn</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{course.highlightsTitle || "What You'll Learn"}</h2>
                 <div className="grid md:grid-cols-2 gap-4">
                   {course.highlights.map((highlight, index) => (
                     <div key={index} className="flex items-start gap-3">
@@ -503,7 +600,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
 
               {/* Course Curriculum */}
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Curriculum</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">{course.curriculumTitle || 'Course Curriculum'}</h2>
                 <div className="space-y-4">
                   {course.curriculum.map((section, index) => (
                     <div key={index} className="bg-gray-50 rounded-lg p-6 border border-gray-200">
@@ -525,7 +622,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
 
               {/* Prerequisites */}
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Prerequisites</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{course.prerequisitesTitle || 'Prerequisites'}</h2>
                 <ul className="space-y-2">
                   {course.prerequisites.map((prerequisite, index) => (
                     <li key={index} className="flex items-start gap-3 text-gray-700">
@@ -551,13 +648,13 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                     onClick={() => setShowEnrollForm(true)}
                     className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-lg font-semibold transition-colors"
                   >
-                    Enroll Now
+                    {course.enrollNowText || 'Enroll Now'}
                   </button>
                 </div>
 
                 {/* What's Included */}
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                  <h3 className="font-semibold text-gray-900 mb-4">What's Included</h3>
+                  <h3 className="font-semibold text-gray-900 mb-4">{course.includedTitle || "What's Included"}</h3>
                   <ul className="space-y-3">
                     {course.included.map((item, index) => (
                       <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
@@ -571,14 +668,14 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                 {/* Certification */}
                 <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
                   <div className="flex items-start gap-3 mb-3">
-                    <Award className="w-6 h-6 text-blue-600 flex-shrink-0" />
+                    <CertificationIcon className="w-6 h-6 text-blue-600 flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Certification</h3>
                       <p className="text-sm text-gray-700">{course.certification}</p>
                     </div>
                   </div>
                   <p className="text-xs text-gray-600">
-                    Earn a certificate upon successful completion of the course
+                    {course.certificationSubtext || 'Earn a certificate upon successful completion of the course'}
                   </p>
                 </div>
               </div>
@@ -591,16 +688,16 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Still Have Any Doubts?
+            {course.doubtsTitle || 'Still Have Any Doubts?'}
           </h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Feel free to reach out to us. We're here to help you make the right decision for your career.
+            {course.doubtsMessage || "Feel free to reach out to us. We're here to help you make the right decision for your career."}
           </p>
           <Link
-            href="/contact?enquiry=training"
+            href={course.contactUsLink || '/contact?enquiry=training'}
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
           >
-            Contact Us
+            {course.contactUsText || 'Contact Us'}
           </Link>
         </div>
       </section>
@@ -622,12 +719,12 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-10 h-10 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Enrollment Submitted!</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">{enrollData.successTitle}</h3>
                 <p className="text-gray-600 mb-4">
-                  Thank you for enrolling in {course.title}
+                  {enrollData.successMessage}
                 </p>
                 <p className="text-sm text-gray-500">
-                  Our team will contact you shortly with payment details and further instructions.
+                  {enrollData.successNote}
                 </p>
               </div>
             ) : (
@@ -636,7 +733,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                 {/* Header with close button */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Enroll in Course</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{enrollData.title}</h3>
                     <p className="text-sm text-gray-600 mb-1">{course.title}</p>
                     <p className="text-gray-600">Course Fee: <span className="font-bold text-gray-900">{course.price}</span></p>
                   </div>
@@ -653,7 +750,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   {/* Full Name */}
                   <div>
                     <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-                      Full Name *
+                      {enrollData.fullNameLabel} *
                     </label>
                     <input
                       type="text"
@@ -663,7 +760,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                       value={formData.fullName}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-900 placeholder:text-gray-400"
-                      placeholder="Enter your full name"
+                      placeholder={enrollData.fullNamePlaceholder}
                     />
                   </div>
 
@@ -671,7 +768,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                        Email Address *
+                        {enrollData.emailLabel} *
                       </label>
                       <input
                         type="email"
@@ -681,12 +778,12 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                         value={formData.email}
                         onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-900 placeholder:text-gray-400"
-                        placeholder="your@email.com"
+                        placeholder={enrollData.emailPlaceholder}
                       />
                     </div>
                     <div>
                       <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                        Phone Number *
+                        {enrollData.phoneLabel} *
                       </label>
                       <input
                         type="tel"
@@ -696,7 +793,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                         value={formData.phone}
                         onChange={handleInputChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-900 placeholder:text-gray-400"
-                        placeholder="+91 1234567890"
+                        placeholder={enrollData.phonePlaceholder}
                       />
                     </div>
                   </div>
@@ -704,7 +801,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   {/* Address */}
                   <div>
                     <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                      Address *
+                      {enrollData.addressLabel} *
                     </label>
                     <input
                       type="text"
@@ -714,7 +811,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                       value={formData.address}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-900 placeholder:text-gray-400"
-                      placeholder="Street address"
+                      placeholder={enrollData.addressPlaceholder}
                     />
                   </div>
 
@@ -722,7 +819,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
                       <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                        City *
+                        {enrollData.cityLabel} *
                       </label>
                       <input
                         type="text"
@@ -737,7 +834,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                     </div>
                     <div>
                       <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
-                        State *
+                        {enrollData.stateLabel} *
                       </label>
                       <input
                         type="text"
@@ -752,7 +849,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                     </div>
                     <div>
                       <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-1">
-                        Pincode *
+                        {enrollData.pincodeLabel} *
                       </label>
                       <input
                         type="text"
@@ -770,7 +867,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   {/* Education */}
                   <div>
                     <label htmlFor="education" className="block text-sm font-medium text-gray-700 mb-1">
-                      Highest Education *
+                      {enrollData.educationLabel} *
                     </label>
                     <select
                       id="education"
@@ -781,19 +878,18 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-900 bg-white"
                     >
                       <option value="" className="text-gray-400">Select education level</option>
-                      <option value="10th" className="text-gray-900">10th Pass</option>
-                      <option value="12th" className="text-gray-900">12th Pass</option>
-                      <option value="diploma" className="text-gray-900">Diploma</option>
-                      <option value="graduate" className="text-gray-900">Graduate</option>
-                      <option value="postgraduate" className="text-gray-900">Post Graduate</option>
-                      <option value="other" className="text-gray-900">Other</option>
+                      {enrollData.educationOptions?.map((option: any, idx: number) => (
+                        <option key={idx} value={option.value} className="text-gray-900">
+                          {option.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
                   {/* Experience */}
                   <div>
                     <label htmlFor="experience" className="block text-sm font-medium text-gray-700 mb-1">
-                      Prior Drone Experience
+                      {enrollData.experienceLabel}
                     </label>
                     <select
                       id="experience"
@@ -803,17 +899,18 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-900 bg-white"
                     >
                       <option value="" className="text-gray-400">Select experience level</option>
-                      <option value="none" className="text-gray-900">No Experience</option>
-                      <option value="beginner" className="text-gray-900">Beginner (0-6 months)</option>
-                      <option value="intermediate" className="text-gray-900">Intermediate (6-12 months)</option>
-                      <option value="advanced" className="text-gray-900">Advanced (1+ year)</option>
+                      {enrollData.experienceOptions?.map((option: any, idx: number) => (
+                        <option key={idx} value={option.value} className="text-gray-900">
+                          {option.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
                   {/* Additional Message */}
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                      Additional Information (Optional)
+                      {enrollData.messageLabel}
                     </label>
                     <textarea
                       id="message"
@@ -822,7 +919,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                       value={formData.message}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-900 placeholder:text-gray-400"
-                      placeholder="Any special requirements or questions?"
+                      placeholder={enrollData.messagePlaceholder}
                     />
                   </div>
 
@@ -832,7 +929,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                       type="submit"
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
                     >
-                      Submit Enrollment
+                      {enrollData.submitButtonText}
                     </button>
                     <p className="text-xs text-gray-500 mt-3 text-center">
                       * Our team will contact you with payment details and further instructions

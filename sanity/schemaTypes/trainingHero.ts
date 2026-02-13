@@ -6,6 +6,14 @@ export default defineType({
   type: 'document',
   fields: [
     {
+      name: 'badge',
+      title: 'Badge Text',
+      type: 'string',
+      description: 'Small badge text above the title',
+      initialValue: 'Training Programs',
+      validation: (Rule) => Rule.required(),
+    },
+    {
       name: 'title',
       title: 'Title',
       type: 'string',
@@ -16,30 +24,6 @@ export default defineType({
       name: 'subtitle',
       title: 'Subtitle',
       type: 'text',
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'primaryButtonText',
-      title: 'Primary Button Text',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'primaryButtonLink',
-      title: 'Primary Button Link',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'secondaryButtonText',
-      title: 'Secondary Button Text',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'secondaryButtonLink',
-      title: 'Secondary Button Link',
-      type: 'string',
       validation: (Rule) => Rule.required(),
     },
     {

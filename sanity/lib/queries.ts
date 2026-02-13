@@ -66,3 +66,60 @@ export async function getServicesPageContent() {
     return null
   }
 }
+
+/**
+ * Fetch all active service detail pages
+ */
+export async function getAllServiceDetailPages() {
+  try {
+    const query = `*[_type == "serviceDetailPage" && isActive == true] | order(category asc, order asc, title asc){
+      _id,
+      title,
+      slug,
+      category,
+      icon,
+      order,
+      hero{
+        badge,
+        title,
+        subtitle
+      },
+      overview{
+        title,
+        description
+      },
+      seo
+    }`
+    
+    const services = await client.fetch(query)
+    return services
+  } catch (error) {
+    console.error('Error fetching service detail pages:', error)
+    return []
+  }
+}
+
+/**
+ * Fetch service detail pages by category
+ */
+export async function getServiceDetailPagesByCategory(category: 'drone' | 'software' | 'education') {
+  try {
+    const query = `*[_type == "serviceDetailPage" && category == $category && isActive == true] | order(order asc, title asc){
+      _id,
+      title,
+      slug,
+      category,
+      icon,
+      order,
+      overview{
+        description
+      }
+    }`
+    
+    const services = await client.fetch(query, { category })
+    return services
+  } catch (error) {
+    console.error(`Error fetching service detail pages for category ${category}:`, error)
+    return []
+  }
+}

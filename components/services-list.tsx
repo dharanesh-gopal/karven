@@ -30,10 +30,7 @@ interface ServiceItemData {
   slug: { current: string }
   category: string
   icon: string
-  tagline?: string
   description: string
-  features?: string[]
-  applications?: string[]
 }
 
 interface ServicesListProps {

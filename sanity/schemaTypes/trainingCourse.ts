@@ -5,18 +5,19 @@ export default defineType({
   title: 'Training Course (Full Details)',
   type: 'document',
   fields: [
+    // Basic Information
     {
       name: 'title',
-      title: 'Title',
+      title: 'Course Title',
       type: 'string',
-      description: 'Course title (e.g., "Course A | Small Class Drone Pilot Training")',
+      description: 'Full course title (e.g., "Course A | Small Class Drone Pilot Training")',
       validation: (Rule) => Rule.required(),
     },
     {
       name: 'slug',
-      title: 'Slug',
+      title: 'URL Slug',
       type: 'slug',
-      description: 'URL-friendly identifier (e.g., "course-a", "course-b"). This determines the course URL: /training/courses/[slug]',
+      description: 'URL-friendly identifier (e.g., "course-a"). Determines URL: /training/courses/[slug]',
       options: {
         source: 'title',
       },
@@ -26,24 +27,21 @@ export default defineType({
       name: 'subtitle',
       title: 'Subtitle',
       type: 'string',
-      description: 'Course subtitle (e.g., "Introduction to Drone Flying")',
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'description',
-      title: 'Description',
-      type: 'text',
+      description: 'Short tagline (e.g., "Introduction to Drone Flying")',
       validation: (Rule) => Rule.required(),
     },
     {
       name: 'image',
-      title: 'Course Image',
+      title: 'Course Banner Image',
       type: 'image',
+      description: 'Main course image displayed on course page',
       options: {
         hotspot: true,
       },
       validation: (Rule) => Rule.required(),
     },
+
+    // Course Details
     {
       name: 'duration',
       title: 'Duration',
@@ -55,12 +53,12 @@ export default defineType({
       name: 'price',
       title: 'Price',
       type: 'string',
-      description: 'Course price (e.g., "₹25,000")',
+      description: 'Course price (e.g., "₹25,000", "₹8,000 per student")',
       validation: (Rule) => Rule.required(),
     },
     {
       name: 'level',
-      title: 'Level',
+      title: 'Difficulty Level',
       type: 'string',
       options: {
         list: [
@@ -73,88 +71,218 @@ export default defineType({
     },
     {
       name: 'maxStudents',
-      title: 'Max Students',
+      title: 'Maximum Students',
       type: 'string',
-      description: 'Maximum students (e.g., "15", "20-30")',
+      description: 'Maximum class size (e.g., "15", "20-30")',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'certificationIcon',
+      title: 'Certification Icon',
+      type: 'string',
+      description: 'Lucide icon name for certification (e.g., "Award", "Medal", "Trophy")',
+      initialValue: 'Award',
       validation: (Rule) => Rule.required(),
     },
     {
       name: 'certification',
-      title: 'Certification',
+      title: 'Certification Text',
       type: 'string',
-      description: 'Certificate type (e.g., "Certificate of Completion", "Professional Certification")',
+      description: 'Main certification text (e.g., "DGCA Remote Pilot Certificate")',
       validation: (Rule) => Rule.required(),
     },
     {
-      name: 'highlights',
-      title: 'Course Highlights',
-      type: 'array',
-      of: [{ type: 'string' }],
-      validation: (Rule) => Rule.required().min(1),
+      name: 'certificationSubtext',
+      title: 'Certification Subtext',
+      type: 'text',
+      description: 'Additional details about the certification',
+      initialValue: 'Earn a certificate upon successful completion of the course',
+      validation: (Rule) => Rule.required(),
+    },
+
+    // Course Description
+    {
+      name: 'descriptionTitle',
+      title: 'Description Section Title',
+      type: 'string',
+      description: 'Heading for the description section',
+      initialValue: 'Course Description',
+      validation: (Rule) => Rule.required(),
     },
     {
-      name: 'curriculum',
-      title: 'Curriculum',
+      name: 'description',
+      title: 'Course Description',
+      type: 'text',
+      description: 'Detailed description explaining what the course covers',
+      validation: (Rule) => Rule.required(),
+    },
+
+    // Course Highlights
+    {
+      name: 'highlightsTitle',
+      title: 'Highlights Section Title',
+      type: 'string',
+      description: 'Heading for the highlights section',
+      initialValue: 'Course Highlights',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'highlightsList',
+      title: 'Highlights',
       type: 'array',
+      description: 'Key features and benefits of the course',
+      of: [{ type: 'string' }],
+      validation: (Rule) => Rule.required().min(3),
+    },
+
+    // Course Curriculum
+    {
+      name: 'curriculumTitle',
+      title: 'Curriculum Section Title',
+      type: 'string',
+      description: 'Heading for the curriculum section',
+      initialValue: 'Course Curriculum',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'curriculumList',
+      title: 'Curriculum Sections',
+      type: 'array',
+      description: 'Detailed syllabus broken down by session/day',
       of: [
         {
           type: 'object',
           fields: [
             {
               name: 'session',
-              title: 'Session',
+              title: 'Session/Day',
               type: 'string',
-              description: 'Session number/range (e.g., "Session 1-2", "Day 1")',
+              description: 'Session number or day range (e.g., "Day 1-2", "Session 1")',
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'title',
-              title: 'Title',
+              title: 'Session Title',
               type: 'string',
+              description: 'Title of this session (e.g., "Introduction to Drones")',
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'topics',
-              title: 'Topics',
+              title: 'Topics Covered',
               type: 'array',
+              description: 'List of topics covered in this session',
               of: [{ type: 'string' }],
+              validation: (Rule) => Rule.required().min(1),
             },
           ],
+          preview: {
+            select: {
+              session: 'session',
+              title: 'title',
+            },
+            prepare({ session, title }) {
+              return {
+                title: `${session}: ${title}`,
+              }
+            },
+          },
         },
       ],
       validation: (Rule) => Rule.required().min(1),
     },
+
+    // Prerequisites
     {
-      name: 'prerequisites',
+      name: 'prerequisitesTitle',
+      title: 'Prerequisites Section Title',
+      type: 'string',
+      description: 'Heading for the prerequisites section',
+      initialValue: 'Prerequisites',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'prerequisitesList',
       title: 'Prerequisites',
       type: 'array',
+      description: 'Requirements and eligibility criteria',
       of: [{ type: 'string' }],
       validation: (Rule) => Rule.required().min(1),
     },
+
+    // What's Included
     {
-      name: 'included',
-      title: "What's Included",
-      type: 'array',
-      of: [{ type: 'string' }],
-      validation: (Rule) => Rule.required().min(1),
-    },
-    {
-      name: 'detailsLink',
-      title: 'Details Page Link (Deprecated)',
+      name: 'includedTitle',
+      title: 'What\'s Included Section Title',
       type: 'string',
-      description: '⚠️ DEPRECATED: This field is no longer used. The URL is automatically generated from the slug field above.',
-      readOnly: true,
+      description: 'Heading for the what\'s included section',
+      initialValue: 'What\'s Included',
+      validation: (Rule) => Rule.required(),
     },
+    {
+      name: 'includedList',
+      title: 'Included Items',
+      type: 'array',
+      description: 'What students receive with this course',
+      of: [{ type: 'string' }],
+      validation: (Rule) => Rule.required().min(1),
+    },
+
+    // CTA Settings
+    {
+      name: 'doubtsTitle',
+      title: 'Doubts Section Title',
+      type: 'string',
+      description: 'Main heading for the doubts/contact section',
+      initialValue: 'Still Have Any Doubts?',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'doubtsMessage',
+      title: 'Doubts Section Message',
+      type: 'text',
+      description: 'Message encouraging students to reach out',
+      initialValue: 'Feel free to reach out to us. We\'re here to help you make the right decision for your career.',
+      validation: (Rule) => Rule.required(),
+    },
+    {
+      name: 'contactUsText',
+      title: 'Contact Us Button Text',
+      type: 'string',
+      initialValue: 'Contact Us',
+    },
+    {
+      name: 'contactUsLink',
+      title: 'Contact Us Button Link',
+      type: 'string',
+      initialValue: '/contact?enquiry=training',
+    },
+    {
+      name: 'enrollNowText',
+      title: 'Enroll Now Button Text',
+      type: 'string',
+      initialValue: 'Enroll Now',
+    },
+    {
+      name: 'enrollNowLink',
+      title: 'Enroll Now Button Link',
+      type: 'string',
+      initialValue: '/contact?enquiry=enrollment',
+    },
+
+    // Display Settings
     {
       name: 'order',
-      title: 'Order',
+      title: 'Display Order',
       type: 'number',
-      description: 'Display order (lower numbers appear first)',
+      description: 'Order in which course appears (lower numbers first)',
       validation: (Rule) => Rule.required(),
     },
     {
       name: 'isActive',
       title: 'Is Active',
       type: 'boolean',
-      description: 'Toggle to show/hide this course',
+      description: 'Toggle to show/hide this course on the website',
       initialValue: true,
     },
   ],

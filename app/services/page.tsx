@@ -27,7 +27,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { DroneIcon } from "@/components/icons/drone-icon"
 import { fetchSanityData } from "@/lib/fetchSanityData"
-import { getServicesPageContent } from "@/sanity/lib/queries"
+import { getServicesPageContent, getServiceDetailPagesByCategory } from "@/sanity/lib/queries"
 import { urlFor } from "@/sanity/lib/image"
 import { ServicesList } from "@/components/services-list"
 import { generateSEOMetadata, generateServiceStructuredData, generateBreadcrumbStructuredData } from "@/lib/seo-utils"
@@ -75,6 +75,7 @@ function getSectionIcon(iconName: string | undefined, fallback: string = "Camera
     Shield,
     Target,
     Zap,
+    CheckCircle2,
   }
   return icons[iconName || fallback] || Camera
 }
@@ -84,10 +85,10 @@ interface ServiceItemData {
   slug: { current: string }
   category: string
   icon: string
-  tagline?: string
-  description: string
-  features?: string[]
-  applications?: string[]
+  description?: string
+  overview?: {
+    description: string
+  }
 }
 
 // Revalidate every 60 seconds
@@ -199,33 +200,24 @@ const defaultSoftwareServices = [
     slug: { current: "ai-software" },
     icon: "Cpu",
     title: "AI Software Development",
-    tagline: "Intelligent Solutions for Modern Challenges",
     description:
       "Custom AI and machine learning solutions tailored to your business needs. From predictive analytics to natural language processing, we build AI systems that drive real business value.",
-    features: [],
-    applications: [],
     category: "software"
   },
   {
     slug: { current: "cloud-services" },
     icon: "Cloud",
     title: "Cloud Services",
-    tagline: "Scalable Infrastructure for Modern Business",
     description:
       "Comprehensive cloud computing solutions for businesses of all sizes. From cloud migration to infrastructure management, we provide secure, scalable, and cost-effective cloud services.",
-    features: [],
-    applications: [],
     category: "software"
   },
   {
     slug: { current: "lms" },
     icon: "BookOpen",
     title: "Learning Management Systems",
-    tagline: "Modern Education Platforms",
     description:
       "Comprehensive LMS solutions for educational institutions and corporate training. Engage learners with interactive content, assessments, and progress tracking.",
-    features: [],
-    applications: [],
     category: "software"
   },
 ]
@@ -235,11 +227,8 @@ const defaultEducationServices = [
     slug: { current: "training" },
     icon: "GraduationCap",
     title: "Educational Programs",
-    tagline: "Awareness & Skill Development",
     description:
       "Hands-on workshops and awareness programs about drone technology, AI, and emerging technologies for schools, colleges, and professionals.",
-    features: [],
-    applications: [],
     category: "education"
   },
 ]
@@ -248,7 +237,12 @@ export default async function ServicesPage() {
   // Fetch page content from Sanity
   const pageContent = await getServicesPageContent()
 
-  // Fetch services from Sanity
+  // Fetch service detail pages from Sanity by category
+  const droneServicesFromDetailPages = await getServiceDetailPagesByCategory('drone')
+  const softwareServicesFromDetailPages = await getServiceDetailPagesByCategory('software')
+  const educationServicesFromDetailPages = await getServiceDetailPagesByCategory('education')
+
+  // Fetch service items from Sanity (legacy support)
   const droneServicesData = await fetchSanityData<ServiceItemData[]>(
     `*[_type == "serviceItem" && category == "drone" && isActive == true] | order(order asc){
       title,
@@ -267,10 +261,7 @@ export default async function ServicesPage() {
       slug,
       category,
       icon,
-      tagline,
-      description,
-      features,
-      applications
+      description
     }`,
     {},
     []
@@ -282,43 +273,59 @@ export default async function ServicesPage() {
       slug,
       category,
       icon,
-      tagline,
-      description,
-      features,
-      applications
+      description
     }`,
     {},
     []
   )
 
-  // Use Sanity data or fall back to defaults
+  // Transform serviceDetailPage data to match ServiceItemData interface
+  const transformDetailPageToServiceItem = (detailPage: any): ServiceItemData => ({
+    title: detailPage.title,
+    slug: detailPage.slug,
+    category: detailPage.category,
+    icon: detailPage.icon || 'Camera',
+    description: detailPage.overview?.description || detailPage.hero?.subtitle || ''
+  })
+
+  // Merge service detail pages with service items (detail pages take priority)
+  const droneDetailPagesList = droneServicesFromDetailPages?.map(transformDetailPageToServiceItem) || []
+  const softwareDetailPagesList = softwareServicesFromDetailPages?.map(transformDetailPageToServiceItem) || []
+  const educationDetailPagesList = educationServicesFromDetailPages?.map(transformDetailPageToServiceItem) || []
+
+  // Use detail pages if available, otherwise fall back to service items, then defaults
   const content = pageContent || defaultPageContent
-  const droneServices = (droneServicesData && droneServicesData.length > 0) ? droneServicesData : defaultDroneServices
-  const aiSoftwareServices = (softwareServicesData && softwareServicesData.length > 0) ? softwareServicesData : defaultSoftwareServices
-  const educationalServices = (educationServicesData && educationServicesData.length > 0) ? educationServicesData : defaultEducationServices
+  const droneServices = droneDetailPagesList.length > 0 
+    ? droneDetailPagesList 
+    : (droneServicesData && droneServicesData.length > 0) 
+      ? droneServicesData 
+      : defaultDroneServices
+  const aiSoftwareServices = softwareDetailPagesList.length > 0 
+    ? softwareDetailPagesList 
+    : (softwareServicesData && softwareServicesData.length > 0) 
+      ? softwareServicesData 
+      : defaultSoftwareServices
+  const educationalServices = educationDetailPagesList.length > 0 
+    ? educationDetailPagesList 
+    : (educationServicesData && educationServicesData.length > 0) 
+      ? educationServicesData 
+      : defaultEducationServices
 
-  // Slug mapping for drone services
-  const droneSlugMap: Record<string, string> = {
-    'survey-mapping': '/services/drone-survey-and-mapping',
-    'surveillance': '/services/drone-surveillance-and-videography',
-    'precision-spraying': '/services/precision-spraying',
-    'delivery': '/services/drone-delivery',
-    'hardware-software': '/services/hardware-software-firmware',
-    'drone-in-box': '/services/drone-in-a-box',
-    'data-gis': '/services/data-gis-digital-solutions',
+  // Generate slug map from service slugs
+  const generateSlugMap = (services: ServiceItemData[]): Record<string, string> => {
+    const map: Record<string, string> = {}
+    services.forEach(service => {
+      const slugStr = typeof service.slug === 'string' ? service.slug : service.slug?.current
+      if (slugStr) {
+        map[slugStr] = `/services/${slugStr}`
+      }
+    })
+    return map
   }
 
-  // Slug mapping for software services
-  const softwareSlugMap: Record<string, string> = {
-    'ai-software': '/services/ai-software-development',
-    'cloud-services': '/services/cloud-services',
-    'lms': '/services/learning-management-systems',
-  }
-
-  // Slug mapping for education services
-  const educationSlugMap: Record<string, string> = {
-    'training': '/services/educational-programs',
-  }
+  const droneSlugMap = generateSlugMap(droneServices)
+  const softwareSlugMap = generateSlugMap(aiSoftwareServices)
+  const educationSlugMap = generateSlugMap(educationalServices)
 
   // Get section icons from Sanity or use defaults
   const droneTitleIconName = content.droneSection?.titleIcon || "Drone"

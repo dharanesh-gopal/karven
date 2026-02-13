@@ -2,7 +2,7 @@
  * Seed Training Courses to Sanity
  * 
  * This script populates the training courses in Sanity CMS.
- * Run with: node scripts/seed-training-courses.js
+ * Run with: npx sanity exec scripts/seed-training-courses-updated.js --with-user-token
  */
 
 import { createClient } from '@sanity/client'
@@ -88,7 +88,8 @@ const courses = [
         ]
       }
     ],
-    prerequisites: [
+    prerequisitesTitle: 'Prerequisites',
+    prerequisitesList: [
       'Age 18 years or above',
       'Basic understanding of technology',
       'No prior drone experience required'
@@ -213,7 +214,7 @@ const courses = [
     subtitle: 'STEM & Robotics for Students',
     description: 'Designed for schools and colleges, this workshop introduces students to drone technology, coding, and practical applications. An exciting introduction to the world of drones and robotics.',
     duration: '3-5 Days',
-    price: '₹8,000',
+    price: '₹8,000 per student',
     level: 'Beginner',
     maxStudents: '30',
     certificationIcon: 'Award',

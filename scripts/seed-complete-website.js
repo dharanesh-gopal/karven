@@ -1501,54 +1501,6 @@ const footerSettings = {
   copyrightText: 'KarVenSen. All rights reserved.'
 }
 
-// ============ SERVICES (Main Service Cards) ============
-const services = [
-  {
-    _type: 'service',
-    _id: 'service-ai-ml',
-    title: 'AI & Machine Learning',
-    slug: { _type: 'slug', current: 'ai-machine-learning' },
-    icon: 'Cpu',
-    excerpt: 'Custom AI solutions, ML models, and intelligent automation for your business',
-    category: 'ai',
-    features: ['Machine Learning', 'Natural Language Processing', 'Computer Vision', 'Predictive Analytics'],
-    order: 1
-  },
-  {
-    _type: 'service',
-    _id: 'service-drone-tech',
-    title: 'Drone Technology',
-    slug: { _type: 'slug', current: 'drone-technology' },
-    icon: 'Plane',
-    excerpt: 'Professional drone services for surveying, agriculture, surveillance, and delivery',
-    category: 'drone',
-    features: ['Aerial Surveying', 'Precision Agriculture', 'Inspection Services', 'Autonomous Flight'],
-    order: 2
-  },
-  {
-    _type: 'service',
-    _id: 'service-cloud-infra',
-    title: 'Cloud Infrastructure',
-    slug: { _type: 'slug', current: 'cloud-infrastructure' },
-    icon: 'Cloud',
-    excerpt: 'Scalable cloud solutions with AWS, Azure, and Google Cloud Platform',
-    category: 'cloud',
-    features: ['Cloud Migration', 'DevOps', 'Infrastructure as Code', 'Auto-scaling'],
-    order: 3
-  },
-  {
-    _type: 'service',
-    _id: 'service-lms-edtech',
-    title: 'LMS & EdTech',
-    slug: { _type: 'slug', current: 'lms-edtech' },
-    icon: 'BookOpen',
-    excerpt: 'Modern learning management systems and educational technology platforms',
-    category: 'education',
-    features: ['Course Management', 'Student Analytics', 'Video Integration', 'Mobile Learning'],
-    order: 4
-  }
-]
-
 // ============ SERVICE ITEMS (for Services Page Grid) ============
 const serviceItems = [
   {
@@ -2000,13 +1952,6 @@ async function seedAll() {
     }
     console.log('✅ Done\n')
 
-    // Main Services
-    console.log('🔧 Main Services...')
-    for (const service of services) {
-      await client.createOrReplace(service)
-    }
-    console.log('✅ Done\n')
-
     // Service Items
     console.log('📋 Service Items...')
     for (const item of serviceItems) {
@@ -2055,14 +2000,13 @@ async function seedAll() {
     console.log(`   - Training Page: ${trainingStats.length + upcomingPrograms.length + trainingFaqs.length + trainingProgramsDetailed.length + trainingPrograms.length + trainingCourses.length + 1} items`)
     console.log(`   - Careers Page: ${careerValues.length + hiringSteps.length + careerTestimonials.length + careerBenefits.length + cultureImages.length + jobOpenings.length + 1} items`)
     console.log(`   - Contact Page: ${officeLocations.length + 2} items`)
-    console.log(`   - Main Services: ${services.length}`)
     console.log(`   - Service Items: ${serviceItems.length}`)
     console.log(`   - Service Detail Pages: ${serviceDetailPages.length}`)
     console.log(`   - Blog: ${authors.length} authors + ${categories.length} categories + ${blogPosts.length} posts`)
     console.log(`   - Projects: ${projects.length}`)
     console.log(`   - Legal Pages: ${legalPages.length}`)
     console.log(`   - Navigation: 1`)
-    console.log(`\n🎉 Total: ~170+ documents across ALL 40+ content types!`)
+    console.log(`\n🎉 Total: ~165+ documents across ALL 39+ content types!`)
     console.log(`\n🎉 Visit http://localhost:3000/studio to see EVERYTHING!`)
 
   } catch (error) {

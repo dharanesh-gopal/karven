@@ -149,13 +149,10 @@ export const structure: StructureResolver = (S) =>
                 .title('0. Services Page Settings (Main Page)')
                 .child(S.document().schemaType('servicesPage').documentId('servicesPage')),
               S.listItem()
-                .title('1. All Services (Main List)')
-                .child(S.documentTypeList('service').title('Services')),
-              S.listItem()
-                .title('2. Service Detail Pages')
+                .title('1. Service Detail Pages')
                 .child(S.documentTypeList('serviceDetailPage').title('Service Detail Pages')),
               S.listItem()
-                .title('3. Service Items (Individual Items)')
+                .title('2. Service Items (Grid Items)')
                 .child(S.documentTypeList('serviceItem').title('Service Items')),
             ])
         ),
@@ -170,23 +167,54 @@ export const structure: StructureResolver = (S) =>
             .title('Training - All Content')
             .items([
               S.listItem()
+                .title('0. Training Page Settings')
+                .child(S.document().schemaType('trainingPageSettings').documentId('trainingPageSettings')),
+              S.listItem()
                 .title('1. Training Hero Section')
                 .child(S.document().schemaType('trainingHero').documentId('trainingHero')),
               S.listItem()
-                .title('2. Training Programs (All Courses)')
-                .child(S.documentTypeList('training').title('Training Programs')),
+                .title('2. On-Field Action Media')
+                .child(S.documentTypeList('onFieldAction').title('On-Field Action Media')),
               S.listItem()
-                .title('3. Training Courses')
+                .title('3. Training Courses (Detail Pages)')
                 .child(S.documentTypeList('trainingCourse').title('Training Courses')),
               S.listItem()
-                .title('4. Upcoming Training Programs')
-                .child(S.documentTypeList('trainingProgram').title('Upcoming Programs')),
+                .title('4. Trusted Partners')
+                .child(S.documentTypeList('trustedPartner').title('Trusted Partners')),
               S.listItem()
-                .title('5. Training Stats')
-                .child(S.documentTypeList('trainingStat').title('Training Stats')),
+                .title('5. Why Learn Items')
+                .child(
+                  S.list()
+                    .title('Why Learn Items - Both Sections')
+                    .items([
+                      S.listItem()
+                        .title('📚 Why Train With Us?')
+                        .child(
+                          S.document()
+                            .schemaType('whyTrainWithUs')
+                            .documentId('whyTrainWithUs')
+                        ),
+                      S.listItem()
+                        .title('✨ What Sets Us Apart?')
+                        .child(
+                          S.document()
+                            .schemaType('whatSetsUsApart')
+                            .documentId('whatSetsUsApart')
+                        ),
+                    ])
+                ),
               S.listItem()
-                .title('6. Training FAQs')
+                .title('6. Career Opportunities')
+                .child(S.documentTypeList('careerOpportunity').title('Career Opportunities')),
+              S.listItem()
+                .title('7. Upcoming Training Programs')
+                .child(S.documentTypeList('upcomingProgram').title('Upcoming Programs')),
+              S.listItem()
+                .title('8. Training FAQs')
                 .child(S.documentTypeList('trainingFaq').title('Training FAQs')),
+              S.listItem()
+                .title('9. Enroll Page')
+                .child(S.document().schemaType('enrollPage').documentId('enrollPage')),
             ])
         ),
 

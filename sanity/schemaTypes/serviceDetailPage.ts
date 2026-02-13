@@ -28,6 +28,63 @@ export default defineType({
       initialValue: true,
     }),
     defineField({
+      name: 'category',
+      title: 'Service Category',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Drone Services', value: 'drone' },
+          { title: 'AI & Software Services', value: 'software' },
+          { title: 'Educational Services', value: 'education' },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+      description: 'Select the category this service belongs to',
+    }),
+    defineField({
+      name: 'icon',
+      title: 'Icon Name',
+      type: 'string',
+      description: 'Lucide icon name (e.g., Camera, Video, Cpu, Cloud, GraduationCap)',
+      options: {
+        list: [
+          { title: 'Brain', value: 'Brain' },
+          { title: 'Camera', value: 'Camera' },
+          { title: 'Video', value: 'Video' },
+          { title: 'Sprout', value: 'Sprout' },
+          { title: 'Package', value: 'Package' },
+          { title: 'Microchip', value: 'Microchip' },
+          { title: 'Box', value: 'Box' },
+          { title: 'BarChart3', value: 'BarChart3' },
+          { title: 'Radio', value: 'Radio' },
+          { title: 'Cpu', value: 'Cpu' },
+          { title: 'Cloud', value: 'Cloud' },
+          { title: 'BookOpen', value: 'BookOpen' },
+          { title: 'GraduationCap', value: 'GraduationCap' },
+          { title: 'Plane', value: 'Plane' },
+          { title: 'Server', value: 'Server' },
+          { title: 'Map', value: 'Map' },
+          { title: 'Ruler', value: 'Ruler' },
+          { title: 'Shield', value: 'Shield' },
+          { title: 'Target', value: 'Target' },
+          { title: 'Zap', value: 'Zap' },
+          { title: 'Droplet', value: 'Droplet' },
+          { title: 'CheckCircle2', value: 'CheckCircle2' },
+          { title: 'Code', value: 'Code' },
+          { title: 'Users', value: 'Users' },
+          { title: 'FileText', value: 'FileText' },
+          { title: 'MessageSquare', value: 'MessageSquare' },
+        ],
+      },
+    }),
+    defineField({
+      name: 'order',
+      title: 'Display Order',
+      type: 'number',
+      description: 'Order within category (lower numbers first)',
+      initialValue: 999,
+    }),
+    defineField({
       name: 'hero',
       title: 'Hero Section',
       type: 'object',
@@ -154,6 +211,27 @@ export default defineType({
               fields: [
                 { name: 'name', type: 'string', title: 'Technology Name' },
                 { name: 'description', type: 'text', title: 'Description' }
+              ]
+            }
+          ]
+        }
+      ]
+    }),
+    defineField({
+      name: 'crops',
+      title: 'Crops Section',
+      type: 'object',
+      fields: [
+        { name: 'title', type: 'string', title: 'Section Title' },
+        {
+          name: 'items',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                { name: 'name', type: 'string', title: 'Crop Name' },
+                { name: 'icon', type: 'string', title: 'Icon (Emoji or Lucide Name)' }
               ]
             }
           ]

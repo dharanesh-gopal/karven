@@ -22,12 +22,9 @@ interface UpcomingProgramData {
 }
 
 interface TrainingHeroData {
+  badge: string
   title: string
   subtitle: string
-  primaryButtonText: string
-  primaryButtonLink: string
-  secondaryButtonText: string
-  secondaryButtonLink: string
 }
 
 interface TrainingFaqData {
@@ -45,6 +42,56 @@ interface TrainingCourseData {
     current: string
   }
   detailsLink?: string
+}
+
+interface TrainingPageSettingsData {
+  onFieldActionTitle: string
+  coursesTitle: string
+  trustedPartnersTitle: string
+  trustedPartnersSubtitle: string
+  whyLearnTitle: string
+  careerOpportunitiesTitle: string
+  upcomingProgramsTitle: string
+  upcomingProgramsSubtitle: string
+  faqTitle: string
+  faqSubtitle: string
+}
+
+interface OnFieldActionData {
+  title: string
+  mediaType: 'image' | 'video'
+  image?: any
+  video?: any
+  order: number
+}
+
+interface TrustedPartnerData {
+  name: string
+  logo?: any
+  websiteUrl?: string
+}
+
+interface WhyLearnItemData {
+  iconName: string
+  iconColor: string
+  title: string
+  description: string
+  order: number
+}
+
+interface WhyLearnSectionData {
+  sectionTitle: string
+  sectionImage?: any
+  items: WhyLearnItemData[]
+  isActive: boolean
+}
+
+interface CareerOpportunityData {
+  title: string
+  description: string
+  iconName: string
+  iconColor: string
+  image?: any
 }
 
 // Upcoming Programs Grid Component
@@ -217,21 +264,43 @@ export default function TrainingPage() {
   // CMS Data Hooks
   const { data: heroData } = useSanityData<TrainingHeroData>(
     `*[_type == "trainingHero" && isActive == true][0]{
+      badge,
       title,
-      subtitle,
-      primaryButtonText,
-      primaryButtonLink,
-      secondaryButtonText,
-      secondaryButtonLink
+      subtitle
     }`,
     {},
     {
+      badge: 'Training Programs',
       title: 'Drone Awareness & <span class="text-white">Technical Training</span>',
       subtitle: 'Empowering communities with knowledge and skills in AI and drone technology. From farmers to students to professionals, we have programs designed for everyone.',
-      primaryButtonText: 'Browse Programs',
-      primaryButtonLink: '#programs',
-      secondaryButtonText: 'Contact Us',
-      secondaryButtonLink: '/contact',
+    }
+  )
+
+  const { data: pageSettings } = useSanityData<TrainingPageSettingsData>(
+    `*[_type == "trainingPageSettings" && isActive == true][0]{
+      onFieldActionTitle,
+      coursesTitle,
+      trustedPartnersTitle,
+      trustedPartnersSubtitle,
+      whyLearnTitle,
+      careerOpportunitiesTitle,
+      upcomingProgramsTitle,
+      upcomingProgramsSubtitle,
+      faqTitle,
+      faqSubtitle
+    }`,
+    {},
+    {
+      onFieldActionTitle: 'On-Field Action',
+      coursesTitle: 'Our Training Courses',
+      trustedPartnersTitle: 'Trusted by Leading Organizations',
+      trustedPartnersSubtitle: 'Our training programs are recognized and trusted by top companies and institutions across India',
+      whyLearnTitle: 'Why Learn with KarVenSen',
+      careerOpportunitiesTitle: 'Career Opportunities After Training',
+      upcomingProgramsTitle: 'Upcoming Programs',
+      upcomingProgramsSubtitle: 'Register for our upcoming training sessions and workshops',
+      faqTitle: 'Frequently Asked Questions',
+      faqSubtitle: 'Common questions about our training programs',
     }
   )
 
@@ -252,6 +321,79 @@ export default function TrainingPage() {
       "image": image.asset,
       duration,
       slug
+    }`,
+    {},
+    []
+  )
+
+  // On-Field Action Media
+  const { data: onFieldActionData } = useSanityData<OnFieldActionData[]>(
+    `*[_type == "onFieldAction" && isActive == true] | order(order asc){
+      title,
+      mediaType,
+      "image": image.asset,
+      "video": video.asset->url,
+      order
+    }`,
+    {},
+    []
+  )
+
+  // Trusted Partners
+  const { data: trustedPartnersData } = useSanityData<TrustedPartnerData[]>(
+    `*[_type == "trustedPartner" && isActive == true] | order(order asc){
+      name,
+      "logo": logo.asset,
+      websiteUrl
+    }`,
+    {},
+    []
+  )
+
+  // Why Train With Us
+  const { data: whyTrainData } = useSanityData<WhyLearnSectionData | null>(
+    `*[_type == "whyTrainWithUs" && _id == "whyTrainWithUs"][0]{
+      sectionTitle,
+      "sectionImage": sectionImage.asset,
+      isActive,
+      items[]{
+        iconName,
+        iconColor,
+        title,
+        description,
+        order
+      }
+    }`,
+    {},
+    null
+  )
+
+  // What Sets Us Apart
+  const { data: setsApartData } = useSanityData<WhyLearnSectionData | null>(
+    `*[_type == "whatSetsUsApart" && _id == "whatSetsUsApart"][0]{
+      sectionTitle,
+      "sectionImage": sectionImage.asset,
+      isActive,
+      items[]{
+        iconName,
+        iconColor,
+        title,
+        description,
+        order
+      }
+    }`,
+    {},
+    null
+  )
+
+  // Career Opportunities
+  const { data: careerOpportunitiesData } = useSanityData<CareerOpportunityData[]>(
+    `*[_type == "careerOpportunity" && isActive == true] | order(order asc){
+      title,
+      description,
+      iconName,
+      iconColor,
+      "image": image.asset
     }`,
     {},
     []
@@ -339,18 +481,80 @@ export default function TrainingPage() {
     })
   }, [coursesData, activeCourses, hasValidCourses])
 
-  const mediaItems = [
+  // Fallback media items
+  const fallbackMediaItems = [
     {
-      type: 'image',
-      src: '/edu drone.png',
-      caption: 'Educational Workshops for Students'
+      mediaType: 'image' as const,
+      image: null,
+      video: null,
     },
     {
-      type: 'video',
-      src: '/drone video 2.mp4',
-      caption: 'Live Drone Demonstration'
+      mediaType: 'video' as const,
+      image: null,
+      video: '/drone video 2.mp4',
     },
   ]
+
+  // Transform Sanity data to match the expected format
+  const mediaItems = (onFieldActionData && onFieldActionData.length > 0) 
+    ? onFieldActionData.map(item => ({
+        mediaType: item.mediaType,
+        image: item.image,
+        video: item.video,
+      }))
+    : fallbackMediaItems
+
+  // Fallback trusted partners
+  const fallbackPartners = [
+    { name: 'TCS' }, { name: 'Infosys' }, { name: 'Wipro' },
+    { name: 'Cognizant' }, { name: 'Tech Mahindra' }, { name: 'HCL Technologies' },
+    { name: 'Microsoft' }, { name: 'Google' }, { name: 'Amazon' }, { name: 'IBM' },
+  ]
+
+  const trustedPartners = (trustedPartnersData && trustedPartnersData.length > 0) 
+    ? trustedPartnersData 
+    : fallbackPartners
+
+  // Fallback why learn items
+  const fallbackWhyTrainItems = [
+    { iconName: 'Award', iconColor: 'blue', title: 'DGCA Certification', description: 'Recognized industry certification' },
+    { iconName: 'Users', iconColor: 'blue', title: 'Industry-Leading Instructors', description: 'Learn from the best professionals' },
+    { iconName: 'CheckCircle', iconColor: 'blue', title: 'Comprehensive Support System', description: 'End-to-end guidance and assistance' },
+    { iconName: 'Tractor', iconColor: 'blue', title: 'Focus on Entrepreneurship', description: 'Build your own business ventures' },
+  ]
+
+  const fallbackSetsApartItems = [
+    { iconName: 'GraduationCap', iconColor: 'green', title: 'Expert Guidance', description: 'Personalized mentoring and support' },
+    { iconName: 'CheckCircle', iconColor: 'green', title: 'Real-World Experience', description: 'Hands-on practical training' },
+    { iconName: 'Award', iconColor: 'green', title: 'Industry Recognition', description: 'Certificates valued by employers' },
+    { iconName: 'Users', iconColor: 'green', title: 'Career Support', description: 'Job placement assistance' },
+  ]
+
+  const whyTrainItems = (whyTrainData && whyTrainData.isActive && whyTrainData.items && whyTrainData.items.length > 0)
+    ? whyTrainData.items.sort((a, b) => a.order - b.order)
+    : fallbackWhyTrainItems
+
+  const setsApartItems = (setsApartData && setsApartData.isActive && setsApartData.items && setsApartData.items.length > 0)
+    ? setsApartData.items.sort((a, b) => a.order - b.order)
+    : fallbackSetsApartItems
+
+  const whyTrainImage = whyTrainData?.sectionImage
+  const setsApartImage = setsApartData?.sectionImage
+
+  // Fallback career opportunities
+  const fallbackCareerOpportunities = [
+    { iconName: 'Users', iconColor: 'blue', title: 'Tailored Job Placement Support', description: 'Connect with top agricultural and tech companies actively hiring certified drone pilots and AI specialists.' },
+    { iconName: 'Award', iconColor: 'blue', title: 'Exclusive Drone Pilot Opportunities', description: 'Access to exclusive job openings in precision agriculture, infrastructure inspection, and aerial surveying.' },
+    { iconName: 'GraduationCap', iconColor: 'blue', title: 'Expert Mentorship Programs', description: 'Ongoing guidance from industry experts to help you launch your career or start your own drone business.' },
+  ]
+
+  const careerOpportunities = (careerOpportunitiesData && careerOpportunitiesData.length > 0)
+    ? careerOpportunitiesData
+    : fallbackCareerOpportunities
+
+  const careerImage = careerOpportunitiesData && careerOpportunitiesData.length > 0
+    ? careerOpportunitiesData.find(item => item.image)?.image
+    : null
 
   // Ensure currentSlide is within bounds
   useEffect(() => {
@@ -414,7 +618,7 @@ export default function TrainingPage() {
         <div className="relative container mx-auto px-4 py-20 z-10">
           <div className="max-w-3xl mx-auto text-center">
             <div className="mb-4 inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
-              Training Programs
+              {heroData?.badge || 'Training Programs'}
             </div>
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl mb-6" dangerouslySetInnerHTML={{ __html: heroData?.title || 'Drone Awareness & <span class="text-white">Technical Training</span>' }} />
             <p className="text-lg text-white/90">
@@ -427,21 +631,30 @@ export default function TrainingPage() {
       {/* On-Field Action Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">On-Field Action</h2>
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">{pageSettings?.onFieldActionTitle || 'On-Field Action'}</h2>
           
           <div className="max-w-5xl mx-auto">
             <div className="relative bg-white rounded-lg overflow-hidden shadow-xl">
               {/* Media Container */}
               <div className="relative aspect-video bg-gray-900">
-                {mediaItems[currentSlide].type === 'image' ? (
-                  <img
-                    src={mediaItems[currentSlide].src}
-                    alt={mediaItems[currentSlide].caption}
-                    className="w-full h-full object-cover"
-                  />
+                {mediaItems[currentSlide].mediaType === 'image' ? (
+                  mediaItems[currentSlide].image ? (
+                    <Image
+                      src={urlFor(mediaItems[currentSlide].image).url()}
+                      alt="Training field action"
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <img
+                      src="/edu drone.png"
+                      alt="Training field action"
+                      className="w-full h-full object-cover"
+                    />
+                  )
                 ) : (
                   <video
-                    src={mediaItems[currentSlide].src}
+                    src={mediaItems[currentSlide].video || '/drone video 2.mp4'}
                     autoPlay
                     loop
                     muted
@@ -451,36 +664,42 @@ export default function TrainingPage() {
                 )}
 
                 {/* Navigation Arrows */}
-                <button
-                  onClick={prevSlide}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-800 text-white p-3 rounded-lg transition-colors"
-                  aria-label="Previous slide"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                
-                <button
-                  onClick={nextSlide}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-800 text-white p-3 rounded-lg transition-colors"
-                  aria-label="Next slide"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
+                {mediaItems.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevSlide}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-800 text-white p-3 rounded-lg transition-colors"
+                      aria-label="Previous slide"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    
+                    <button
+                      onClick={nextSlide}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-800 text-white p-3 rounded-lg transition-colors"
+                      aria-label="Next slide"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Pagination Dots */}
-              <div className="flex justify-center gap-2 py-4 bg-white">
-                {mediaItems.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      currentSlide === index ? 'bg-blue-600' : 'bg-gray-300'
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
-              </div>
+              {mediaItems.length > 1 && (
+                <div className="flex justify-center gap-2 py-4 bg-white">
+                  {mediaItems.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        currentSlide === index ? 'bg-blue-600' : 'bg-gray-300'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -489,7 +708,7 @@ export default function TrainingPage() {
       {/* Courses Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Our Training Courses</h2>
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">{pageSettings?.coursesTitle || 'Our Training Courses'}</h2>
           
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
             {activeCourses.map((course, index) => (
@@ -562,8 +781,8 @@ export default function TrainingPage() {
       <section className="py-20 bg-white border-t border-b border-gray-200">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Trusted by Leading Organizations</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Our training programs are recognized and trusted by top companies and institutions across India</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{pageSettings?.trustedPartnersTitle || 'Trusted by Leading Organizations'}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">{pageSettings?.trustedPartnersSubtitle || 'Our training programs are recognized and trusted by top companies and institutions across India'}</p>
           </div>
         </div>
         
@@ -575,44 +794,42 @@ export default function TrainingPage() {
             style={{ scrollBehavior: 'auto' }}
           >
             {/* First set of logos */}
-            {[
-              { name: 'TCS' },
-              { name: 'Infosys' },
-              { name: 'Wipro' },
-              { name: 'Cognizant' },
-              { name: 'Tech Mahindra' },
-              { name: 'HCL Technologies' },
-              { name: 'Microsoft' },
-              { name: 'Google' },
-              { name: 'Amazon' },
-              { name: 'IBM' },
-            ].map((partner, index) => (
+            {trustedPartners.map((partner, index) => (
               <div
                 key={`partner-1-${index}`}
                 className="flex-shrink-0 w-48 h-24 bg-white rounded-xl border-2 border-gray-200 p-6 flex items-center justify-center hover:border-blue-400 hover:shadow-xl transition-all duration-300"
               >
-                <span className="text-gray-800 font-bold text-lg">{partner.name}</span>
+                {partner.logo ? (
+                  <Image
+                    src={urlFor(partner.logo).url()}
+                    alt={partner.name}
+                    width={120}
+                    height={60}
+                    className="object-contain"
+                  />
+                ) : (
+                  <span className="text-gray-800 font-bold text-lg">{partner.name}</span>
+                )}
               </div>
             ))}
             
             {/* Duplicate set for seamless loop */}
-            {[
-              { name: 'TCS' },
-              { name: 'Infosys' },
-              { name: 'Wipro' },
-              { name: 'Cognizant' },
-              { name: 'Tech Mahindra' },
-              { name: 'HCL Technologies' },
-              { name: 'Microsoft' },
-              { name: 'Google' },
-              { name: 'Amazon' },
-              { name: 'IBM' },
-            ].map((partner, index) => (
+            {trustedPartners.map((partner, index) => (
               <div
                 key={`partner-2-${index}`}
                 className="flex-shrink-0 w-48 h-24 bg-white rounded-xl border-2 border-gray-200 p-6 flex items-center justify-center hover:border-blue-400 hover:shadow-xl transition-all duration-300"
               >
-                <span className="text-gray-800 font-bold text-lg">{partner.name}</span>
+                {partner.logo ? (
+                  <Image
+                    src={urlFor(partner.logo).url()}
+                    alt={partner.name}
+                    width={120}
+                    height={60}
+                    className="object-contain"
+                  />
+                ) : (
+                  <span className="text-gray-800 font-bold text-lg">{partner.name}</span>
+                )}
               </div>
             ))}
           </div>
@@ -624,7 +841,7 @@ export default function TrainingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Why Learn with KarVenSen
+              {pageSettings?.whyLearnTitle || 'Why Learn with KarVenSen'}
             </h2>
           </div>
 
@@ -632,110 +849,94 @@ export default function TrainingPage() {
             {/* First Row - Text Left, Image Right */}
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6 pr-6">
-                <h3 className="text-3xl font-bold text-gray-900 mb-6">Why Train With Us?</h3>
+                <h3 className="text-3xl font-bold text-gray-900 mb-6">
+                  {whyTrainItems[0]?.sectionTitle || 'Why Train With Us?'}
+                </h3>
                 
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Award className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg mb-1">DGCA Certification</h4>
-                    <p className="text-gray-600 text-sm">Recognized industry certification</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Industry-Leading Instructors</h4>
-                    <p className="text-gray-600 text-sm">Learn from the best professionals</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Comprehensive Support System</h4>
-                    <p className="text-gray-600 text-sm">End-to-end guidance and assistance</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Tractor className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Focus on Entrepreneurship</h4>
-                    <p className="text-gray-600 text-sm">Build your own business ventures</p>
-                  </div>
-                </div>
+                {whyTrainItems.map((item, index) => {
+                  const IconComponent = item.iconName === 'Award' ? Award :
+                                       item.iconName === 'Users' ? Users :
+                                       item.iconName === 'CheckCircle' ? CheckCircle :
+                                       item.iconName === 'Tractor' ? Tractor :
+                                       item.iconName === 'GraduationCap' ? GraduationCap : Award
+                  
+                  return (
+                    <div key={index} className="flex items-start gap-4">
+                      <div className={`flex-shrink-0 w-12 h-12 bg-${item.iconColor}-100 rounded-lg flex items-center justify-center`}>
+                        <IconComponent className={`w-6 h-6 text-${item.iconColor}-600`} />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 text-lg mb-1">{item.title}</h4>
+                        <p className="text-gray-600 text-sm">{item.description}</p>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
               
               <div className="relative pl-6">
-                <img
-                  src="/open field certificate image.png"
-                  alt="Training with KarVenSen"
-                  className="rounded-xl shadow-lg w-full h-auto max-h-[500px] object-cover"
-                />
+                {whyTrainImage ? (
+                  <Image
+                    src={urlFor(whyTrainImage).url()}
+                    alt="Training with KarVenSen"
+                    width={600}
+                    height={500}
+                    className="rounded-xl shadow-lg w-full h-auto max-h-[500px] object-cover"
+                  />
+                ) : (
+                  <img
+                    src="/open field certificate image.png"
+                    alt="Training with KarVenSen"
+                    className="rounded-xl shadow-lg w-full h-auto max-h-[500px] object-cover"
+                  />
+                )}
               </div>
             </div>
 
             {/* Second Row - Image Left, Text Right */}
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="relative pr-6">
-                <img
-                  src="/staff teaches to std.png"
-                  alt="What sets us apart"
-                  className="rounded-xl shadow-lg w-full h-auto max-h-[500px] object-cover"
-                />
+                {setsApartImage ? (
+                  <Image
+                    src={urlFor(setsApartImage).url()}
+                    alt="What sets us apart"
+                    width={600}
+                    height={500}
+                    className="rounded-xl shadow-lg w-full h-auto max-h-[500px] object-cover"
+                  />
+                ) : (
+                  <img
+                    src="/staff teaches to std.png"
+                    alt="What sets us apart"
+                    className="rounded-xl shadow-lg w-full h-auto max-h-[500px] object-cover"
+                  />
+                )}
               </div>
               
               <div className="space-y-6 pl-6">
-                <h3 className="text-3xl font-bold text-gray-900 mb-6">What Sets Us Apart?</h3>
+                <h3 className="text-3xl font-bold text-gray-900 mb-6">
+                  {setsApartItems[0]?.sectionTitle || 'What Sets Us Apart?'}
+                </h3>
                 
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <GraduationCap className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Expert Guidance</h4>
-                    <p className="text-gray-600 text-sm">Personalized mentoring and support</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Real-World Experience</h4>
-                    <p className="text-gray-600 text-sm">Hands-on practical training</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Award className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Industry Recognition</h4>
-                    <p className="text-gray-600 text-sm">Certificates valued by employers</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg mb-1">Career Support</h4>
-                    <p className="text-gray-600 text-sm">Job placement assistance</p>
-                  </div>
-                </div>
+                {setsApartItems.map((item, index) => {
+                  const IconComponent = item.iconName === 'Award' ? Award :
+                                       item.iconName === 'Users' ? Users :
+                                       item.iconName === 'CheckCircle' ? CheckCircle :
+                                       item.iconName === 'Tractor' ? Tractor :
+                                       item.iconName === 'GraduationCap' ? GraduationCap : Award
+                  
+                  return (
+                    <div key={index} className="flex items-start gap-4">
+                      <div className={`flex-shrink-0 w-12 h-12 bg-${item.iconColor}-100 rounded-lg flex items-center justify-center`}>
+                        <IconComponent className={`w-6 h-6 text-${item.iconColor}-600`} />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 text-lg mb-1">{item.title}</h4>
+                        <p className="text-gray-600 text-sm">{item.description}</p>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -747,48 +948,32 @@ export default function TrainingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Career Opportunities After Training
+              {pageSettings?.careerOpportunitiesTitle || 'Career Opportunities After Training'}
             </h2>
           </div>
 
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
             {/* Left Side - Career Cards */}
             <div className="space-y-6">
-              <div className="bg-white rounded-lg shadow-md p-6 flex items-start gap-4 hover:shadow-xl transition-shadow">
-                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Tailored Job Placement Support</h3>
-                  <p className="text-gray-600 text-sm">
-                    Connect with top agricultural and tech companies actively hiring certified drone pilots and AI specialists.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-md p-6 flex items-start gap-4 hover:shadow-xl transition-shadow">
-                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Award className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Exclusive Drone Pilot Opportunities</h3>
-                  <p className="text-gray-600 text-sm">
-                    Access to exclusive job openings in precision agriculture, infrastructure inspection, and aerial surveying.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-md p-6 flex items-start gap-4 hover:shadow-xl transition-shadow">
-                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <GraduationCap className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Expert Mentorship Programs</h3>
-                  <p className="text-gray-600 text-sm">
-                    Ongoing guidance from industry experts to help you launch your career or start your own drone business.
-                  </p>
-                </div>
-              </div>
+              {careerOpportunities.map((opportunity, index) => {
+                const IconComponent = opportunity.iconName === 'Award' ? Award :
+                                     opportunity.iconName === 'Users' ? Users :
+                                     opportunity.iconName === 'CheckCircle' ? CheckCircle :
+                                     opportunity.iconName === 'Tractor' ? Tractor :
+                                     opportunity.iconName === 'GraduationCap' ? GraduationCap : Users
+                
+                return (
+                  <div key={index} className="bg-white rounded-lg shadow-md p-6 flex items-start gap-4 hover:shadow-xl transition-shadow">
+                    <div className={`flex-shrink-0 w-12 h-12 bg-${opportunity.iconColor}-100 rounded-lg flex items-center justify-center`}>
+                      <IconComponent className={`w-6 h-6 text-${opportunity.iconColor}-600`} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">{opportunity.title}</h3>
+                      <p className="text-gray-600 text-sm">{opportunity.description}</p>
+                    </div>
+                  </div>
+                )
+              })}
 
               <div className="text-center mt-8">
                 <Link
@@ -802,11 +987,21 @@ export default function TrainingPage() {
 
             {/* Right Side - Image */}
             <div className="relative">
-              <img
-                src="/train-3.jpeg"
-                alt="Career opportunities in drone technology"
-                className="rounded-2xl shadow-2xl w-full h-auto"
-              />
+              {careerImage ? (
+                <Image
+                  src={urlFor(careerImage).url()}
+                  alt="Career opportunities in drone technology"
+                  width={600}
+                  height={600}
+                  className="rounded-2xl shadow-2xl w-full h-auto"
+                />
+              ) : (
+                <img
+                  src="/train-3.jpeg"
+                  alt="Career opportunities in drone technology"
+                  className="rounded-2xl shadow-2xl w-full h-auto"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -816,9 +1011,9 @@ export default function TrainingPage() {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">Upcoming Programs</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">{pageSettings?.upcomingProgramsTitle || 'Upcoming Programs'}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Register for our upcoming training sessions and workshops
+              {pageSettings?.upcomingProgramsSubtitle || 'Register for our upcoming training sessions and workshops'}
             </p>
           </div>
           <UpcomingProgramsGrid />
@@ -835,8 +1030,8 @@ export default function TrainingPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">Frequently Asked Questions</h2>
-              <p className="text-gray-600">Common questions about our training programs</p>
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">{pageSettings?.faqTitle || 'Frequently Asked Questions'}</h2>
+              <p className="text-gray-600">{pageSettings?.faqSubtitle || 'Common questions about our training programs'}</p>
             </div>
             <Accordion type="single" collapsible className="w-full">
               {activeFaqs.map((faq, index) => (
