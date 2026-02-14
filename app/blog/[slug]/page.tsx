@@ -1,18 +1,24 @@
 "use client"
 
 import { use } from "react"
-import type { Metadata } from "next"
 import { Calendar, ArrowLeft, BookOpen } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { blogPosts } from "@/lib/blog-data"
-import { blogContentMap, generateDefaultContent } from "@/lib/blog-content"
 import { notFound } from "next/navigation"
-import BlogSubtitleAnimator from "@/components/blog-subtitle-animator"
 import ScrollToTop from "@/components/scroll-to-top"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
-import { PortableText } from '@portabletext/react'
+import { BlogContentRenderer } from "@/components/blog-content-renderer"
+
+// Category-based fallback images from public folder
+const categoryFallbacks: Record<string, string> = {
+  "Artificial Intelligence": "/enterprise-ai-dashboard.png",
+  "Drone Technology": "/drone-flying-over-farm-field-at-sunset.jpg",
+  "Cloud Computing": "/cloud-computing-infrastructure.png",
+  "LMS & EdTech": "/training-drone.png",
+}
+
+const defaultBlogImage = "/blog-img1.jpg"
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -21,60 +27,92 @@ type Props = {
 export default function BlogDetailPage({ params }: Props) {
   const { slug } = use(params)
 
-  // Fetch blog post from CMS
-  const { data: cmsBlog } = useSanityData<any>(
-    `*[_type == "blog" && slug.current == $slug && isActive == true][0]{
-      "id": slug.current,
+  // Fetch blog post from Sanity with defensive type conversion
+  const { data: post, loading } = useSanityData<any>(
+    `*[_type == "blog" && slug.current == $slug][0]{
+      _id,
       title,
+      slug,
       excerpt,
-      category,
+      "category": coalesce(
+        select(
+          category._ref == "category-ai" => "Artificial Intelligence",
+          category._ref == "category-drone" => "Drone Technology",
+          category._ref == "category-cloud" => "Cloud Computing",
+          category._ref == "category-lms" => "LMS & EdTech"
+        ),
+        category,
+        "Uncategorized"
+      ),
       branch,
-      "date": publishedAt,
+      publishedAt,
       readTime,
-      "author": author->name,
-      "heroImage": heroImage.asset,
-      heroVideo,
-      body
+      "authorName": coalesce(author->name, author, "Karvensen Team"),
+      "authorImage": author->image,
+      heroImage,
+      body,
+      ctaTitle,
+      ctaSubtitle,
+      ctaButton1Text,
+      ctaButton1Link,
+      ctaButton2Text,
+      ctaButton2Link
     }`,
     { slug },
     null
   )
 
-  // Use CMS data if available, otherwise fallback
-  const post = cmsBlog || blogPosts.find((p) => p.id === slug)
+  // Fetch related posts (same category, excluding current post)
+  const { data: relatedPosts } = useSanityData<any[]>(
+    `*[_type == "blog" && slug.current != $slug][0...3] | order(publishedAt desc){
+      _id,
+      title,
+      slug,
+      excerpt,
+      "category": coalesce(
+        select(
+          category._ref == "category-ai" => "Artificial Intelligence",
+          category._ref == "category-drone" => "Drone Technology",
+          category._ref == "category-cloud" => "Cloud Computing",
+          category._ref == "category-lms" => "LMS & EdTech"
+        ),
+        category,
+        "Uncategorized"
+      ),
+      publishedAt,
+      heroImage
+    }`,
+    { slug },
+    []
+  )
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+          <p className="mt-4 text-gray-600">Loading article...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!post) {
     notFound()
   }
 
-  // Fetch related posts from CMS (same category, excluding current post)
-  const { data: cmsRelatedPosts } = useSanityData<any[]>(
-    `*[_type == "blog" && category == $category && slug.current != $slug && isActive == true][0...3] | order(publishedAt desc){
-      "id": slug.current,
-      title,
-      excerpt,
-      category,
-      "date": publishedAt,
-      "heroImage": heroImage.asset
-    }`,
-    { category: post.category, slug },
-    []
-  )
-
-  // Get related posts (same category, excluding current post)
-  const relatedPosts = (cmsRelatedPosts && cmsRelatedPosts.length > 0) 
-    ? cmsRelatedPosts 
-    : blogPosts.filter((p) => p.category === post.category && p.id !== post.id).slice(0, 3)
+  console.log('Blog post data:', {
+    hasBody: !!post.body,
+    bodyLength: post.body?.length,
+    bodyPreview: post.body?.slice(0, 2)
+  })
 
   return (
     <div className="min-h-screen bg-white">
       {/* Scroll to Top on Page Load */}
       <ScrollToTop />
       
-      {/* Subtitle Animation Controller */}
-      <BlogSubtitleAnimator />
-      
-      {/* AI Video Hero Section with Overlay Content */}
+      {/* Hero Section */}
       <section className="relative w-full bg-gray-900 min-h-[600px]">
         {post.heroVideo ? (
           <div className="absolute inset-0">
@@ -86,35 +124,17 @@ export default function BlogDetailPage({ params }: Props) {
               className="w-full h-full object-cover"
             >
               <source src={post.heroVideo} type="video/mp4" />
-              {/* Fallback to image if video not available */}
-              {post.heroImage && (
-                <div 
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${post.heroImage})` }}
-                />
-              )}
             </video>
-            {/* Overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-gray-900/40" />
           </div>
         ) : (
-          // Fallback: Featured image with gradient overlay
           <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900">
-            {post.heroImage && (
-              typeof post.heroImage === 'object' ? (
-                <Image
-                  src={urlFor(post.heroImage).url()}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                />
-              ) : (
-                <div 
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${post.heroImage})` }}
-                />
-              )
-            )}
+            <Image
+              src={post.heroImage?.asset ? urlFor(post.heroImage).url() : (categoryFallbacks[post.category] || defaultBlogImage)}
+              alt={post.title}
+              fill
+              className="object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-gray-900/40" />
           </div>
         )}
@@ -135,9 +155,11 @@ export default function BlogDetailPage({ params }: Props) {
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-bold border border-white/30">
               {post.category}
             </span>
-            <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-semibold border border-white/20">
-              {post.branch}
-            </span>
+            {post.branch && (
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-semibold border border-white/20">
+                {post.branch}
+              </span>
+            )}
           </div>
 
           {/* Title */}
@@ -150,106 +172,78 @@ export default function BlogDetailPage({ params }: Props) {
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
               <span className="text-sm font-medium">
-                {new Date(post.date).toLocaleDateString('en-US', { 
+                {new Date(post.publishedAt).toLocaleDateString('en-US', { 
                   month: 'long', 
                   day: 'numeric', 
                   year: 'numeric' 
                 })}
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">By <span className="text-white font-semibold">{post.author}</span></span>
-            </div>
+            {post.authorName && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">By <span className="text-white font-semibold">{post.authorName}</span></span>
+              </div>
+            )}
+            {post.readTime && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">{post.readTime}</span>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Premium Content Section */}
+      {/* Article Content */}
       <article className="py-16 lg:py-24">
         <div className="container mx-auto px-4 max-w-4xl">
-
-          {/* Article Content with Enhanced Reading Experience */}
-          <div className="prose prose-lg prose-gray max-w-none">
-            {/* Introduction with Premium Typography */}
-            <p className="text-2xl text-gray-700 leading-relaxed mb-12 font-light border-l-4 border-gray-900 pl-6 italic">
+          {/* Excerpt */}
+          {post.excerpt && (
+            <p className="text-2xl text-gray-700 leading-relaxed mb-12 font-light border-l-4 border-primary pl-6 italic">
               {post.excerpt}
             </p>
+          )}
 
-            {/* Main Content - Detailed Information based on Branch */}
-            <div className="space-y-10 text-gray-800 leading-relaxed">
-              {/* Render CMS body if available, otherwise use ContentSection */}
-              {cmsBlog?.body ? (
-                <div className="prose-headings:font-bold prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-p:text-lg prose-p:leading-relaxed prose-p:mb-6 prose-ul:my-6 prose-li:mb-3">
-                  <PortableText value={cmsBlog.body} />
-                </div>
-              ) : (
-                <ContentSection post={post} />
-              )}
+          {/* Main Content */}
+          {post.body && post.body.length > 0 ? (
+            <BlogContentRenderer content={post.body} />
+          ) : (
+            <p className="text-gray-600">No content available for this post.</p>
+          )}
+
+          {/* CTA Section */}
+          <div className="relative overflow-hidden rounded-3xl my-16 shadow-2xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
+                backgroundSize: '40px 40px'
+              }}></div>
             </div>
-
-            {/* Premium Key Takeaways Box */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-l-4 border-gray-900 rounded-r-xl p-8 my-12 shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
-                <span className="w-2 h-2 bg-gray-900 rounded-full"></span>
-                Key Takeaways
-              </h3>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex items-start gap-3">
-                  <span className="text-gray-900 font-bold mt-1">•</span>
-                  <span>Advanced {post.branch.toLowerCase()} implementation strategies</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gray-900 font-bold mt-1">•</span>
-                  <span>Real-world applications and use cases in Indian context</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gray-900 font-bold mt-1">•</span>
-                  <span>Best practices for deployment and scaling</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gray-900 font-bold mt-1">•</span>
-                  <span>Future trends and emerging technologies</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Premium CTA Section - Modern Split Design */}
-            <div className="relative overflow-hidden rounded-3xl my-16 shadow-2xl">
-              {/* Background Pattern */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800">
-                <div className="absolute inset-0 opacity-10" style={{
-                  backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)`,
-                  backgroundSize: '40px 40px'
-                }}></div>
-              </div>
-              
-              {/* Content */}
-              <div className="relative z-10 p-12 md:p-16">
-                <div className="max-w-4xl mx-auto">
-                  <h3 className="text-4xl md:text-5xl font-bold mb-4 text-white leading-tight" style={{ color: '#FFFFFF' }}>
-                    Interested in {post.branch}?
-                  </h3>
-                  
-                  <p className="text-xl text-gray-300 mb-10 leading-relaxed">
-                    Learn how Karvensen can help you implement cutting-edge solutions for your business.
-                  </p>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Link
-                      href="/contact"
-                      className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-xl"
-                    >
-                      <span>Contact Our Experts</span>
-                      <span className="group-hover:translate-x-1 transition-transform">→</span>
-                    </Link>
-                    <Link
-                      href="/services"
-                      className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-xl"
-                    >
-                      <span>Explore Our Services</span>
-                      <span className="group-hover:translate-x-1 transition-transform">→</span>
-                    </Link>
-                  </div>
+            
+            <div className="relative z-10 p-12 md:p-16">
+              <div className="max-w-4xl mx-auto">
+                <h3 className="text-4xl md:text-5xl font-bold mb-4 text-white leading-tight">
+                  {post.ctaTitle || `Interested in ${post.branch || post.category}?`}
+                </h3>
+                
+                <p className="text-xl text-gray-300 mb-10 leading-relaxed">
+                  {post.ctaSubtitle || 'Learn how Karvensen can help you implement cutting-edge solutions for your business.'}
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link
+                    href={post.ctaButton1Link || "/contact"}
+                    className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-xl"
+                  >
+                    <span>{post.ctaButton1Text || 'Contact Our Experts'}</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </Link>
+                  <Link
+                    href={post.ctaButton2Link || "/services"}
+                    className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-xl font-bold hover:bg-white/20 transition-all duration-300 hover:scale-105"
+                  >
+                    <span>{post.ctaButton2Text || 'Explore Our Services'}</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -257,8 +251,8 @@ export default function BlogDetailPage({ params }: Props) {
         </div>
       </article>
 
-      {/* Premium Related Posts Section */}
-      {relatedPosts.length > 0 && (
+      {/* Related Posts Section */}
+      {relatedPosts && relatedPosts.length > 0 && (
         <section className="py-20 bg-gradient-to-b from-gray-50 to-white border-t-2 border-gray-100">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex items-center gap-3 mb-12">
@@ -271,42 +265,24 @@ export default function BlogDetailPage({ params }: Props) {
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {relatedPosts.map((relatedPost) => (
                 <Link
-                  key={relatedPost.id}
-                  href={`/blog/${relatedPost.id}`}
+                  key={relatedPost._id}
+                  href={`/blog/${relatedPost.slug.current}`}
                   className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100"
                 >
-                  {/* Image Section */}
                   <div className="relative h-48 overflow-hidden">
-                    {relatedPost.heroImage ? (
-                      typeof relatedPost.heroImage === 'object' ? (
-                        <Image
-                          src={urlFor(relatedPost.heroImage).url()}
-                          alt={relatedPost.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                      ) : (
-                        <Image
-                          src={relatedPost.heroImage}
-                          alt={relatedPost.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700"
-                          unoptimized
-                        />
-                      )
-                    ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400">
-                        <div className="absolute inset-0 bg-gradient-to-br from-gray-600/20 via-gray-700/20 to-gray-800/20 group-hover:scale-110 transition-transform duration-700"></div>
-                      </div>
-                    )}
+                    <Image
+                      src={relatedPost.heroImage?.asset ? urlFor(relatedPost.heroImage).url() : (categoryFallbacks[relatedPost.category] || defaultBlogImage)}
+                      alt={relatedPost.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
                     <div className="absolute top-4 left-4 px-4 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-gray-900 shadow-lg z-10">
                       {relatedPost.category}
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
 
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors duration-300 line-clamp-2">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors duration-300 line-clamp-2">
                       {relatedPost.title}
                     </h3>
                     <p className="text-gray-600 text-sm line-clamp-2 mb-4">
@@ -316,7 +292,7 @@ export default function BlogDetailPage({ params }: Props) {
                       <div className="flex items-center gap-2 text-sm text-gray-500">
                         <Calendar className="h-4 w-4" />
                         <span>
-                          {new Date(relatedPost.date).toLocaleDateString('en-US', { 
+                          {new Date(relatedPost.publishedAt).toLocaleDateString('en-US', { 
                             month: 'short', 
                             day: 'numeric', 
                             year: 'numeric' 
@@ -336,18 +312,4 @@ export default function BlogDetailPage({ params }: Props) {
       )}
     </div>
   )
-}
-
-// Content Section Component - Generates detailed content based on post branch
-function ContentSection({ post }: { post: typeof blogPosts[0] }) {
-  // Check if we have specific content for this branch
-  const contentGenerator = blogContentMap[post.branch]
-  
-  if (contentGenerator) {
-    // Use detailed branch-specific content
-    return <div className="space-y-8">{contentGenerator()}</div>
-  }
-  
-  // Fall back to default content generator
-  return <div className="space-y-8">{generateDefaultContent(post.branch, post.category)}</div>
 }

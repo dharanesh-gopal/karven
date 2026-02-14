@@ -1,0 +1,6 @@
+{"_id":"blogPageSettings","_type":"blogPageSettings","heroTitle":"The KarVenSen Blog","heroSubtitle":"Explore cutting-edge insights on Artificial Intelligence, Drone Technology, Cloud Computing, LMS platforms, and next-generation digital solutions.","heroBadgeText":"Insights & Updates","heroVideoUrl":"/ai-background.mp4","categories":["All","Artificial Intelligence","Drone Technology","Cloud Computing","LMS & EdTech"],"isActive":true}
+{"_id":"author-karvensen-team","_type":"author","name":"Karvensen Team","bio":"Expert team of technology professionals specializing in AI, Drones, Cloud, and EdTech solutions."}
+{"_id":"category-ai","_type":"category","title":"Artificial Intelligence","description":"Articles about AI, machine learning, and intelligent systems"}
+{"_id":"category-drone","_type":"category","title":"Drone Technology","description":"Insights on drone applications and aerial technology"}
+{"_id":"category-cloud","_type":"category","title":"Cloud Computing","description":"Cloud infrastructure, migration, and best practices"}
+{"_id":"category-lms","_type":"category","title":"LMS & EdTech","description":"Learning management systems and educational technology"}

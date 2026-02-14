@@ -484,17 +484,6 @@ html {
 }
 
 /* Apply animations with intersection observer classes */
-.prose h2,
-.prose h3,
-.prose p,
-.prose ul,
-.prose ol,
-.prose > div:not(.bg-gray-50):not(.bg-white):not(.grid),
-.prose section {
-  opacity: 0;
-  transition: none;
-}
-
 .prose h2.animate-slide-left,
 .prose h3.animate-slide-left,
 .prose p.animate-slide-left,
@@ -503,7 +492,6 @@ html {
 .prose > div.animate-slide-left,
 .prose section.animate-slide-left {
   animation: slideInLeft 0.7s ease-out forwards;
-  opacity: 1;
 }
 
 .prose h2.animate-slide-right,
@@ -514,5 +502,4 @@ html {
 .prose > div.animate-slide-right,
 .prose section.animate-slide-right {
   animation: slideInRight 0.7s ease-out forwards;
-  opacity: 1;
 }

@@ -78,11 +78,43 @@ import boardMember from './boardMember'
 import aboutContactForm from './aboutContactForm'
 import seoObject from './seoObject'
 
+// Rich Content Blocks
+import {
+  buttonBlock,
+  badgeBlock,
+  calloutBlock,
+  codeBlock,
+  alertBlock,
+  quoteBlock,
+  statsBlock,
+  videoBlock,
+  dividerBlock,
+  accordionBlock,
+} from './richContentBlocks'
+
+// Page Settings
+import blogPageSettings from './blogPageSettings'
+import homePageSettings from './homePageSettings'
+import contactPageSettings from './contactPageSettings'
+import careersPageSettings from './careersPageSettings'
+
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     // Reusable Objects
     seoObject,
+
+    // Rich Content Blocks
+    buttonBlock,
+    badgeBlock,
+    calloutBlock,
+    codeBlock,
+    alertBlock,
+    quoteBlock,
+    statsBlock,
+    videoBlock,
+    dividerBlock,
+    accordionBlock,
 
     // Site-wide
     siteSettings,
@@ -90,6 +122,12 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     notification,
     footerSettings,
     aboutContactForm,
+
+    // Page Settings
+    homePageSettings,
+    blogPageSettings,
+    contactPageSettings,
+    careersPageSettings,
 
     // Content
 

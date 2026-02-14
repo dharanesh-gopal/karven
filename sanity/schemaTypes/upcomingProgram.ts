@@ -86,6 +86,20 @@ export default defineType({
       description: 'Link to registration form (optional)',
     },
     {
+      name: 'enquireButtonText',
+      type: 'string',
+      title: 'Enquire Button Text',
+      description: 'Text for the enquire button (e.g., "Enquire Now", "Register Now")',
+      initialValue: 'Enquire Now',
+    },
+    {
+      name: 'enquireLink',
+      type: 'string',
+      title: 'Enquire Link',
+      description: 'Link for enquiry (e.g., /contact?enquiry=training or custom URL)',
+      initialValue: '/contact?enquiry=training',
+    },
+    {
       name: 'order',
       type: 'number',
       title: 'Display Order',

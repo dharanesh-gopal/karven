@@ -8,6 +8,16 @@ import { blogPosts, blogCategories } from "@/lib/blog-data"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
 
+// Category-based fallback images from public folder
+const categoryFallbacks: Record<string, string> = {
+  "Artificial Intelligence": "/enterprise-ai-dashboard.png",
+  "Drone Technology": "/drone-flying-over-farm-field-at-sunset.jpg",
+  "Cloud Computing": "/cloud-computing-infrastructure.png",
+  "LMS & EdTech": "/training-drone.png",
+}
+
+const defaultBlogImage = "/blog-img1.jpg"
+
 export default function BlogGrid() {
   const [selectedCategory, setSelectedCategory] = useState("All")
 
@@ -68,7 +78,13 @@ export default function BlogGrid() {
             </div>
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-              {filteredPosts.map((post) => (
+              {filteredPosts.map((post) => {
+                const fallbackImage = categoryFallbacks[post.category] || defaultBlogImage
+                const imageSrc = typeof post.heroImage === 'object' 
+                  ? urlFor(post.heroImage).url() 
+                  : (post.heroImage || fallbackImage)
+                
+                return (
                 <Link
                   key={post.id}
                   href={`/blog/${post.id}`}
@@ -76,20 +92,14 @@ export default function BlogGrid() {
                 >
                   {/* Image Section with Category Badge Overlay */}
                   <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
-                    {post.heroImage ? (
-                      <Image
-                        src={typeof post.heroImage === 'object' ? urlFor(post.heroImage).url() : post.heroImage}
-                        alt={post.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                        <span className="text-sm">Image loading...</span>
-                      </div>
-                    )}
+                    <Image
+                      src={imageSrc}
+                      alt={post.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      unoptimized
+                    />
                     <div className="absolute inset-0 bg-black/20" />
                     {/* Category Badge Overlay */}
                     <div className="absolute top-4 left-4 px-4 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-gray-900 shadow-lg z-10">
@@ -120,7 +130,7 @@ export default function BlogGrid() {
                     </div>
                   </div>
                 </Link>
-              ))}
+              )})}
             </div>
           )}
         </div>

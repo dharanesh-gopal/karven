@@ -19,6 +19,8 @@ interface UpcomingProgramData {
   duration?: string
   fee?: string
   registrationLink?: string
+  enquireButtonText?: string
+  enquireLink?: string
 }
 
 interface TrainingHeroData {
@@ -107,7 +109,9 @@ function UpcomingProgramsGrid() {
       category,
       duration,
       fee,
-      registrationLink
+      registrationLink,
+      enquireButtonText,
+      enquireLink
     }`,
     {},
     []
@@ -125,6 +129,8 @@ function UpcomingProgramsGrid() {
       image: null,
       fee: "₹5,000",
       registrationLink: undefined,
+      enquireButtonText: "Enquire Now",
+      enquireLink: "/contact?enquiry=training",
     },
     {
       title: "AI/ML Bootcamp",
@@ -137,6 +143,8 @@ function UpcomingProgramsGrid() {
       image: null,
       fee: "₹15,000",
       registrationLink: undefined,
+      enquireButtonText: "Enquire Now",
+      enquireLink: "/contact?enquiry=training",
     },
     {
       title: "School Tech Festival",
@@ -149,6 +157,8 @@ function UpcomingProgramsGrid() {
       image: null,
       fee: undefined,
       registrationLink: undefined,
+      enquireButtonText: "Enquire Now",
+      enquireLink: "/contact?enquiry=training",
     },
   ]
 
@@ -243,10 +253,10 @@ function UpcomingProgramsGrid() {
               </a>
             ) : (
               <Link
-                href="/contact?enquiry=training"
+                href={event.enquireLink || '/contact?enquiry=training'}
                 className="inline-flex items-center gap-2 text-red-600 font-medium text-sm hover:gap-3 transition-all duration-300"
               >
-                <span>Enquire Now</span>
+                <span>{event.enquireButtonText || 'Enquire Now'}</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             )}

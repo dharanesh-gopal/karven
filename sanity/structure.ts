@@ -228,6 +228,9 @@ export const structure: StructureResolver = (S) =>
             .title('Blog - All Content')
             .items([
               S.listItem()
+                .title('0. Blog Page Settings')
+                .child(S.document().schemaType('blogPageSettings').documentId('blogPageSettings')),
+              S.listItem()
                 .title('1. All Blog Posts')
                 .child(S.documentTypeList('blog').title('Blog Posts')),
               S.listItem()

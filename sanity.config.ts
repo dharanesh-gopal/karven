@@ -25,4 +25,6 @@ export default defineConfig({
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({defaultApiVersion: apiVersion}),
   ],
+  // Disable autoUpdates to prevent hydration issues
+  unstable_autoUpdates: false,
 })
