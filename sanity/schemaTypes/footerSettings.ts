@@ -63,6 +63,62 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'menuSections',
+      title: 'Footer Menu Sections',
+      type: 'object',
+      description: 'Configure the footer menu columns (Services, Training, Resources, Company)',
+      fields: [
+        {
+          name: 'services',
+          type: 'array',
+          title: 'Services Links',
+          of: [{
+            type: 'object',
+            fields: [
+              { name: 'label', type: 'string', title: 'Link Text' },
+              { name: 'href', type: 'string', title: 'URL Path' },
+            ],
+          }],
+        },
+        {
+          name: 'training',
+          type: 'array',
+          title: 'Training Links',
+          of: [{
+            type: 'object',
+            fields: [
+              { name: 'label', type: 'string', title: 'Link Text' },
+              { name: 'href', type: 'string', title: 'URL Path' },
+            ],
+          }],
+        },
+        {
+          name: 'resources',
+          type: 'array',
+          title: 'Resources Links',
+          of: [{
+            type: 'object',
+            fields: [
+              { name: 'label', type: 'string', title: 'Link Text' },
+              { name: 'href', type: 'string', title: 'URL Path' },
+            ],
+          }],
+        },
+        {
+          name: 'company',
+          type: 'array',
+          title: 'Company Links',
+          of: [{
+            type: 'object',
+            fields: [
+              { name: 'label', type: 'string', title: 'Link Text' },
+              { name: 'href', type: 'string', title: 'URL Path' },
+            ],
+          }],
+        },
+      ],
+    }),
+    defineField({
       name: 'legalLinks',
       title: 'Legal Links',
       type: 'object',

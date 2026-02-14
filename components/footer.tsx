@@ -21,6 +21,12 @@ interface FooterData {
     name: string
     url: string
   }>
+  menuSections?: {
+    services?: Array<{ label: string; href: string }>
+    training?: Array<{ label: string; href: string }>
+    resources?: Array<{ label: string; href: string }>
+    company?: Array<{ label: string; href: string }>
+  }
   legalLinks?: {
     contactUsText?: string
     contactUsUrl?: string
@@ -46,31 +52,31 @@ const fallbackFooterData: FooterData = {
   copyrightText: "KarVenSen. All rights reserved.",
   groupCompanies: [
     { name: "KarvenTech Solutions", url: "https://karventech.com" },
-    { name: "VenSen Innovations", url: "https://vensentech.com" },
+    { name: "Murgdur", url: "https://murgdur.com" },
+    { name: "Veldursen", url: "https://veldursen.com" },
   ],
-}
-
-const footerLinks = {
-  services: [
-    { label: "AI Software Development", href: "/services/ai-software-development" },
-    { label: "Drone Services", href: "/services" },
-    { label: "Cloud Services", href: "/services/cloud-services" },
-    { label: "Educational Programs", href: "/services/educational-programs" },
-    { label: "Data & GIS Solutions", href: "/services/data-gis-digital-solutions" },
-    { label: "Learning Management Systems", href: "/services/learning-management-systems" },
-  ],
-  training: [
-    { label: "Training Programs", href: "/training" },
-    { label: "View All Courses", href: "/training/courses" },
-  ],
-  resources: [
-    { label: "Blog", href: "/blog" },
-    { label: "Contact Us", href: "/contact" },
-  ],
-  company: [
-    { label: "About Us", href: "/about" },
-    { label: "Careers", href: "/careers" },
-  ],
+  menuSections: {
+    services: [
+      { label: "AI Software Development", href: "/services/ai-software-development" },
+      { label: "Drone Services", href: "/services" },
+      { label: "Cloud Services", href: "/services/cloud-services" },
+      { label: "Educational Programs", href: "/services/educational-programs" },
+      { label: "Data & GIS Solutions", href: "/services/data-gis-digital-solutions" },
+      { label: "Learning Management Systems", href: "/services/learning-management-systems" },
+    ],
+    training: [
+      { label: "Training Programs", href: "/training" },
+      { label: "View All Courses", href: "/training/courses" },
+    ],
+    resources: [
+      { label: "Blog", href: "/blog" },
+      { label: "Contact Us", href: "/contact" },
+    ],
+    company: [
+      { label: "About Us", href: "/about" },
+      { label: "Careers", href: "/careers" },
+    ],
+  }
 }
 
 export function Footer() {
@@ -83,6 +89,7 @@ export function Footer() {
       socialMedia,
       copyrightText,
       groupCompanies,
+      menuSections,
       legalLinks
     }`,
     {},
@@ -141,7 +148,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-gray-900 text-base">Services</h3>
             <ul className="space-y-2.5">
-              {footerLinks.services.map((link) => (
+              {(footerData?.menuSections?.services || []).map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
                     {link.label}
@@ -155,7 +162,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-gray-900 text-base">Training</h3>
             <ul className="space-y-2.5">
-              {footerLinks.training.map((link) => (
+              {(footerData?.menuSections?.training || []).map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
                     {link.label}
@@ -169,7 +176,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-gray-900 text-base">Resources</h3>
             <ul className="space-y-2.5">
-              {footerLinks.resources.map((link) => (
+              {(footerData?.menuSections?.resources || []).map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
                     {link.label}
@@ -183,7 +190,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-gray-900 text-base">Company</h3>
             <ul className="space-y-2.5">
-              {footerLinks.company.map((link) => (
+              {(footerData?.menuSections?.company || []).map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
                     {link.label}

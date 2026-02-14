@@ -5,14 +5,11 @@ import author from './author'
 import category from './category'
 import training from './training'
 import testimonial from './testimonial'
-import project from './project'
 import settings from './settings'
 import heroSection from './heroSection'
-import feature from './feature'
 import stats from './stats'
 import processStep from './processStep'
 import ctaSection from './ctaSection'
-import contactInfo from './contactInfo'
 import siteSettings from './siteSettings'
 import notification from './notification'
 import gallerySection from './gallerySection'
@@ -47,12 +44,6 @@ import trustedPartner from './trustedPartner'
 import whyTrainWithUs from './whyTrainWithUs'
 import whatSetsUsApart from './whatSetsUsApart'
 import careerOpportunity from './careerOpportunity'
-import careerHero from './careerHero'
-import careerValue from './careerValue'
-import hiringStep from './hiringStep'
-import careerTestimonial from './careerTestimonial'
-import cultureImage from './cultureImage'
-import careerBenefit from './careerBenefit'
 import jobOpening from './jobOpening'
 import contactHero from './contactHero'
 import officeLocation from './officeLocation'
@@ -118,7 +109,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 
     // Site-wide
     siteSettings,
-    contactInfo,
     notification,
     footerSettings,
     aboutContactForm,
@@ -136,7 +126,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     category,
     training,
     testimonial,
-    project,
     settings,
 
     // Homepage
@@ -145,7 +134,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     howWeWorkSection,
     whyChooseSection,
     testimonialsSection,
-    feature,
     stats,
     processStep,
     ctaSection,
@@ -200,12 +188,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     careerOpportunity,
 
     // Careers Page
-    careerHero,
-    careerValue,
-    hiringStep,
-    careerTestimonial,
-    cultureImage,
-    careerBenefit,
     jobOpening,
 
     // Contact Page

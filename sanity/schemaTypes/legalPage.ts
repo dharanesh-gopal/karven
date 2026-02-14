@@ -89,6 +89,8 @@ export default defineType({
       type: 'object',
       description: 'Contact details for legal inquiries',
       fields: [
+        { name: 'title', type: 'string', title: 'Section Title' },
+        { name: 'subtitle', type: 'text', title: 'Section Subtitle/Description' },
         { name: 'email', type: 'string', title: 'Email' },
         { name: 'phone', type: 'string', title: 'Phone' },
         { name: 'address', type: 'text', title: 'Address' },

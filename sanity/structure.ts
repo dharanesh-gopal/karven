@@ -20,28 +20,25 @@ export const structure: StructureResolver = (S) =>
                 .title('1. Hero Section (Top of Page)')
                 .child(S.documentTypeList('heroSection').title('Hero Section')),
               S.listItem()
-                .title('2. Features Section')
-                .child(S.documentTypeList('feature').title('Features')),
-              S.listItem()
-                .title('3. Stats Section')
+                .title('2. Stats Section')
                 .child(S.documentTypeList('stats').title('Stats')),
               S.listItem()
-                .title('4. How We Work Section')
+                .title('3. How We Work Section')
                 .child(S.document().schemaType('howWeWorkSection').documentId('howWeWorkSection')),
               S.listItem()
-                .title('5. Process Steps')
+                .title('4. Process Steps')
                 .child(S.documentTypeList('processStep').title('Process Steps')),
               S.listItem()
-                .title('6. Testimonials Section Settings')
+                .title('5. Testimonials Section Settings')
                 .child(S.document().schemaType('testimonialsSection').documentId('testimonialsSection')),
               S.listItem()
-                .title('7. Testimonials (Individual Reviews)')
+                .title('6. Testimonials (Individual Reviews)')
                 .child(S.documentTypeList('testimonial').title('Testimonials')),
               S.listItem()
-                .title('8. Gallery Section')
+                .title('7. Gallery Section')
                 .child(S.documentTypeList('gallerySection').title('Gallery Section')),
               S.listItem()
-                .title('9. CTA Section (Call to Action)')
+                .title('8. CTA Section (Call to Action)')
                 .child(S.documentTypeList('ctaSection').title('CTA Section')),
             ])
         ),
@@ -133,6 +130,9 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title('26. Group Companies')
                 .child(S.documentTypeList('groupCompany').title('Group Companies')),
+              S.listItem()
+                .title('27. Contact Form Settings (Floating Button)')
+                .child(S.document().schemaType('aboutContactForm').documentId('aboutContactForm')),
             ])
         ),
 
@@ -252,26 +252,11 @@ export const structure: StructureResolver = (S) =>
             .title('Careers - All Content')
             .items([
               S.listItem()
-                .title('1. Career Hero (Top Banner)')
-                .child(S.document().schemaType('careerHero').documentId('careerHero')),
+                .title('Careers Page - All Sections')
+                .child(S.document().schemaType('careersPageSettings').documentId('careersPageSettings')),
               S.listItem()
-                .title('2. Job Openings (Active Jobs)')
+                .title('Job Openings (Individual Posts)')
                 .child(S.documentTypeList('jobOpening').title('Job Openings')),
-              S.listItem()
-                .title('3. Company Values')
-                .child(S.documentTypeList('careerValue').title('Career Values')),
-              S.listItem()
-                .title('4. Employee Benefits')
-                .child(S.documentTypeList('careerBenefit').title('Career Benefits')),
-              S.listItem()
-                .title('5. Culture Images (Office Photos)')
-                .child(S.documentTypeList('cultureImage').title('Culture Images')),
-              S.listItem()
-                .title('6. Hiring Process Steps')
-                .child(S.documentTypeList('hiringStep').title('Hiring Steps')),
-              S.listItem()
-                .title('7. Employee Testimonials')
-                .child(S.documentTypeList('careerTestimonial').title('Career Testimonials')),
             ])
         ),
 
@@ -293,15 +278,11 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title('3. Social Media Links')
                 .child(S.document().schemaType('socialMediaSection').documentId('socialMediaSection')),
+              S.listItem()
+                .title('4. Contact Page Settings')
+                .child(S.document().schemaType('contactPageSettings').documentId('contactPageSettings')),
             ])
         ),
-
-      S.divider(),
-
-      // Projects
-      S.listItem()
-        .title('📂 Projects Portfolio')
-        .child(S.documentTypeList('project').title('All Projects')),
 
       S.divider(),
 
@@ -340,9 +321,6 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title('Footer (Bottom of All Pages)')
                 .child(S.document().schemaType('footerSettings').documentId('footerSettings')),
-              S.listItem()
-                .title('Contact Information (Global)')
-                .child(S.document().schemaType('contactInfo').documentId('contactInfo')),
               S.listItem()
                 .title('Notifications (Alerts)')
                 .child(S.documentTypeList('notification').title('Notifications')),

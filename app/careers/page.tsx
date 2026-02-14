@@ -17,7 +17,8 @@ import { urlFor } from "@/sanity/lib/image"
 // Icon mapper for Sanity string icons
 const iconMap: Record<string, any> = {
   Globe, TrendingUp, ShieldCheck, FileText, UserCheck, Terminal, CheckCircle,
-  Sparkles, Monitor, MapPin, Heart, Coffee, Lightbulb, Award, Cpu, Target, Zap, Users
+  Sparkles, Monitor, MapPin, Heart, Coffee, Lightbulb, Award, Cpu, Target, Zap, Users,
+  Wallet, Clock, Laptop, Baby
 }
 
 const getIconComponent = (iconName: string | any) => {
@@ -179,23 +180,86 @@ const JobSpotlightRow = ({ children, className = "" }: { children: ReactNode, cl
 // --- 3. SUB-COMPONENTS (MODALS) ---
 
 // 1. BENEFITS MODAL
-const BenefitsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+const BenefitsModal = ({ isOpen, onClose, policyData }: { isOpen: boolean; onClose: () => void; policyData: any }) => {
   if (!isOpen) return null;
+  
+  // Fallback data
+  const modalTitle = policyData?.modalTitle || "Employee Policy Guide";
+  const edition = policyData?.edition || "2026 Edition • Global";
+  const closeText = policyData?.closeButtonText || "Close Guide";
+  
+  const sections = policyData?.sections || [
+    {
+      icon: "Clock",
+      title: "Work Philosophy",
+      content: [
+        { label: "Core Hours", value: "11:00 AM - 3:00 PM (Local Time)." },
+        { label: "Hybrid Policy", value: "Remote-First. Offices available for collaboration." }
+      ]
+    },
+    {
+      icon: "Wallet",
+      title: "Compensation & IP",
+      content: [
+        { label: "Base Salary", value: "Reviewed bi-annually." },
+        { label: "ESOPs", value: "Vested over 4 years." },
+        { label: "Patent Bonus", value: "$3,000 upon grant." }
+      ]
+    },
+    {
+      icon: "Laptop",
+      title: "Equipment",
+      content: [
+        { label: "$1,000 Setup Stipend", value: "for home office." }
+      ]
+    },
+    {
+      icon: "Baby",
+      title: "Parental & Family",
+      content: [
+        { label: "Primary Caregiver", value: "26 Weeks Fully Paid." },
+        { label: "Secondary Caregiver", value: "4 Weeks Fully Paid." }
+      ]
+    }
+  ];
+  
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={onClose}></div>
       <div className="relative w-full max-w-lg h-full bg-white shadow-2xl animate-in slide-in-from-right duration-500 overflow-y-auto border-l border-slate-200">
         <div className="p-8">
           <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-6">
-            <div><h2 className="text-2xl font-bold text-slate-900">Employee Policy Guide</h2><p className="text-xs text-slate-500 uppercase tracking-widest mt-1">2026 Edition • Global</p></div>
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900">{modalTitle}</h2>
+              <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">{edition}</p>
+            </div>
             <button onClick={onClose} className="p-2 hover:bg-sky-50 rounded-full transition-colors text-slate-500 hover:text-sky-600"><X className="w-6 h-6" /></button>
           </div>
           <div className="space-y-8">
-            <div className="space-y-3"><h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Clock className="w-5 h-5 text-sky-600" /> Work Philosophy</h3><div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm text-slate-600 leading-relaxed"><p className="mb-2"><strong>Core Hours:</strong> 11:00 AM - 3:00 PM (Local Time).</p><p><strong>Hybrid Policy:</strong> Remote-First. Offices available for collaboration.</p></div></div>
-            <div className="space-y-3"><h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Wallet className="w-5 h-5 text-sky-600" /> Compensation & IP</h3><ul className="list-disc pl-5 text-sm text-slate-600 space-y-2"><li><strong>Base Salary:</strong> Reviewed bi-annually.</li><li><strong>ESOPs:</strong> Vested over 4 years.</li><li><strong>Patent Bonus:</strong> $3,000 upon grant.</li></ul></div>
-            <div className="space-y-3"><h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Laptop className="w-5 h-5 text-sky-600" /> Equipment</h3><p className="text-sm text-slate-600 leading-relaxed"><strong>$1,000 Setup Stipend</strong> for home office.</p></div>
-            <div className="space-y-3"><h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg"><Baby className="w-5 h-5 text-sky-600" /> Parental & Family</h3><ul className="list-disc pl-5 text-sm text-slate-600 space-y-2"><li><strong>Primary Caregiver:</strong> 26 Weeks Fully Paid.</li><li><strong>Secondary Caregiver:</strong> 4 Weeks Fully Paid.</li></ul></div>
-            <div className="pt-8 border-t border-slate-100"><button onClick={onClose} className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-sky-600 transition-colors shadow-lg">Close Guide</button></div>
+            {sections.map((section: any, idx: number) => {
+              const IconComponent = getIconComponent(section.icon);
+              return (
+                <div key={idx} className="space-y-3">
+                  <h3 className="font-bold text-slate-900 flex items-center gap-2 text-lg">
+                    <IconComponent className="w-5 h-5 text-sky-600" /> {section.title}
+                  </h3>
+                  {section.content && section.content.length > 0 && (
+                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm text-slate-600 leading-relaxed space-y-2">
+                      {section.content.map((item: any, i: number) => (
+                        <p key={i} className={i > 0 ? "mb-2" : ""}>
+                          <strong>{item.label}:</strong> {item.value}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            <div className="pt-8 border-t border-slate-100">
+              <button onClick={onClose} className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-sky-600 transition-colors shadow-lg">
+                {closeText}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -205,8 +269,22 @@ const BenefitsModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
 
 // 2. TALENT NETWORK MODAL (UPDATED - DYNAMIC)
 // --- UPDATED: TALENT NETWORK MODAL (Connected to Backend) ---
-const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+const TalentNetworkModal = ({ isOpen, onClose, modalData }: { isOpen: boolean; onClose: () => void; modalData: any }) => {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  // CMS data with fallbacks
+  const modalTitle = status === "success" 
+    ? (modalData?.successTitle || "Application Received")
+    : (modalData?.modalTitle || "Join Talent Network");
+  const modalSubtitle = status === "success"
+    ? (modalData?.successSubtitle || "Welcome to the fleet. Check your inbox.")
+    : (modalData?.modalSubtitle || "Leave your details and we will contact you for future roles.");
+  const successConfirmation = modalData?.successConfirmation || "You're on the list!";
+  const successDescription = modalData?.successDescription || "We've sent a confirmation email to your inbox.";
+  const submitText = modalData?.submitButtonText || "Join Network";
+  const submittingText = modalData?.submittingText || "Sending...";
+  const errorText = modalData?.errorMessage || "Something went wrong. Please try again.";
+  const closeText = modalData?.closeButtonText || "Close Window";
 
   // Reset state when modal is closed/opened
   useEffect(() => {
@@ -252,12 +330,10 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
           <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/20 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
           <div className="relative z-10">
             <h2 className="text-2xl font-bold tracking-tight">
-              {status === "success" ? "Application Received" : "Join Talent Network"}
+              {modalTitle}
             </h2>
             <p className="text-slate-400 text-sm mt-2">
-              {status === "success" 
-                ? "Welcome to the fleet. Check your inbox." 
-                : "Leave your details and we will contact you for future roles."}
+              {modalSubtitle}
             </p>
           </div>
           <button 
@@ -276,10 +352,10 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle2 className="w-10 h-10 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">You're on the list!</h3>
-              <p className="text-slate-500 mb-8">We've sent a confirmation email to your inbox.</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">{successConfirmation}</h3>
+              <p className="text-slate-500 mb-8">{successDescription}</p>
               <button onClick={onClose} className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all">
-                Close Window
+                {closeText}
               </button>
             </div>
           ) : (
@@ -301,7 +377,7 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               </div>
 
               {status === "error" && (
-                <p className="text-red-500 text-sm text-center">Something went wrong. Please try again.</p>
+                <p className="text-red-500 text-sm text-center">{errorText}</p>
               )}
               
               <div className="pt-4">
@@ -313,11 +389,11 @@ const TalentNetworkModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                   {status === "submitting" ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Sending...
+                      {submittingText}
                     </>
                   ) : (
                     <>
-                      Join Network <Send className="w-4 h-4" />
+                      {submitText} <Send className="w-4 h-4" />
                     </>
                   )}
                 </button>
@@ -389,10 +465,10 @@ const HiringPipeline = ({ steps }: { steps: any[] }) => {
   )
 }
 
-const HeroSection = ({ cultureData }: { cultureData: any[] }) => {
+const HeroSection = ({ cultureData, heroData }: { cultureData: any[]; heroData: any }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [typedText, setTypedText] = useState("");
-  const fullText = "We are building the autonomous infrastructure of tomorrow.";
+  const fullText = heroData?.subtitle || "We are building the autonomous infrastructure of tomorrow.";
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -410,7 +486,7 @@ const HeroSection = ({ cultureData }: { cultureData: any[] }) => {
     if (index === fullText.length) clearInterval(timer);
   }, 30);
   return () => clearInterval(timer);
-}, []);
+}, [fullText]);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -432,10 +508,23 @@ const HeroSection = ({ cultureData }: { cultureData: any[] }) => {
     return () => clearInterval(autoScroll);
   }, []);
 
+  // Get hero data with fallbacks
+  const badge = heroData?.badge || "Join The Revolution";
+  const title = heroData?.title || "Build the Future with Karvensen";
+  const companyNameHighlight = heroData?.companyNameHighlight || "KarVenSen";
+  const ctaText = heroData?.ctaText || "View Openings";
+  const bgImage = heroData?.backgroundImage 
+    ? urlFor(heroData.backgroundImage).url() 
+    : "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop";
+
+  // Split title to apply gradient to company name
+  const titleParts = title.split(companyNameHighlight);
+  const hasCompanyName = titleParts.length > 1;
+
   return (
     <section onMouseMove={handleMouseMove} className="relative pt-18 pb-16 overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop" alt="Background" className="w-full h-full object-cover" />
+        <img src={bgImage} alt="Background" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-slate-900/90"></div> 
       </div>
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-600/20 rounded-full blur-[100px] pointer-events-none transition-transform duration-100 ease-out z-0" style={{ transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)` }}></div>
@@ -444,12 +533,21 @@ const HeroSection = ({ cultureData }: { cultureData: any[] }) => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-end gap-8 mb-12">
           <div className="max-w-2xl">
-            <div className="flex items-center gap-3 mb-4 animate-in fade-in slide-in-from-left duration-700">
-               <span className="h-px w-8 bg-sky-500"></span>
-               <span className="text-sky-400 font-bold text-xs uppercase tracking-widest">Join The Revolution</span>
+            <div className="mb-4 animate-in fade-in slide-in-from-bottom duration-500">
+              <span className="text-sm font-bold text-sky-400 uppercase tracking-[0.2em] border-l-4 border-sky-500 pl-4">{badge}</span>
             </div>
             <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight mb-4 animate-in fade-in slide-in-from-bottom duration-700 delay-100">
-              Life at <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500 italic">KarVenSen</span>
+              {hasCompanyName ? (
+                <>
+                  {titleParts[0]}
+                  <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 bg-clip-text text-transparent">
+                    {companyNameHighlight}
+                  </span>
+                  {titleParts[1]}
+                </>
+              ) : (
+                title
+              )}
             </h1>
             <p className="text-lg text-slate-300 font-light h-16 md:h-8">
               {typedText}<span className="animate-pulse text-sky-500">|</span>
@@ -457,7 +555,7 @@ const HeroSection = ({ cultureData }: { cultureData: any[] }) => {
           </div>
           <div className="shrink-0 animate-in fade-in zoom-in duration-700 delay-300">
             <button onClick={() => document.getElementById('jobs')?.scrollIntoView({ behavior: 'smooth' })} className="group relative px-8 py-4 bg-white text-slate-900 rounded-full font-bold overflow-hidden transition-all hover:scale-105 hover:shadow-lg hover:shadow-sky-500/20">
-              <span className="relative z-10 group-hover:text-white transition-colors">View Openings</span>
+              <span className="relative z-10 group-hover:text-white transition-colors">{ctaText}</span>
               <div className="absolute inset-0 bg-sky-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
             </button>
           </div>
@@ -491,64 +589,32 @@ const HeroSection = ({ cultureData }: { cultureData: any[] }) => {
 export default function CareersPage() {
   const [activeTab, setActiveTab] = useState("Engineering Ecosystem");
   const [isPolicyModalOpen, setIsPolicyModalOpen] = useState(false);
-  const [isTalentModalOpen, setIsTalentModalOpen] = useState(false); // STATE INITIALIZED CORRECTLY
+  const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
 
-  // Fetch careers data from CMS
-  const { data: cmsValues } = useSanityData<any[]>(
-    `*[_type == "careerValue" && isActive == true] | order(order asc){
-      title,
-      "desc": description,
-      icon,
-      order
+  // Fetch all careers page data from unified schema
+  const { data: careersData } = useSanityData<any>(
+    `*[_type == "careersPageSettings" && isActive == true][0]{
+      heroSection,
+      valuesSection,
+      careerOpportunitiesSection,
+      jobOpeningsSection{
+        badge,
+        title,
+        description
+      },
+      companyValuesSection,
+      benefitsSection,
+      cultureSection,
+      hiringProcessSection,
+      testimonialsSection,
+      talentNetworkCTA
     }`,
     {},
-    []
+    null
   )
 
-  const { data: cmsSteps } = useSanityData<any[]>(
-    `*[_type == "hiringStep" && isActive == true] | order(order asc){
-      title,
-      "desc": description,
-      icon,
-      order
-    }`,
-    {},
-    []
-  )
-
-  const { data: cmsTestimonials } = useSanityData<any[]>(
-    `*[_type == "careerTestimonial" && isActive == true] | order(order asc){
-      name,
-      role,
-      quote,
-      "image": image.asset
-    }`,
-    {},
-    []
-  )
-
-  const { data: cmsCulture } = useSanityData<any[]>(
-    `*[_type == "cultureImage" && isActive == true] | order(order asc){
-      title,
-      category,
-      "url": image.asset
-    }`,
-    {},
-    []
-  )
-
-  const { data: cmsBenefits } = useSanityData<any[]>(
-    `*[_type == "careerBenefit" && isActive == true] | order(order asc){
-      title,
-      "desc": description,
-      category,
-      icon
-    }`,
-    {},
-    []
-  )
-
-  const { data: cmsJobs } = useSanityData<any[]>(
+  // Fetch standalone job documents
+  const { data: jobsData } = useSanityData<any>(
     `*[_type == "jobOpening" && isActive == true] | order(order asc){
       "id": id.current,
       title,
@@ -559,29 +625,52 @@ export default function CareersPage() {
       postedAt,
       description,
       responsibilities,
-      requirements
+      requirements,
+      isActive,
+      order
     }`,
     {},
     []
   )
 
+  // Extract data with fallbacks
+  const cmsHero = careersData?.heroSection
+  const cmsSectionHeaders = {
+    heroSection: careersData?.heroSection,
+    valuesSection: careersData?.valuesSection,
+    hiringProcessSection: careersData?.hiringProcessSection,
+    testimonialsSection: careersData?.testimonialsSection,
+    benefitsSection: careersData?.benefitsSection,
+    jobOpeningsSection: careersData?.jobOpeningsSection,
+    talentNetworkCTA: careersData?.talentNetworkCTA
+  }
+
+  const cmsValues = careersData?.companyValuesSection?.values?.filter((v: any) => v.isActive !== false) || []
+  const cmsSteps = careersData?.hiringProcessSection?.hiringSteps?.filter((s: any) => s.isActive !== false) || []
+  const cmsTestimonials = careersData?.testimonialsSection?.testimonials?.filter((t: any) => t.isActive !== false) || []
+  const cmsCulture = careersData?.cultureSection?.cultureImages?.filter((c: any) => c.isActive !== false) || []
+  const cmsBenefits = careersData?.benefitsSection?.benefits?.filter((b: any) => b.isActive !== false) || []
+  const cmsJobs = jobsData || []
+  
+  const cmsPolicyContent = careersData?.benefitsSection?.policyModal
+
   // Use CMS data with fallback
   const VALUES = (cmsValues && cmsValues.length > 0) 
-    ? cmsValues.map((v: any) => ({ ...v, icon: getIconComponent(v.icon) }))
+    ? cmsValues.map((v: any) => ({ ...v, desc: v.description, icon: getIconComponent(v.icon) }))
     : CORPORATE_VALUES
   const STEPS = (cmsSteps && cmsSteps.length > 0) 
-    ? cmsSteps.map((s: any) => ({ ...s, icon: getIconComponent(s.icon) }))
+    ? cmsSteps.map((s: any) => ({ ...s, desc: s.description, icon: getIconComponent(s.icon) }))
     : HIRING_STEPS
   const TESTIMONIALS_DATA = (cmsTestimonials && cmsTestimonials.length > 0) 
     ? cmsTestimonials.map(t => ({ ...t, image: (t.image && typeof t.image === 'object') ? urlFor(t.image).url() : (t.image || TESTIMONIALS.find(ft => ft.name === t.name)?.image) }))
     : TESTIMONIALS
   const CULTURE_DATA = (cmsCulture && cmsCulture.length > 0)
-    ? cmsCulture.map(c => ({ ...c, url: (c.url && typeof c.url === 'object') ? urlFor(c.url).url() : (c.url || CULTURE_IMAGES.find(fc => fc.title === c.title)?.url) }))
+    ? cmsCulture.map(c => ({ ...c, url: (c.image && typeof c.image === 'object') ? urlFor(c.image).url() : (c.url || CULTURE_IMAGES.find(fc => fc.title === c.title)?.url) }))
     : CULTURE_IMAGES
   
   // Group benefits by category
   const BENEFITS_BY_CATEGORY = (cmsBenefits && cmsBenefits.length > 0) 
-    ? cmsBenefits.map((b: any) => ({ ...b, icon: getIconComponent(b.icon) })).reduce((acc, benefit) => {
+    ? cmsBenefits.map((b: any) => ({ ...b, desc: b.description, icon: getIconComponent(b.icon) })).reduce((acc, benefit) => {
         if (!acc[benefit.category]) acc[benefit.category] = []
         acc[benefit.category].push(benefit)
         return acc
@@ -590,6 +679,9 @@ export default function CareersPage() {
 
   // Use CMS jobs or fallback
   const JOBS = (cmsJobs && cmsJobs.length > 0) ? cmsJobs : JOBS_DATA
+  
+  // Placeholder for talent modal - can be integrated later
+  const cmsTalentModal = null
 
   // Group JOBS by Department for Section 6
   const groupedJobs = JOBS.reduce((acc, job) => {
@@ -602,7 +694,7 @@ export default function CareersPage() {
     <main className="min-h-screen bg-white font-sans text-slate-800 selection:bg-sky-500 selection:text-white">
       
       {/* SECTION 1: HERO */}
-      <HeroSection cultureData={CULTURE_DATA} />
+      <HeroSection cultureData={CULTURE_DATA} heroData={cmsHero} />
 
       {/* SECTION 2: VALUES */}
       <section className="py-24 bg-slate-50 border-t border-slate-200">
@@ -614,12 +706,11 @@ export default function CareersPage() {
               <div className="space-y-8">
                 <div>
                   <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
-                    Where Technology Meets <br/>
-                    <span className="text-sky-700">Real-World Impact</span>
+                    {cmsSectionHeaders?.valuesSection?.title || "Where Technology Meets"} <br/>
+                    <span className="text-sky-700">{cmsSectionHeaders?.valuesSection?.titleHighlight || "Real-World Impact"}</span>
                   </h2>
                   <p className="text-lg text-slate-600 leading-relaxed">
-                    At KarVenSen, we build the digital infrastructure for the aviation industry. 
-                    Join a team dedicated to precision, safety, and scalable engineering.
+                    {cmsSectionHeaders?.valuesSection?.description || "At KarVenSen, we build the digital infrastructure for the aviation industry. Join a team dedicated to precision, safety, and scalable engineering."}
                   </p>
                 </div>
 
@@ -650,14 +741,14 @@ export default function CareersPage() {
               </div>
             </RevealOnScroll>
 
-            {/* Right Column: Images (Unchanged) */}
+            {/* Right Column: Images */}
             <RevealOnScroll delay={200}>
               <div className="relative h-[500px] w-full hidden lg:block">
                 <div className="absolute top-0 right-0 w-[85%] h-[85%] rounded-lg overflow-hidden shadow-2xl shadow-slate-200 border-4 border-white z-10">
-                  <img src="https://static.ambitionbox.com/api/v2/photo/NURwNlNQQk5UMzFpa2M5djJpdEt2UT09" alt="Meeting" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                  <img src={cmsSectionHeaders?.valuesSection?.decorativeImage1 ? urlFor(cmsSectionHeaders.valuesSection.decorativeImage1).url() : "https://static.ambitionbox.com/api/v2/photo/NURwNlNQQk5UMzFpa2M5djJpdEt2UT09"} alt="Meeting" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
                 <div className="absolute bottom-8 left-0 w-[50%] h-[45%] rounded-lg overflow-hidden shadow-xl border-4 border-white z-20">
-                  <img src="https://i0.wp.com/apeejay.news/wp-content/uploads/2024/03/280324-Drone-15.jpg?resize=740%2C494&ssl=1" alt="Engineer" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                  <img src={cmsSectionHeaders?.valuesSection?.decorativeImage2 ? urlFor(cmsSectionHeaders.valuesSection.decorativeImage2).url() : "https://i0.wp.com/apeejay.news/wp-content/uploads/2024/03/280324-Drone-15.jpg?resize=740%2C494&ssl=1"} alt="Engineer" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
                 <div className="absolute bottom-0 right-10 w-40 h-40 bg-sky-100 rounded-full blur-3xl -z-10 mix-blend-multiply opacity-70"></div>
                 <div className="absolute top-10 left-10 w-60 h-60 bg-slate-200 rounded-full blur-3xl -z-10 mix-blend-multiply opacity-70"></div>
@@ -671,7 +762,10 @@ export default function CareersPage() {
       {/* SECTION 3: HIRING PROCESS */}
       <section className="py-24 bg-gradient-to-b from-slate-50 to-slate-100 border-y border-slate-200">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16"><h2 className="text-4xl font-bold text-slate-900">Our Hiring Process</h2><p className="text-slate-500 mt-2">A transparent path from application to offer.</p></div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900">{cmsSectionHeaders?.hiringProcessSection?.title || "Our Hiring Process"}</h2>
+            <p className="text-slate-500 mt-2">{cmsSectionHeaders?.hiringProcessSection?.subtitle || "A transparent path from application to offer."}</p>
+          </div>
           <HiringPipeline steps={STEPS} />
         </div>
       </section>
@@ -680,7 +774,10 @@ export default function CareersPage() {
       <section className="py-24 bg-slate-900 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-sky-900/20 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center mb-16"><h2 className="text-4xl font-bold text-white mb-4">Voices from the Team</h2><p className="text-slate-400">Hear from the people building the future.</p></div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-4">{cmsSectionHeaders?.testimonialsSection?.title || "Voices from the Team"}</h2>
+            <p className="text-slate-400">{cmsSectionHeaders?.testimonialsSection?.subtitle || "Hear from the people building the future."}</p>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
             {TESTIMONIALS_DATA.map((t: any, i: number) => (<RevealOnScroll key={i} delay={i * 150}><div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 p-8 rounded-2xl relative hover:bg-slate-800 transition-all duration-300 group cursor-default"><Quote className="w-10 h-10 text-sky-500/10 absolute top-6 right-6 group-hover:text-sky-500/30 group-hover:scale-110 transition-all duration-500" /><div className="flex items-center gap-1 mb-6">{[0, 1, 2, 3, 4].map((starIndex) => (<Star key={starIndex} className="w-4 h-4 fill-current text-sky-600 group-hover:text-yellow-400 transition-colors duration-300" style={{ transitionDelay: `${starIndex * 75}ms` }} />))}</div><p className="text-lg text-slate-300 italic mb-8 relative z-10 leading-relaxed group-hover:text-white transition-colors duration-300">"{t.quote}"</p><div className="flex items-center gap-4 pt-6 border-t border-slate-700"><img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover ring-2 ring-slate-600 group-hover:ring-sky-500 transition-all duration-300" /><div><h4 className="font-bold text-white text-sm">{t.name}</h4><p className="text-xs font-semibold text-sky-400 uppercase tracking-wide">{t.role}</p></div></div></div></RevealOnScroll>))}
           </div>
@@ -689,14 +786,24 @@ export default function CareersPage() {
 
       {/* SECTION 5: BENEFITS */}
       <section className="py-24 bg-white relative">
-        <BenefitsModal isOpen={isPolicyModalOpen} onClose={() => setIsPolicyModalOpen(false)} />
+        <BenefitsModal isOpen={isPolicyModalOpen} onClose={() => setIsPolicyModalOpen(false)} policyData={cmsPolicyContent} />
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-3 gap-16 items-start">
             <div className="lg:col-span-1 sticky top-24 group cursor-default">
                 <div className="inline-block p-3 bg-sky-50 border border-transparent rounded-xl mb-6 transition-all duration-500 group-hover:bg-yellow-50 group-hover:border-yellow-200 group-hover:shadow-lg group-hover:shadow-yellow-100/50"><Sparkles className="w-6 h-6 text-sky-700 transition-all duration-500 group-hover:text-yellow-500 group-hover:fill-yellow-400 group-hover:rotate-12 group-hover:scale-110" /></div>
-                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">Invest in your <br/><span className="text-sky-700 transition-colors duration-300 group-hover:text-sky-600">Future Self.</span></h2>
-                <p className="text-slate-600 text-lg leading-relaxed mb-8">We don't just offer perks; we offer an ecosystem for you to master Cloud, AI, and Aviation tech.</p>
-                <button onClick={() => setIsPolicyModalOpen(true)} className="flex items-center gap-3 text-slate-900 font-bold transition-all duration-300 group-hover:gap-4 group-hover:text-sky-700"><span className="border-b-2 border-slate-900 pb-1 transition-colors duration-300 group-hover:border-sky-700">View Full Policy Guide</span><ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"/></button>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
+                  {cmsSectionHeaders?.benefitsSection?.title || "Invest in your"} <br/>
+                  <span className="text-sky-700 transition-colors duration-300 group-hover:text-sky-600">{cmsSectionHeaders?.benefitsSection?.titleHighlight || "Future Self."}</span>
+                </h2>
+                <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                  {cmsSectionHeaders?.benefitsSection?.description || "We don't just offer perks; we offer an ecosystem for you to master Cloud, AI, and Aviation tech."}
+                </p>
+                <button onClick={() => setIsPolicyModalOpen(true)} className="flex items-center gap-3 text-slate-900 font-bold transition-all duration-300 group-hover:gap-4 group-hover:text-sky-700">
+                  <span className="border-b-2 border-slate-900 pb-1 transition-colors duration-300 group-hover:border-sky-700">
+                    {cmsSectionHeaders?.benefitsSection?.policyLinkText || "View Full Policy Guide"}
+                  </span>
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"/>
+                </button>
             </div>
             <div className="lg:col-span-2">
               <div className="flex flex-wrap gap-2 mb-8 border-b border-slate-100 pb-1">{Object.keys(BENEFITS_BY_CATEGORY).map((tab) => (<button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 text-sm font-bold rounded-t-lg transition-all duration-300 relative top-[1px] ${activeTab === tab ? "text-sky-700 border-b-2 border-sky-700 bg-sky-50/50" : "text-slate-400 hover:text-slate-600"}`}>{tab}</button>))}</div>
@@ -718,14 +825,20 @@ export default function CareersPage() {
       <section id="jobs" className="py-24 bg-slate-50 relative border-t border-slate-200">
         
         {/* MODAL (Now controlled by state) */}
-        <TalentNetworkModal isOpen={isTalentModalOpen} onClose={() => setIsTalentModalOpen(false)} />
+        <TalentNetworkModal isOpen={isTalentModalOpen} onClose={() => setIsTalentModalOpen(false)} modalData={cmsTalentModal} />
 
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#475569 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
         <div className="container mx-auto px-6 max-w-6xl relative z-10">
           <div className="text-center mb-20">
-            <span className="font-bold text-xs text-sky-700 uppercase tracking-widest mb-3 block">Join the Fleet</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Current Openings</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">We are expanding across Engineering, Operations, and Product. Find the role where you can do your life's best work.</p>
+            <span className="font-bold text-xs text-sky-700 uppercase tracking-widest mb-3 block">
+              {cmsSectionHeaders?.jobOpeningsSection?.badge || "Join the Fleet"}
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              {cmsSectionHeaders?.jobOpeningsSection?.title || "Current Openings"}
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              {cmsSectionHeaders?.jobOpeningsSection?.description || "We are expanding across Engineering, Operations, and Product. Find the role where you can do your life's best work."}
+            </p>
           </div>
 
           <div className="space-y-16">
@@ -762,11 +875,17 @@ export default function CareersPage() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-sky-600/20 rounded-full blur-[80px]"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-600/20 rounded-full blur-[80px]"></div>
             <div className="relative z-10">
-              <h3 className="text-3xl font-bold text-white mb-4">Don't see your perfect role?</h3>
-              <p className="text-slate-400 mb-8 max-w-xl mx-auto text-lg">We are always looking for exceptional talent. Send us your resume and we'll keep you on our radar for future missions.</p>
+              <h3 className="text-3xl font-bold text-white mb-4">
+                {cmsSectionHeaders?.talentNetworkCTA?.title || "Don't see your perfect role?"}
+              </h3>
+              <p className="text-slate-400 mb-8 max-w-xl mx-auto text-lg">
+                {cmsSectionHeaders?.talentNetworkCTA?.description || "We are always looking for exceptional talent. Send us your resume and we'll keep you on our radar for future missions."}
+              </p>
               
               {/* BUTTON CONNECTED TO STATE */}
-              <button onClick={() => setIsTalentModalOpen(true)} className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold hover:bg-sky-50 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform duration-200">Join Talent Network</button>
+              <button onClick={() => setIsTalentModalOpen(true)} className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold hover:bg-sky-50 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform duration-200">
+                {cmsSectionHeaders?.talentNetworkCTA?.buttonText || "Join Talent Network"}
+              </button>
             
             </div>
           </div>

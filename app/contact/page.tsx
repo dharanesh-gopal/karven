@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Mail, Phone, MapPin, Send, Loader2, ArrowLeft } from "lucide-react"
+import { Mail, Phone, MapPin, Send, Loader2, ArrowLeft, Linkedin, Youtube, Facebook, Twitter, Instagram, Github } from "lucide-react"
 import dynamic from "next/dynamic"
 import { motion } from "framer-motion"
 import { useSanityData } from "@/hooks/useSanityData"
@@ -148,6 +148,20 @@ function ContactPageContent() {
     null
   )
 
+  // Fetch contact page settings (includes form configuration)
+  const { data: pageSettings } = useSanityData<any>(
+    `*[_type == "contactPageSettings" && isActive == true][0]{
+      formTitle,
+      formSubtitle,
+      formFields,
+      submitButton,
+      successMessage,
+      errorMessage
+    }`,
+    {},
+    null
+  )
+
   // Use CMS data with fallback
   const heroData = cmsHero || {
     badge: "Fly High. Aim Higher!",
@@ -161,6 +175,43 @@ function ContactPageContent() {
     badge: "20K+ Followers",
     title: "Stay Connected, Stay Informed!",
     description: "Join our growing Karvensen community for updates, insights, and innovations."
+  }
+
+  // Form configuration with fallbacks
+  const formConfig = pageSettings || {
+    formTitle: "Take the First Step Towards Excellence!",
+    formSubtitle: "Send us a message and our team will respond within 24 hours.",
+    successMessage: "Thank you for reaching out. We have sent a confirmation to your email.",
+    submitButton: { text: "Send Message", loadingText: "Sending..." }
+  }
+
+  const formFields = pageSettings?.formFields || {
+    fullName: { label: 'Full Name', placeholder: 'Your Full Name', required: true },
+    phone: { label: 'Phone Number', placeholder: '+91 98765 43210', required: true },
+    email: { label: 'Email', placeholder: 'your.email@company.com', required: true },
+    enquiryType: { 
+      label: 'Enquiry About', 
+      placeholder: 'Select enquiry type', 
+      required: true,
+      options: [
+        { label: 'Services', value: 'services' },
+        { label: 'Training Programs', value: 'training' },
+        { label: 'Custom Training', value: 'custom-training' },
+        { label: 'Drone Services', value: 'drone-services' },
+        { label: 'Software Development', value: 'software-development' },
+        { label: 'Careers', value: 'careers' },
+        { label: 'Partnership', value: 'partnership' },
+        { label: 'General Inquiry', value: 'general' },
+      ]
+    },
+    country: { 
+      label: 'Country', 
+      placeholder: 'Select Country', 
+      required: true,
+      options: ['India', 'USA', 'UK', 'Canada', 'Australia', 'Germany', 'Other']
+    },
+    city: { label: 'City', placeholder: 'Your City', required: true },
+    message: { label: 'Message', placeholder: 'Tell us about your inquiry...', required: true, rows: 4 },
   }
 
   // Auto-select enquiry type from URL parameter
@@ -309,9 +360,9 @@ function ContactPageContent() {
       >
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto mb-12">
-            <h2 className="text-4xl font-bold text-gray-900">Take the First Step Towards Excellence!</h2>
+            <h2 className="text-4xl font-bold text-gray-900">{formConfig.formTitle}</h2>
             <p className="text-gray-600 text-lg mt-3">
-              Send us a message and our team will respond within 24 hours.
+              {formConfig.formSubtitle}
             </p>
           </div>
 
@@ -333,7 +384,7 @@ function ContactPageContent() {
                       </div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-2">Message Sent!</h3>
                       <p className="text-gray-600 mb-6">
-                        Thank you for reaching out. We have sent a confirmation to your email.
+                        {formConfig.successMessage}
                       </p>
                       <button
                         onClick={() => setIsSubmitted(false)}
@@ -346,106 +397,101 @@ function ContactPageContent() {
                     <form onSubmit={handleSubmit} className="space-y-5">
                       <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                          Full Name <span className="text-red-500">*</span>
+                          {formFields.fullName.label} {formFields.fullName.required && <span className="text-red-500">*</span>}
                         </label>
                         <input
                           type="text"
                           name="fullName"
                           value={formData.fullName}
                           onChange={handleInputChange}
-                          placeholder="Your Full Name"
-                          required
+                          placeholder={formFields.fullName.placeholder}
+                          required={formFields.fullName.required}
                           className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                          Phone Number <span className="text-red-500">*</span>
+                          {formFields.phone.label} {formFields.phone.required && <span className="text-red-500">*</span>}
                         </label>
                         <input
                           type="tel"
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          placeholder="+91 98765 43210"
-                          required
+                          placeholder={formFields.phone.placeholder}
+                          required={formFields.phone.required}
                           className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                          Email <span className="text-red-500">*</span>
+                          {formFields.email.label} {formFields.email.required && <span className="text-red-500">*</span>}
                         </label>
                         <input
                           type="email"
                           name="email"
                           value={formData.email}
                           onChange={handleInputChange}
-                          placeholder="your.email@company.com"
-                          required
+                          placeholder={formFields.email.placeholder}
+                          required={formFields.email.required}
                           className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                          Enquiry About <span className="text-red-500">*</span>
+                          {formFields.enquiryType.label} {formFields.enquiryType.required && <span className="text-red-500">*</span>}
                         </label>
                         <select
                           name="enquiryType"
                           value={formData.enquiryType}
                           onChange={handleInputChange}
-                          required
+                          required={formFields.enquiryType.required}
                           className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                         >
-                          <option value="">Select enquiry type</option>
-                          <option value="services">Services</option>
-                          <option value="training">Training Programs</option>
-                          <option value="custom-training">Custom Training</option>
-                          <option value="drone-services">Drone Services</option>
-                          <option value="software-development">Software Development</option>
-                          <option value="careers">Careers</option>
-                          <option value="partnership">Partnership</option>
-                          <option value="general">General Inquiry</option>
+                          <option value="">{formFields.enquiryType.placeholder}</option>
+                          {formFields.enquiryType.options?.map((option: any) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
                         </select>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Country <span className="text-red-500">*</span>
+                            {formFields.country.label} {formFields.country.required && <span className="text-red-500">*</span>}
                           </label>
                           <select
                             name="country"
                             value={formData.country}
                             onChange={handleInputChange}
-                            required
+                            required={formFields.country.required}
                             className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                           >
-                            <option value="">Select Country</option>
-                            <option value="India">India</option>
-                            <option value="USA">USA</option>
-                            <option value="UK">UK</option>
-                            <option value="Canada">Canada</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Germany">Germany</option>
-                            <option value="Other">Other</option>
+                            <option value="">{formFields.country.placeholder}</option>
+                            {formFields.country.options?.map((country: string) => (
+                              <option key={country} value={country}>
+                                {country}
+                              </option>
+                            ))}
                           </select>
                         </div>
 
                         <div>
                           <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            City <span className="text-red-500">*</span>
+                            {formFields.city.label} {formFields.city.required && <span className="text-red-500">*</span>}
                           </label>
                           <input
                             type="text"
                             name="city"
                             value={formData.city}
                             onChange={handleInputChange}
-                            placeholder="Your City"
-                            required
+                            placeholder={formFields.city.placeholder}
+                            required={formFields.city.required}
                             className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                           />
                         </div>
@@ -453,15 +499,15 @@ function ContactPageContent() {
 
                       <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                          Message <span className="text-red-500">*</span>
+                          {formFields.message.label} {formFields.message.required && <span className="text-red-500">*</span>}
                         </label>
                         <textarea
                           name="message"
                           value={formData.message}
                           onChange={handleInputChange}
-                          placeholder="Tell us about your inquiry..."
-                          rows={4}
-                          required
+                          placeholder={formFields.message.placeholder}
+                          rows={formFields.message.rows || 4}
+                          required={formFields.message.required}
                           className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all resize-none"
                         ></textarea>
                       </div>
@@ -474,12 +520,12 @@ function ContactPageContent() {
                         {isLoading ? (
                           <>
                             <Loader2 className="animate-spin h-5 w-5" />
-                            Sending...
+                            {formConfig.submitButton?.loadingText || 'Sending...'}
                           </>
                         ) : (
                           <>
                             <Send className="h-5 w-5" />
-                            Send Message
+                            {formConfig.submitButton?.text || 'Send Message'}
                           </>
                         )}
                       </button>
@@ -513,7 +559,7 @@ Data
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800 border border-gray-700 mb-6">
-              <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
               <span className="text-sm font-medium">{socialData.badge}</span>
             </div>
 
@@ -524,7 +570,117 @@ Data
             </p>
 
             <div className="flex justify-center gap-6 flex-wrap">
-              {/* Add social icons here if needed, or keeping empty as per original */}
+              {socialData.socialLinks && socialData.socialLinks.length > 0 ? (
+                socialData.socialLinks.map((link: any) => {
+                  const getSocialIcon = (platform: string) => {
+                    switch (platform.toLowerCase()) {
+                      case 'linkedin':
+                        return <Linkedin className="h-6 w-6" />
+                      case 'twitter':
+                        return <Twitter className="h-6 w-6" />
+                      case 'facebook':
+                        return <Facebook className="h-6 w-6" />
+                      case 'instagram':
+                        return <Instagram className="h-6 w-6" />
+                      case 'youtube':
+                        return <Youtube className="h-6 w-6" />
+                      case 'github':
+                        return <Github className="h-6 w-6" />
+                      default:
+                        return <Mail className="h-6 w-6" />
+                    }
+                  }
+
+                  const getSocialColor = (platform: string) => {
+                    switch (platform.toLowerCase()) {
+                      case 'linkedin':
+                        return 'hover:bg-[#0077b5] hover:border-[#0077b5]'
+                      case 'twitter':
+                        return 'hover:bg-[#1DA1F2] hover:border-[#1DA1F2]'
+                      case 'facebook':
+                        return 'hover:bg-[#316FF6] hover:border-[#316FF6]'
+                      case 'instagram':
+                        return 'hover:bg-[#E1306C] hover:border-[#E1306C]'
+                      case 'youtube':
+                        return 'hover:bg-[#CD201F] hover:border-[#CD201F]'
+                      case 'github':
+                        return 'hover:bg-[#333] hover:border-[#333]'
+                      default:
+                        return 'hover:bg-red-600 hover:border-red-600'
+                    }
+                  }
+
+                  return (
+                    <a
+                      key={link._key || link.platform}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`flex items-center justify-center w-14 h-14 rounded-full border-2 border-gray-700 bg-gray-800 text-white transition-all duration-300 transform hover:scale-110 hover:shadow-lg ${getSocialColor(link.platform)}`}
+                      aria-label={link.platform}
+                    >
+                      {getSocialIcon(link.platform)}
+                    </a>
+                  )
+                })
+              ) : (
+                <>
+                  <a
+                    href="https://www.linkedin.com/company/karvensen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-14 h-14 rounded-full border-2 border-gray-700 bg-gray-800 text-white transition-all duration-300 transform hover:scale-110 hover:bg-[#0077b5] hover:border-[#0077b5] hover:shadow-lg"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin className="h-6 w-6" />
+                  </a>
+                  <a
+                    href="https://twitter.com/karvensen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-14 h-14 rounded-full border-2 border-gray-700 bg-gray-800 text-white transition-all duration-300 transform hover:scale-110 hover:bg-[#1DA1F2] hover:border-[#1DA1F2] hover:shadow-lg"
+                    aria-label="Twitter"
+                  >
+                    <Twitter className="h-6 w-6" />
+                  </a>
+                  <a
+                    href="https://www.facebook.com/karvensen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-14 h-14 rounded-full border-2 border-gray-700 bg-gray-800 text-white transition-all duration-300 transform hover:scale-110 hover:bg-[#316FF6] hover:border-[#316FF6] hover:shadow-lg"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="h-6 w-6" />
+                  </a>
+                  <a
+                    href="https://www.instagram.com/karvensen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-14 h-14 rounded-full border-2 border-gray-700 bg-gray-800 text-white transition-all duration-300 transform hover:scale-110 hover:bg-[#E1306C] hover:border-[#E1306C] hover:shadow-lg"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="h-6 w-6" />
+                  </a>
+                  <a
+                    href="https://www.youtube.com/@karvensen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-14 h-14 rounded-full border-2 border-gray-700 bg-gray-800 text-white transition-all duration-300 transform hover:scale-110 hover:bg-[#CD201F] hover:border-[#CD201F] hover:shadow-lg"
+                    aria-label="YouTube"
+                  >
+                    <Youtube className="h-6 w-6" />
+                  </a>
+                  <a
+                    href="https://github.com/karvensen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-14 h-14 rounded-full border-2 border-gray-700 bg-gray-800 text-white transition-all duration-300 transform hover:scale-110 hover:bg-[#333] hover:border-[#333] hover:shadow-lg"
+                    aria-label="GitHub"
+                  >
+                    <Github className="h-6 w-6" />
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>
