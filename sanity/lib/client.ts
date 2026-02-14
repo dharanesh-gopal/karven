@@ -12,11 +12,14 @@ try {
       projectId,
       dataset,
       apiVersion,
-      useCdn: process.env.NODE_ENV === 'production', // CDN only in production
+      useCdn: true, // Always use CDN for better performance and reliability
       perspective: 'published', // Only show published documents
       stega: {
         enabled: false,
       },
+      // Explicitly set no authentication for public access
+      token: undefined,
+      withCredentials: false,
     })
   } else {
     throw new Error("Invalid config")

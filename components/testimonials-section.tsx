@@ -1,11 +1,6 @@
-"use client"
-
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Quote } from "lucide-react"
-import { useEffect, useRef } from "react"
-import { useSanityData } from "@/hooks/useSanityData"
+import { fetchSanityData } from "@/lib/fetchSanityData"
 import { urlFor } from "@/sanity/lib/image"
+import { TestimonialsClient } from "./testimonials-client"
 
 interface Testimonial {
   _id: string
@@ -91,18 +86,19 @@ const fallbackTestimonials: Testimonial[] = [
   },
 ]
 
-export function TestimonialsSection() {
-  const { data: sectionData } = useSanityData<TestimonialsSectionData>(
+export async function TestimonialsSection() {
+  const sectionData = await fetchSanityData<TestimonialsSectionData>(
     `*[_type == "testimonialsSection" && isActive == true][0]{
       title,
       subtitle,
       showFeaturedOnly
     }`,
     {},
-    { title: "Trusted by Organizations Nationwide" }
+    { title: "Trusted by Organizations Nationwide" },
+    { tags: ['testimonials-section'], revalidate: 300 }
   )
 
-  const { data: testimonialsData } = useSanityData<Testimonial[]>(
+  const testimonialsData = await fetchSanityData<Testimonial[]>(
     sectionData?.showFeaturedOnly
       ? `*[_type == "testimonial" && featured == true] | order(_createdAt desc) {
           _id,
@@ -125,117 +121,29 @@ export function TestimonialsSection() {
           }
         }`,
     {},
-    fallbackTestimonials
+    fallbackTestimonials,
+    { tags: ['testimonials'], revalidate: 300 }
   )
 
-  // Use fallback if data is empty or undefined
   const testimonials = (testimonialsData && testimonialsData.length > 0) ? testimonialsData : fallbackTestimonials
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const scrollContainer = scrollRef.current
-    if (!scrollContainer || !testimonials || testimonials.length === 0) return
-
-    let animationId: number
-    let scrollPosition = 0
-
-    const scroll = () => {
-      scrollPosition += 0.5
-      if (scrollContainer) {
-        scrollContainer.scrollLeft = scrollPosition
-
-        // Reset to start when reaching the end
-        if (scrollPosition >= scrollContainer.scrollWidth / 2) {
-          scrollPosition = 0
-        }
-      }
-      animationId = requestAnimationFrame(scroll)
-    }
-
-    // Start animation after a short delay to ensure DOM is ready
-    const timeoutId = setTimeout(() => {
-      animationId = requestAnimationFrame(scroll)
-    }, 100)
-
-    return () => {
-      clearTimeout(timeoutId)
-      if (animationId) {
-        cancelAnimationFrame(animationId)
-      }
-    }
-  }, [testimonials])
+  
+  // Process testimonials with image URLs
+  const processedTestimonials = testimonials.map(t => ({
+    _id: t._id,
+    name: t.name,
+    role: t.role,
+    company: t.company,
+    content: t.content,
+    imageSrc: t.image?.asset 
+      ? urlFor(t.image.asset).width(80).height(80).url()
+      : t.avatar
+  }))
 
   return (
-    <section className="py-16 bg-gray-50 border-b border-gray-200 min-h-[500px]">
-      <div className="container mx-auto px-6 md:px-8 lg:px-12">
-        <div className="text-center mb-12 max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">
-            {sectionData?.title || "Trusted by Organizations Nationwide"}
-          </h2>
-          {sectionData?.subtitle && (
-            <p className="text-gray-600 text-lg">
-              {sectionData.subtitle}
-            </p>
-          )}
-        </div>
-
-        <div className="overflow-hidden min-h-[300px] relative">
-          <div
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-auto"
-            style={{
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              WebkitOverflowScrolling: 'touch'
-            }}
-          >
-            {/* Duplicate testimonials for seamless loop */}
-            {testimonials && testimonials.length > 0 ? (
-              [...testimonials, ...testimonials].map((testimonial, index) => (
-                <Card
-                  key={`${testimonial._id}-${index}`}
-                  className="relative flex-shrink-0 w-[380px] hover:shadow-lg transition-shadow bg-white border-gray-200"
-                >
-                  <CardContent className="pt-8">
-                    <Quote className="absolute top-6 left-6 h-8 w-8 text-gray-200" />
-                    <p className="mb-6 text-gray-600 relative z-10 pl-4 leading-relaxed text-sm">
-                      {testimonial.content}
-                    </p>
-                    <div className="flex items-center gap-3 border-t border-gray-200 pt-4">
-                      <Avatar className="h-10 w-10">
-                        {(testimonial.image?.asset || testimonial.avatar) ? (
-                          <AvatarImage
-                            src={testimonial.image?.asset
-                              ? urlFor(testimonial.image.asset).width(80).height(80).url()
-                              : testimonial.avatar
-                            }
-                            alt={testimonial.name}
-                            onError={(e) => {
-                              // Hide image on error to show fallback
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
-                        ) : null}
-                        <AvatarFallback className="bg-blue-600 text-white">
-                          {testimonial.name[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold text-sm text-gray-900">{testimonial.name}</p>
-                        <p className="text-xs text-gray-600">
-                          {testimonial.role}{testimonial.company ? `, ${testimonial.company}` : ''}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <p className="text-gray-500 text-center w-full">No testimonials available</p>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
+    <TestimonialsClient 
+      title={sectionData?.title || "Trusted by Organizations Nationwide"}
+      subtitle={sectionData?.subtitle}
+      testimonials={processedTestimonials}
+    />
   )
 }
