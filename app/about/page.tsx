@@ -667,20 +667,19 @@ export default function AboutPage() {
 
 
   // Get gallery images from Sanity or use fallback
-  const galleryImages = galleryData?.images?.length > 0 
+  const galleryImages = galleryData?.images?.length > 0
     ? galleryData.images.map(img => ({
-        src: img.asset ? urlFor(img.asset).url() : "",
-        alt: img.alt || "KarVenSen team member",
-        caption: img.caption
-      }))
+      src: img.asset ? urlFor(img.asset).url() : "",
+      alt: img.alt || "KarVenSen team member",
+      caption: img.caption
+    }))
     : [
-        { src: "/indian-professional-man.png", alt: "KarVenSen team member in professional setting", caption: "Professional drone training programs" },
-        { src: "/indian-woman-professional.png", alt: "KarVenSen software developer", caption: "Innovative software solutions" },
-        { src: "/indian-professor-man.jpg", alt: "KarVenSen AI researcher", caption: "Cutting-edge AI research" },
-        { src: "/staff teaches to std.png", alt: "KarVenSen instructor teaching students", caption: "Comprehensive educational programs" },
-        { src: "/drone-flying-over-farm-field-at-sunset.jpg", alt: "Drone flying over agricultural field", caption: "Advanced drone operations" },
-        { src: "/dron in agri land.png", alt: "Agricultural drone in farming field", caption: "Smart agriculture solutions" },
-      ]
+      { src: "/cc img1.jpeg", alt: "KarVenSen Operations", caption: "Precision Drone Technology" },
+      { src: "/cc img2.jpeg", alt: "KarVenSen Innovative Solutions", caption: "AI-Driven Insights" },
+      { src: "/cc img 3.jpeg", alt: "KarVenSen Team in Action", caption: "Industrial Excellence" },
+      { src: "/cc img4.jpeg", alt: "Technical Training", caption: "Expert Training Programs" },
+      { src: "/cc img5.jpeg", alt: "Drone Deployment", caption: "Scalable Aerial Solutions" },
+    ]
 
   useEffect(() => {
     // Trigger animation on page load
@@ -809,7 +808,7 @@ export default function AboutPage() {
                 <div className="w-20 h-1 bg-red-600 mx-auto"></div>
               </div>
             )}
-            
+
             {/* Main Carousel */}
             <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden group">
               {/* Images */}
@@ -970,8 +969,8 @@ export default function AboutPage() {
               { value: 1, label: "UAV Surveys", icon: "Cpu", suffix: "+" },
               { value: 9, label: "Countries", icon: "Target", suffix: "+" },
               { value: 60, label: "Partners", icon: "Award", suffix: "+" },
-            ]).map((stat) => (
-              <AnimatedStat key={stat.label} stat={stat} />
+            ]).map((stat, index) => (
+              <AnimatedStat key={`${stat.label}-${index}`} stat={stat} />
             ))}
           </div>
         </div>
@@ -1055,7 +1054,7 @@ export default function AboutPage() {
               const IconComponent = getIconComponent(value.icon)
               return (
                 <div
-                  key={value.title}
+                  key={`${value.title}-${index}`}
                   className="text-center bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-gray-400 hover:-translate-y-1 transition-all duration-300"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
@@ -1360,7 +1359,7 @@ export default function AboutPage() {
                         />
                       ) : (
                         <Image
-                          src="/indian-professional-man.png"
+                          src={["/cc img1.jpeg", "/cc img2.jpeg", "/cc img 3.jpeg", "/cc img4.jpeg", "/cc img5.jpeg", "/cc img6.jpeg"][index % 6]}
                           alt={award.title}
                           fill
                           className="object-cover opacity-80 group-hover:opacity-90 transition-opacity"

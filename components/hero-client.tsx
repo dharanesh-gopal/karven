@@ -31,10 +31,10 @@ export function HeroClient({ title, subtitle, videoUrl, buttonText, buttonLink }
       {/* Main Headline - Center */}
       <div className="relative z-10 flex-1 flex items-center justify-center">
         <div className="text-center px-6 md:px-8 lg:px-12 max-w-4xl">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
             {title}
           </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 font-medium">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 font-medium max-w-3xl mx-auto">
             {subtitle}
           </p>
         </div>
