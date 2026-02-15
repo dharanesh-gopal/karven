@@ -26,11 +26,11 @@ const siteSettingsData = {
     _type: 'siteSettings',
     _id: 'siteSettings', // Standard ID for singleton
     siteName: 'Karvensen',
-    siteDescription: 'Karvensen specializing in AI-first software services, Agricultural drone technology, and Enterprise solutions. Pioneering innovation from India for global scale.',
+    siteDescription: "Elevate your business with Karvensen's AI-powered agricultural drones and enterprise software. We deliver innovative solutions from India for global scale.",
     seo: {
         _type: 'seoObject',
-        metaTitle: 'Karvensen | AI-Driven Drone & Software Solutions in India',
-        metaDescription: 'Karvensen specializing in AI-first software services, Agricultural drone technology, and Enterprise solutions. Pioneering innovation from India for global scale.',
+        metaTitle: 'Karvensen | AI-First Drone Technology & Software Services',
+        metaDescription: "Elevate your business with Karvensen's AI-powered agricultural drones and enterprise software. We deliver innovative solutions from India for global scale.",
         keywords: [
             'AI Solutions',
             'Drone Technology India',

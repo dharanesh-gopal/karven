@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Target, Eye, Award, Users, Plane, Lightbulb, Shield, TrendingUp, Building2, GraduationCap, Cloud, Cpu, ChevronDown, Linkedin, X, Send, Home, MessageCircle } from "lucide-react"
+import { Target, Eye, Award, Users, Plane, Lightbulb, Shield, TrendingUp, Building2, GraduationCap, Cloud, Cpu, ChevronDown, Linkedin, X, Send, Home, MessageCircle, Rocket } from "lucide-react"
 import Image from "next/image"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"

@@ -29,9 +29,9 @@ export async function generateMetadata(): Promise<Metadata> {
     ? urlFor(settings.favicon).width(32).height(32).format('png').url()
     : '/karvensen favicon logo.jpeg'
 
-  const title = settings?.siteName || "Karvensen | AI-Driven Drone & Software Solutions in India"
+  const title = settings?.siteName || "Karvensen | AI-First Drone Technology & Software Services"
   const description = settings?.siteDescription ||
-    "Karvensen specializing in AI-first software services, Agricultural drone technology, and Enterprise solutions. Pioneering innovation from India for global scale."
+    "Elevate your business with Karvensen's AI-powered agricultural drones and enterprise software. We deliver innovative solutions from India for global scale."
 
   return {
     metadataBase: new URL(siteUrl),
