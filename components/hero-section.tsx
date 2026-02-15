@@ -14,9 +14,9 @@ interface HeroData {
 }
 
 const fallbackData: HeroData = {
-  title: "From Fertile Fields to Secure Borders.",
-  subtitle: "We deploy advanced AI and drone technology to revolutionize precision agriculture and fortify national defense.",
-  buttonText: "Explore",
+  title: "AI-Driven Drone Technology for Precision Agriculture & Defense.",
+  subtitle: "Karvensen deploys advanced AI solutions and specialized drones to revolutionize precision agriculture and fortify national security.",
+  buttonText: "Explore Solutions",
   buttonLink: "/services"
 }
 
@@ -43,7 +43,7 @@ export async function HeroSection() {
   const videoUrl = content.backgroundVideo?.asset?.url || "/Drone_Cinematic_Video.mp4"
 
   return (
-    <HeroClient 
+    <HeroClient
       title={content.title}
       subtitle={content.subtitle}
       videoUrl={videoUrl}

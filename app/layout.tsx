@@ -8,13 +8,13 @@ import { getSiteSettings } from "@/sanity/lib/queries"
 import { urlFor } from "@/sanity/lib/image"
 import "./globals.css"
 
-const outfit = Outfit({ 
+const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
   display: "swap"
 })
 
-const spaceGrotesk = Space_Grotesk({ 
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
   display: "swap"
@@ -22,24 +22,88 @@ const spaceGrotesk = Space_Grotesk({
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
-  
+  const siteUrl = "https://karven.vercel.app"
+
   // Get favicon URL from Sanity, fallback to local file
-  const faviconUrl = settings?.favicon 
+  const faviconUrl = settings?.favicon
     ? urlFor(settings.favicon).width(32).height(32).format('png').url()
     : '/karvensen favicon logo.jpeg'
 
+  const title = settings?.siteName || "Karvensen | AI-Driven Drone & Software Solutions in India"
+  const description = settings?.siteDescription ||
+    "Karvensen specializing in AI-first software services, Agricultural drone technology, and Enterprise solutions. Pioneering innovation from India for global scale."
+
   return {
-    title: settings?.siteName || "KarVenSen | AI-Driven Drone & Software Solutions",
-    description: settings?.siteDescription || 
-      "KarVenSen is an AI-first IT software services company specializing in Artificial Intelligence, Drone-based solutions, LMS, ERP, Cloud services, and technical awareness programs.",
-    keywords: settings?.seo?.keywords || ["AI", "Drone Technology", "Software Development", "LMS", "ERP", "Cloud Services", "Machine Learning"],
-    generator: 'v0.app',
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: title,
+      template: `%s | Karvensen`
+    },
+    description: description,
+    keywords: settings?.seo?.keywords || ["AI Solutions", "Drone Technology India", "Software Development", "Agricultural Drones", "ERP Solutions", "LMS Platforms", "Machine Learning", "Karvensen"],
+    authors: [{ name: "Karvensen Team" }],
+    creator: "Karvensen",
+    publisher: "Karvensen",
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      title: title,
+      description: description,
+      url: siteUrl,
+      siteName: "Karvensen",
+      images: [
+        {
+          url: "/karvensen-logo.png",
+          width: 1200,
+          height: 630,
+          alt: "Karvensen - AI & Drone Technology",
+        },
+      ],
+      locale: "en_IN",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: ["/karvensen-logo.png"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     icons: {
       icon: faviconUrl,
       shortcut: faviconUrl,
       apple: faviconUrl,
     },
   }
+}
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Karvensen",
+  "url": "https://karven.vercel.app",
+  "logo": "https://karven.vercel.app/karvensen favicon logo.jpeg",
+  "sameAs": [
+    "https://www.linkedin.com/company/karvensen/",
+    // Add other social links if known
+  ],
+  "description": "Karvensen is an AI-first IT software services company specializing in Artificial Intelligence, Drone-based solutions, and enterprise software.",
 }
 
 export default function RootLayout({
@@ -50,6 +114,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${outfit.variable} ${spaceGrotesk.variable} font-sans antialiased bg-white overflow-x-hidden`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <ConditionalLayout>{children}</ConditionalLayout>
         </ThemeProvider>

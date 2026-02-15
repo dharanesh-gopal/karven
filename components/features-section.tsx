@@ -26,8 +26,8 @@ interface GalleryData {
 }
 
 const fallbackData: GalleryData = {
-  title: "Built in India.",
-  subtitle: "Powered by Innovation.",
+  title: "Indigenous Drone Technology.",
+  subtitle: "Built in India. Powered by Innovation.",
   images: [
     { _key: "1", asset: { _ref: "", _type: "reference" }, alt: "Educational drone" },
     { _key: "2", asset: { _ref: "", _type: "reference" }, alt: "Training program 1" },
@@ -83,16 +83,16 @@ export async function FeaturesSection() {
   // Process images
   const images = galleryData?.images && galleryData.images.length > 0 && galleryData.images[0].asset?._ref
     ? galleryData.images.map((img) => ({
-        src: urlFor(img.asset).url(),
-        alt: img.alt || "Gallery image"
-      }))
+      src: urlFor(img.asset).url(),
+      alt: img.alt || "Gallery image"
+    }))
     : fallbackImages
 
   const autoplayInterval = (galleryData?.autoplayInterval || 3) * 1000
   const stats = statsData || fallbackStats
 
   return (
-    <FeaturesClient 
+    <FeaturesClient
       title={galleryData?.title || "Built in India."}
       subtitle={galleryData?.subtitle || "Powered by Innovation."}
       images={images}
