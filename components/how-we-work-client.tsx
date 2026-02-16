@@ -45,14 +45,13 @@ export function HowWeWorkClient({ sectionTitle, mainHeading, description, imageS
 
   return (
     <section ref={sectionRef} className="py-24 bg-white">
-      <div className="container mx-auto px-8 md:px-12 lg:px-16 xl:px-20">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16 xl:px-20">
         <div className="text-center mb-16">
-          <h2 
-            className={`text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 transition-all duration-1000 ${
-              isVisible 
-                ? 'opacity-100 translate-y-0' 
+          <h2
+            className={`text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 transition-all duration-1000 ${isVisible
+                ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-10'
-            }`}
+              }`}
           >
             {sectionTitle}
           </h2>
@@ -60,35 +59,32 @@ export function HowWeWorkClient({ sectionTitle, mainHeading, description, imageS
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-24 items-center">
           <div className="space-y-8">
-            <h3 
-              className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight transition-all duration-1000 delay-200 ${
-                isVisible 
-                  ? 'opacity-100 translate-y-0' 
+            <h3
+              className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight transition-all duration-1000 delay-200 ${isVisible
+                  ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-10'
-              }`}
+                }`}
             >
               {mainHeading}
             </h3>
 
-            <p 
-              className={`text-lg text-gray-600 leading-relaxed transition-all duration-1000 delay-300 ${
-                isVisible 
-                  ? 'opacity-100 translate-y-0' 
+            <p
+              className={`text-lg text-gray-600 leading-relaxed transition-all duration-1000 delay-300 ${isVisible
+                  ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-10'
-              }`}
+                }`}
             >
               {description}
             </p>
 
             <div className="space-y-6 pt-4">
               {processSteps.map((step, index) => (
-                <div 
-                  key={step._id} 
-                  className={`flex gap-4 transition-all duration-1000 ${
-                    isVisible 
-                      ? 'opacity-100 translate-y-0' 
+                <div
+                  key={step._id}
+                  className={`flex gap-4 transition-all duration-1000 ${isVisible
+                      ? 'opacity-100 translate-y-0'
                       : 'opacity-0 translate-y-10'
-                  }`}
+                    }`}
                   style={{ transitionDelay: `${400 + index * 100}ms` }}
                 >
                   <div className="flex-shrink-0">
@@ -112,12 +108,11 @@ export function HowWeWorkClient({ sectionTitle, mainHeading, description, imageS
             </div>
           </div>
 
-          <div 
-            className={`relative transition-all duration-1000 delay-500 ${
-              isVisible 
-                ? 'opacity-100 scale-100' 
+          <div
+            className={`relative transition-all duration-1000 delay-500 ${isVisible
+                ? 'opacity-100 scale-100'
                 : 'opacity-0 scale-95'
-            }`}
+              }`}
           >
             <div className="relative w-full aspect-square">
               <Image

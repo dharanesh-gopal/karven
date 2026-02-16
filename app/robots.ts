@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: '/studio/',
         },
-        sitemap: 'https://karven.vercel.app/sitemap.xml',
+        sitemap: 'https://karvensen.com/sitemap.xml',
     }
 }

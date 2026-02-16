@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef, ReactNode, MouseEvent } from "react"
 import Link from "next/link"
-import { 
-  MapPin, ArrowRight, Target, Zap, Users, Award, 
-  Heart, Coffee, Globe, ChevronLeft, ChevronRight, 
-  Quote, Star, Cpu, CheckCircle, FileText, UserCheck, 
-  Terminal, ShieldCheck, Briefcase, TrendingUp, Sparkles, 
+import {
+  MapPin, ArrowRight, Target, Zap, Users, Award,
+  Heart, Coffee, Globe, ChevronLeft, ChevronRight,
+  Quote, Star, Cpu, CheckCircle, FileText, UserCheck,
+  Terminal, ShieldCheck, Briefcase, TrendingUp, Sparkles,
   Wallet, Clock, Laptop, Baby, Monitor, Lightbulb, X, Send,
   Loader2, CheckCircle2 // Added these for the dynamic modal
 } from "lucide-react"
@@ -182,12 +182,12 @@ const JobSpotlightRow = ({ children, className = "" }: { children: ReactNode, cl
 // 1. BENEFITS MODAL
 const BenefitsModal = ({ isOpen, onClose, policyData }: { isOpen: boolean; onClose: () => void; policyData: any }) => {
   if (!isOpen) return null;
-  
+
   // Fallback data
   const modalTitle = policyData?.modalTitle || "Employee Policy Guide";
   const edition = policyData?.edition || "2026 Edition • Global";
   const closeText = policyData?.closeButtonText || "Close Guide";
-  
+
   const sections = policyData?.sections || [
     {
       icon: "Clock",
@@ -222,7 +222,7 @@ const BenefitsModal = ({ isOpen, onClose, policyData }: { isOpen: boolean; onClo
       ]
     }
   ];
-  
+
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={onClose}></div>
@@ -273,7 +273,7 @@ const TalentNetworkModal = ({ isOpen, onClose, modalData }: { isOpen: boolean; o
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
   // CMS data with fallbacks
-  const modalTitle = status === "success" 
+  const modalTitle = status === "success"
     ? (modalData?.successTitle || "Application Received")
     : (modalData?.modalTitle || "Join Talent Network");
   const modalSubtitle = status === "success"
@@ -318,13 +318,13 @@ const TalentNetworkModal = ({ isOpen, onClose, modalData }: { isOpen: boolean; o
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div 
-        className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity" 
+      <div
+        className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       ></div>
 
       <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden border border-slate-200">
-        
+
         {/* Header */}
         <div className="bg-slate-900 p-8 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/20 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
@@ -336,8 +336,8 @@ const TalentNetworkModal = ({ isOpen, onClose, modalData }: { isOpen: boolean; o
               {modalSubtitle}
             </p>
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors cursor-pointer z-50"
           >
             <X className="w-5 h-5" />
@@ -346,7 +346,7 @@ const TalentNetworkModal = ({ isOpen, onClose, modalData }: { isOpen: boolean; o
 
         {/* Body */}
         <div className="p-8 bg-white min-h-[340px] flex items-center justify-center">
-          
+
           {status === "success" ? (
             <div className="text-center w-full animate-in fade-in zoom-in duration-500">
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -370,7 +370,7 @@ const TalentNetworkModal = ({ isOpen, onClose, modalData }: { isOpen: boolean; o
                   <input name="lastName" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition-all" placeholder="Doe" />
                 </div>
               </div>
-              
+
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
                 <input name="email" required type="email" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition-all" placeholder="jane@example.com" />
@@ -379,10 +379,10 @@ const TalentNetworkModal = ({ isOpen, onClose, modalData }: { isOpen: boolean; o
               {status === "error" && (
                 <p className="text-red-500 text-sm text-center">{errorText}</p>
               )}
-              
+
               <div className="pt-4">
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={status === "submitting"}
                   className="w-full py-4 bg-sky-600 text-white rounded-xl font-bold hover:bg-sky-700 transition-all shadow-lg shadow-sky-200 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
@@ -426,7 +426,7 @@ const HiringPipeline = ({ steps }: { steps: any[] }) => {
     let interval: NodeJS.Timeout;
     if (isInView) {
       let step = 0;
-      setActiveStep(0); 
+      setActiveStep(0);
       interval = setInterval(() => {
         step++;
         if (step < steps.length) setActiveStep(step);
@@ -441,7 +441,7 @@ const HiringPipeline = ({ steps }: { steps: any[] }) => {
   return (
     <div ref={containerRef} className="relative py-12">
       <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -translate-y-1/2 z-0 hidden md:block rounded-full"></div>
-      <div 
+      <div
         className="absolute top-1/2 left-0 h-1 bg-sky-600 -translate-y-1/2 z-0 transition-all duration-700 ease-out hidden md:block rounded-full"
         style={{ width: activeStep === -1 ? '0%' : `${(activeStep / (steps.length - 1)) * 100}%` }}
       ></div>
@@ -478,15 +478,15 @@ const HeroSection = ({ cultureData, heroData }: { cultureData: any[]; heroData: 
   };
 
   useEffect(() => {
-  let index = 0;
-  const timer = setInterval(() => {
-    const char = fullText.charAt(index);
-    setTypedText((prev) => prev + char);
-    index++;
-    if (index === fullText.length) clearInterval(timer);
-  }, 30);
-  return () => clearInterval(timer);
-}, [fullText]);
+    let index = 0;
+    const timer = setInterval(() => {
+      const char = fullText.charAt(index);
+      setTypedText((prev) => prev + char);
+      index++;
+      if (index === fullText.length) clearInterval(timer);
+    }, 30);
+    return () => clearInterval(timer);
+  }, [fullText]);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -513,8 +513,8 @@ const HeroSection = ({ cultureData, heroData }: { cultureData: any[]; heroData: 
   const title = heroData?.title || "Build the Future with Karvensen";
   const companyNameHighlight = heroData?.companyNameHighlight || "KarVenSen";
   const ctaText = heroData?.ctaText || "View Openings";
-  const bgImage = heroData?.backgroundImage 
-    ? urlFor(heroData.backgroundImage).url() 
+  const bgImage = heroData?.backgroundImage
+    ? urlFor(heroData.backgroundImage).url()
     : "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop";
 
   // Split title to apply gradient to company name
@@ -525,7 +525,7 @@ const HeroSection = ({ cultureData, heroData }: { cultureData: any[]; heroData: 
     <section onMouseMove={handleMouseMove} className="relative pt-18 pb-16 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img src={bgImage} alt="Background" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-slate-900/90"></div> 
+        <div className="absolute inset-0 bg-slate-900/90"></div>
       </div>
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-600/20 rounded-full blur-[100px] pointer-events-none transition-transform duration-100 ease-out z-0" style={{ transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)` }}></div>
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/20 rounded-full blur-[80px] pointer-events-none transition-transform duration-100 ease-out z-0" style={{ transform: `translate(${mousePosition.x * -1}px, ${mousePosition.y * -1}px)` }}></div>
@@ -651,35 +651,35 @@ export default function CareersPage() {
   const cmsCulture = careersData?.cultureSection?.cultureImages?.filter((c: any) => c.isActive !== false) || []
   const cmsBenefits = careersData?.benefitsSection?.benefits?.filter((b: any) => b.isActive !== false) || []
   const cmsJobs = jobsData || []
-  
+
   const cmsPolicyContent = careersData?.benefitsSection?.policyModal
 
   // Use CMS data with fallback
-  const VALUES = (cmsValues && cmsValues.length > 0) 
+  const VALUES = (cmsValues && cmsValues.length > 0)
     ? cmsValues.map((v: any) => ({ ...v, desc: v.description, icon: getIconComponent(v.icon) }))
     : CORPORATE_VALUES
-  const STEPS = (cmsSteps && cmsSteps.length > 0) 
+  const STEPS = (cmsSteps && cmsSteps.length > 0)
     ? cmsSteps.map((s: any) => ({ ...s, desc: s.description, icon: getIconComponent(s.icon) }))
     : HIRING_STEPS
-  const TESTIMONIALS_DATA = (cmsTestimonials && cmsTestimonials.length > 0) 
+  const TESTIMONIALS_DATA = (cmsTestimonials && cmsTestimonials.length > 0)
     ? cmsTestimonials.map(t => ({ ...t, image: (t.image && typeof t.image === 'object') ? urlFor(t.image).url() : (t.image || TESTIMONIALS.find(ft => ft.name === t.name)?.image) }))
     : TESTIMONIALS
   const CULTURE_DATA = (cmsCulture && cmsCulture.length > 0)
     ? cmsCulture.map(c => ({ ...c, url: (c.image && typeof c.image === 'object') ? urlFor(c.image).url() : (c.url || CULTURE_IMAGES.find(fc => fc.title === c.title)?.url) }))
     : CULTURE_IMAGES
-  
+
   // Group benefits by category
-  const BENEFITS_BY_CATEGORY = (cmsBenefits && cmsBenefits.length > 0) 
+  const BENEFITS_BY_CATEGORY = (cmsBenefits && cmsBenefits.length > 0)
     ? cmsBenefits.map((b: any) => ({ ...b, desc: b.description, icon: getIconComponent(b.icon) })).reduce((acc, benefit) => {
-        if (!acc[benefit.category]) acc[benefit.category] = []
-        acc[benefit.category].push(benefit)
-        return acc
-      }, {} as Record<string, typeof cmsBenefits>)
+      if (!acc[benefit.category]) acc[benefit.category] = []
+      acc[benefit.category].push(benefit)
+      return acc
+    }, {} as Record<string, typeof cmsBenefits>)
     : BENEFIT_CATEGORIES
 
   // Use CMS jobs or fallback
   const JOBS = (cmsJobs && cmsJobs.length > 0) ? cmsJobs : JOBS_DATA
-  
+
   // Placeholder for talent modal - can be integrated later
   const cmsTalentModal = null
 
@@ -692,7 +692,7 @@ export default function CareersPage() {
 
   return (
     <main className="min-h-screen bg-white font-sans text-slate-800 selection:bg-sky-500 selection:text-white">
-      
+
       {/* SECTION 1: HERO */}
       <HeroSection cultureData={CULTURE_DATA} heroData={cmsHero} />
 
@@ -700,13 +700,13 @@ export default function CareersPage() {
       <section className="py-24 bg-slate-50 border-t border-slate-200">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            
+
             {/* Left Column: Text & Values */}
             <RevealOnScroll>
               <div className="space-y-8">
                 <div>
                   <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
-                    {cmsSectionHeaders?.valuesSection?.title || "Where Technology Meets"} <br/>
+                    {cmsSectionHeaders?.valuesSection?.title || "Where Technology Meets"} <br />
                     <span className="text-sky-700">{cmsSectionHeaders?.valuesSection?.titleHighlight || "Real-World Impact"}</span>
                   </h2>
                   <p className="text-lg text-slate-600 leading-relaxed">
@@ -718,13 +718,13 @@ export default function CareersPage() {
                 <div className="space-y-8 pt-4">
                   {VALUES.map((val: any, i: number) => (
                     <div key={i} className="flex gap-5 group cursor-default">
-                      
+
                       {/* DYNAMIC ICON: Only this changes on hover */}
                       <div className="shrink-0 w-12 h-12 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-sky-700 shadow-sm transition-all duration-500 ease-out 
                         group-hover:scale-110 group-hover:rotate-6 group-hover:bg-sky-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-sky-200 group-hover:border-transparent">
                         <val.icon className="w-6 h-6" />
                       </div>
-                      
+
                       <div>
                         <h4 className="text-xl font-bold text-slate-900 mb-2 transition-colors duration-300 group-hover:text-sky-700">
                           {val.title}
@@ -737,7 +737,7 @@ export default function CareersPage() {
                   ))}
                 </div>
 
-                
+
               </div>
             </RevealOnScroll>
 
@@ -789,21 +789,21 @@ export default function CareersPage() {
         <BenefitsModal isOpen={isPolicyModalOpen} onClose={() => setIsPolicyModalOpen(false)} policyData={cmsPolicyContent} />
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-3 gap-16 items-start">
-            <div className="lg:col-span-1 sticky top-24 group cursor-default">
-                <div className="inline-block p-3 bg-sky-50 border border-transparent rounded-xl mb-6 transition-all duration-500 group-hover:bg-yellow-50 group-hover:border-yellow-200 group-hover:shadow-lg group-hover:shadow-yellow-100/50"><Sparkles className="w-6 h-6 text-sky-700 transition-all duration-500 group-hover:text-yellow-500 group-hover:fill-yellow-400 group-hover:rotate-12 group-hover:scale-110" /></div>
-                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
-                  {cmsSectionHeaders?.benefitsSection?.title || "Invest in your"} <br/>
-                  <span className="text-sky-700 transition-colors duration-300 group-hover:text-sky-600">{cmsSectionHeaders?.benefitsSection?.titleHighlight || "Future Self."}</span>
-                </h2>
-                <p className="text-slate-600 text-lg leading-relaxed mb-8">
-                  {cmsSectionHeaders?.benefitsSection?.description || "We don't just offer perks; we offer an ecosystem for you to master Cloud, AI, and Aviation tech."}
-                </p>
-                <button onClick={() => setIsPolicyModalOpen(true)} className="flex items-center gap-3 text-slate-900 font-bold transition-all duration-300 group-hover:gap-4 group-hover:text-sky-700">
-                  <span className="border-b-2 border-slate-900 pb-1 transition-colors duration-300 group-hover:border-sky-700">
-                    {cmsSectionHeaders?.benefitsSection?.policyLinkText || "View Full Policy Guide"}
-                  </span>
-                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"/>
-                </button>
+            <div className="lg:col-span-1 lg:sticky top-24 group cursor-default">
+              <div className="inline-block p-3 bg-sky-50 border border-transparent rounded-xl mb-6 transition-all duration-500 group-hover:bg-yellow-50 group-hover:border-yellow-200 group-hover:shadow-lg group-hover:shadow-yellow-100/50"><Sparkles className="w-6 h-6 text-sky-700 transition-all duration-500 group-hover:text-yellow-500 group-hover:fill-yellow-400 group-hover:rotate-12 group-hover:scale-110" /></div>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
+                {cmsSectionHeaders?.benefitsSection?.title || "Invest in your"} <br />
+                <span className="text-sky-700 transition-colors duration-300 group-hover:text-sky-600">{cmsSectionHeaders?.benefitsSection?.titleHighlight || "Future Self."}</span>
+              </h2>
+              <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                {cmsSectionHeaders?.benefitsSection?.description || "We don't just offer perks; we offer an ecosystem for you to master Cloud, AI, and Aviation tech."}
+              </p>
+              <button onClick={() => setIsPolicyModalOpen(true)} className="flex items-center gap-3 text-slate-900 font-bold transition-all duration-300 group-hover:gap-4 group-hover:text-sky-700">
+                <span className="border-b-2 border-slate-900 pb-1 transition-colors duration-300 group-hover:border-sky-700">
+                  {cmsSectionHeaders?.benefitsSection?.policyLinkText || "View Full Policy Guide"}
+                </span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
             </div>
             <div className="lg:col-span-2">
               <div className="flex flex-wrap gap-2 mb-8 border-b border-slate-100 pb-1">{Object.keys(BENEFITS_BY_CATEGORY).map((tab) => (<button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 text-sm font-bold rounded-t-lg transition-all duration-300 relative top-[1px] ${activeTab === tab ? "text-sky-700 border-b-2 border-sky-700 bg-sky-50/50" : "text-slate-400 hover:text-slate-600"}`}>{tab}</button>))}</div>
@@ -823,7 +823,7 @@ export default function CareersPage() {
 
       {/* SECTION 6: JOB PORTAL (Categorized & Expanded) */}
       <section id="jobs" className="py-24 bg-slate-50 relative border-t border-slate-200">
-        
+
         {/* MODAL (Now controlled by state) */}
         <TalentNetworkModal isOpen={isTalentModalOpen} onClose={() => setIsTalentModalOpen(false)} modalData={cmsTalentModal} />
 
@@ -881,12 +881,12 @@ export default function CareersPage() {
               <p className="text-slate-400 mb-8 max-w-xl mx-auto text-lg">
                 {cmsSectionHeaders?.talentNetworkCTA?.description || "We are always looking for exceptional talent. Send us your resume and we'll keep you on our radar for future missions."}
               </p>
-              
+
               {/* BUTTON CONNECTED TO STATE */}
               <button onClick={() => setIsTalentModalOpen(true)} className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold hover:bg-sky-50 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform duration-200">
                 {cmsSectionHeaders?.talentNetworkCTA?.buttonText || "Join Talent Network"}
               </button>
-            
+
             </div>
           </div>
         </div>

@@ -28,19 +28,39 @@ export function TestimonialsClient({ title, subtitle, testimonials }: Testimonia
     if (!scrollContainer || !testimonials || testimonials.length === 0) return
 
     let animationId: number
-    let scrollPosition = 0
+    let scrollPosition = scrollContainer.scrollLeft
+    let isPaused = false
 
     const scroll = () => {
-      scrollPosition += 0.5
-      if (scrollContainer) {
-        scrollContainer.scrollLeft = scrollPosition
+      if (!isPaused) {
+        scrollPosition += 0.5
+        if (scrollContainer) {
+          scrollContainer.scrollLeft = scrollPosition
 
-        if (scrollPosition >= scrollContainer.scrollWidth / 2) {
-          scrollPosition = 0
+          if (scrollPosition >= scrollContainer.scrollWidth / 2) {
+            scrollPosition = 0
+            scrollContainer.scrollLeft = 0
+          }
         }
       }
       animationId = requestAnimationFrame(scroll)
     }
+
+    const handleMouseEnter = () => { isPaused = true }
+    const handleMouseLeave = () => {
+      isPaused = false
+      scrollPosition = scrollContainer.scrollLeft
+    }
+    const handleTouchStart = () => { isPaused = true }
+    const handleTouchEnd = () => {
+      isPaused = false
+      scrollPosition = scrollContainer.scrollLeft
+    }
+
+    scrollContainer.addEventListener('mouseenter', handleMouseEnter)
+    scrollContainer.addEventListener('mouseleave', handleMouseLeave)
+    scrollContainer.addEventListener('touchstart', handleTouchStart, { passive: true })
+    scrollContainer.addEventListener('touchend', handleTouchEnd, { passive: true })
 
     const timeoutId = setTimeout(() => {
       animationId = requestAnimationFrame(scroll)
@@ -51,12 +71,16 @@ export function TestimonialsClient({ title, subtitle, testimonials }: Testimonia
       if (animationId) {
         cancelAnimationFrame(animationId)
       }
+      scrollContainer.removeEventListener('mouseenter', handleMouseEnter)
+      scrollContainer.removeEventListener('mouseleave', handleMouseLeave)
+      scrollContainer.removeEventListener('touchstart', handleTouchStart)
+      scrollContainer.removeEventListener('touchend', handleTouchEnd)
     }
   }, [testimonials])
 
   return (
     <section className="py-16 bg-gray-50 border-b border-gray-200 min-h-[500px]">
-      <div className="container mx-auto px-6 md:px-8 lg:px-12">
+      <div className="container mx-auto px-4 md:px-8 lg:px-12">
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">
             {title}
@@ -71,7 +95,7 @@ export function TestimonialsClient({ title, subtitle, testimonials }: Testimonia
         <div className="overflow-hidden min-h-[300px] relative">
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto"
+            className="flex gap-4 md:gap-6 overflow-x-auto"
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
@@ -82,7 +106,7 @@ export function TestimonialsClient({ title, subtitle, testimonials }: Testimonia
               [...testimonials, ...testimonials].map((testimonial, index) => (
                 <Card
                   key={`${testimonial._id}-${index}`}
-                  className="relative flex-shrink-0 w-[380px] hover:shadow-lg transition-shadow bg-white border-gray-200"
+                  className="relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px] hover:shadow-lg transition-shadow bg-white border-gray-200"
                 >
                   <CardContent className="pt-8">
                     <Quote className="absolute top-6 left-6 h-8 w-8 text-gray-200" />

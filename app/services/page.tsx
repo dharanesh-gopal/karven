@@ -36,18 +36,18 @@ import { generateSEOMetadata, generateServiceStructuredData, generateBreadcrumbS
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const pageContent = await getServicesPageContent()
-
+    
     return generateSEOMetadata({
       seo: pageContent?.seo,
-      fallbackTitle: "Global AI & Drone Services | Karvensen",
-      fallbackDescription: "Explore Karvensen's expert services in AI software, agricultural drones, and cloud solutions. Transform your business with our cutting-edge technology.",
+      fallbackTitle: "Our Services | KarVenSen - AI & Drone Solutions",
+      fallbackDescription: "Explore KarVenSen's comprehensive services in drone technology, AI software development, cloud services, and advanced educational programs. Transform your business with cutting-edge solutions.",
       path: "/services",
     })
   } catch (error) {
     console.error("Error generating metadata:", error)
     return {
-      title: "Global AI & Drone Services | Karvensen",
-      description: "Explore Karvensen's expert services in AI software, agricultural drones, and cloud solutions. Transform your business with our cutting-edge technology.",
+      title: "Our Services | KarVenSen - AI & Drone Solutions",
+      description: "Explore KarVenSen's comprehensive services in drone technology, AI software development, cloud services, and advanced educational programs.",
     }
   }
 }
@@ -295,20 +295,20 @@ export default async function ServicesPage() {
 
   // Use detail pages if available, otherwise fall back to service items, then defaults
   const content = pageContent || defaultPageContent
-  const droneServices = droneDetailPagesList.length > 0
-    ? droneDetailPagesList
-    : (droneServicesData && droneServicesData.length > 0)
-      ? droneServicesData
+  const droneServices = droneDetailPagesList.length > 0 
+    ? droneDetailPagesList 
+    : (droneServicesData && droneServicesData.length > 0) 
+      ? droneServicesData 
       : defaultDroneServices
-  const aiSoftwareServices = softwareDetailPagesList.length > 0
-    ? softwareDetailPagesList
-    : (softwareServicesData && softwareServicesData.length > 0)
-      ? softwareServicesData
+  const aiSoftwareServices = softwareDetailPagesList.length > 0 
+    ? softwareDetailPagesList 
+    : (softwareServicesData && softwareServicesData.length > 0) 
+      ? softwareServicesData 
       : defaultSoftwareServices
-  const educationalServices = educationDetailPagesList.length > 0
-    ? educationDetailPagesList
-    : (educationServicesData && educationServicesData.length > 0)
-      ? educationServicesData
+  const educationalServices = educationDetailPagesList.length > 0 
+    ? educationDetailPagesList 
+    : (educationServicesData && educationServicesData.length > 0) 
+      ? educationServicesData 
       : defaultEducationServices
 
   // Generate slug map from service slugs
@@ -334,25 +334,25 @@ export default async function ServicesPage() {
   const DroneBadge1Icon = getSectionIcon(droneBadge1IconName, "Drone")
   const droneBadge2IconName = content.droneSection?.badge2Icon || "CheckCircle2"
   const DroneBadge2Icon = getSectionIcon(droneBadge2IconName, "CheckCircle2")
-
+  
   const softwareTitleIconName = content.softwareSection?.titleIcon || "Cpu"
   const SoftwareTitleIcon = getSectionIcon(softwareTitleIconName, "Cpu")
   const softwareBadge1IconName = content.softwareSection?.badge1Icon || "Cpu"
   const SoftwareBadge1Icon = getSectionIcon(softwareBadge1IconName, "Cpu")
   const softwareBadge2IconName = content.softwareSection?.badge2Icon || "CheckCircle2"
   const SoftwareBadge2Icon = getSectionIcon(softwareBadge2IconName, "CheckCircle2")
-
+  
   const educationTitleIconName = content.educationSection?.titleIcon || "GraduationCap"
   const EducationTitleIcon = getSectionIcon(educationTitleIconName, "GraduationCap")
   const educationBadge1IconName = content.educationSection?.badge1Icon || "GraduationCap"
   const EducationBadge1Icon = getSectionIcon(educationBadge1IconName, "GraduationCap")
   const educationBadge2IconName = content.educationSection?.badge2Icon || "CheckCircle2"
   const EducationBadge2Icon = getSectionIcon(educationBadge2IconName, "CheckCircle2")
-
+  
   // CTA Section Icon
   const ctaIconName = content.ctaSection?.ctaIcon || "Drone"
   const CtaSectionIcon = getSectionIcon(ctaIconName, "Drone")
-
+  
   const droneImage = content.droneSection?.image
     ? urlFor(content.droneSection.image).width(800).height(600).url()
     : 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&h=600&fit=crop'
@@ -459,9 +459,9 @@ export default async function ServicesPage() {
                     {content.droneSection?.imageTitle || "Premier Consultancy for Drone Projects"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-red-300 transition-colors">
-                    <span className="font-semibold">{content.droneSection?.learnMoreText || "Learn More"}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                  </div>
+                      <span className="font-semibold">{content.droneSection?.learnMoreText || "Learn More"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                    </div>
                 </div>
 
                 {/* Animated Border Effect */}
@@ -561,9 +561,9 @@ export default async function ServicesPage() {
                     {content.softwareSection?.imageTitle || "Cutting-Edge AI & Software Solutions"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-blue-300 transition-colors">
-                    <span className="font-semibold">{content.softwareSection?.learnMoreText || "Learn More"}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                  </div>
+                      <span className="font-semibold">{content.softwareSection?.learnMoreText || "Learn More"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                    </div>
                 </div>
 
                 {/* Animated Border Effect */}
@@ -663,9 +663,9 @@ export default async function ServicesPage() {
                     {content.educationSection?.imageTitle || "Empowering Through Education & Training"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-purple-300 transition-colors">
-                    <span className="font-semibold">{content.educationSection?.learnMoreText || "Learn More"}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                  </div>
+                      <span className="font-semibold">{content.educationSection?.learnMoreText || "Learn More"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                    </div>
                 </div>
 
                 {/* Animated Border Effect */}

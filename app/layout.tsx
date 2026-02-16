@@ -1,5 +1,4 @@
-import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Outfit, Space_Grotesk } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -20,18 +19,33 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap"
 })
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#0f172a",
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
-  const siteUrl = "https://karven.vercel.app"
+  const siteUrl = "https://karvensen.com"
 
   // Get favicon URL from Sanity, fallback to local file
   const faviconUrl = settings?.favicon
     ? urlFor(settings.favicon).width(32).height(32).format('png').url()
     : '/karvensen favicon logo.jpeg'
 
-  const title = settings?.siteName || "Karvensen | AI-First Drone Technology & Software Services"
-  const description = settings?.siteDescription ||
-    "Elevate your business with Karvensen's AI-powered agricultural drones and enterprise software. We deliver innovative solutions from India for global scale."
+  // Ensure title is between 50-60 characters
+  const siteName = settings?.siteName || "Karvensen"
+  const defaultTitle = "Karvensen | AI Drone Tech & Software Solutions"
+  const title = settings?.siteName && settings.siteName.length > 20
+    ? settings.siteName
+    : defaultTitle
+
+  // Ensure description is between 100-130 characters
+  const description = settings?.siteDescription && settings.siteDescription.length >= 100 && settings.siteDescription.length <= 140
+    ? settings.siteDescription
+    : "Karvensen delivers AI-powered drones and enterprise software solutions from India for global scale. Elevate your business today."
 
   return {
     metadataBase: new URL(siteUrl),
@@ -51,6 +65,10 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     alternates: {
       canonical: "/",
+      languages: {
+        'en-IN': '/',
+        'x-default': '/',
+      },
     },
     openGraph: {
       title: title,
@@ -97,11 +115,10 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Karvensen",
-  "url": "https://karven.vercel.app",
-  "logo": "https://karven.vercel.app/karvensen favicon logo.jpeg",
+  "url": "https://karvensen.com",
+  "logo": "https://karvensen.com/karvensen favicon logo.jpeg",
   "sameAs": [
     "https://www.linkedin.com/company/karvensen/",
-    // Add other social links if known
   ],
   "description": "Karvensen is an AI-first IT software services company specializing in Artificial Intelligence, Drone-based solutions, and enterprise software.",
 }

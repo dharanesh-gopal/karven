@@ -17,7 +17,7 @@ export function FeaturesClient({ title, subtitle, images, autoplayInterval, stat
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => 
+      setCurrentIndex((prevIndex) =>
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       )
     }, autoplayInterval)
@@ -26,13 +26,13 @@ export function FeaturesClient({ title, subtitle, images, autoplayInterval, stat
   }, [images.length, autoplayInterval])
 
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     )
   }
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     )
   }
@@ -40,13 +40,13 @@ export function FeaturesClient({ title, subtitle, images, autoplayInterval, stat
   return (
     <section className="bg-white border-b border-gray-200 py-20 relative overflow-hidden">
       <div className="absolute top-1/2 left-0 right-0 bottom-0 bg-[#050d19] -z-0" />
-      
+
       <div className="absolute inset-0 opacity-5" style={{
         backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
         backgroundSize: '24px 24px'
       }} />
-      
-      <div className="container mx-auto px-6 md:px-8 lg:px-12 relative z-10">
+
+      <div className="container mx-auto px-4 md:px-8 lg:px-12 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
             {title}
@@ -73,7 +73,7 @@ export function FeaturesClient({ title, subtitle, images, autoplayInterval, stat
           >
             <ChevronLeft className="w-6 h-6 text-gray-900" />
           </button>
-          
+
           <button
             onClick={handleNext}
             className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
@@ -87,9 +87,8 @@ export function FeaturesClient({ title, subtitle, images, autoplayInterval, stat
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? 'w-8 bg-blue-600' : 'w-2 bg-gray-300'
-                }`}
+                className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex ? 'w-8 bg-blue-600' : 'w-2 bg-gray-300'
+                  }`}
                 aria-label={`Go to image ${index + 1}`}
               />
             ))}
