@@ -109,20 +109,20 @@ export function Footer() {
             </div>
 
             {/* Social Media Icons */}
-            <div className="flex items-center gap-3 mb-6">
-              <a href={footerData?.socialMedia?.twitter || "#"} className="text-gray-600 hover:text-[#1DA1F2] transition-colors" aria-label="Twitter">
+            <div className="flex items-center gap-1 mb-6 -ml-3">
+              <a href={footerData?.socialMedia?.twitter || "#"} className="p-3 text-gray-600 hover:text-[#1DA1F2] transition-colors" aria-label="Twitter">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href={footerData?.socialMedia?.linkedin || "#"} className="text-gray-600 hover:text-[#0077b5] transition-colors" aria-label="LinkedIn">
+              <a href={footerData?.socialMedia?.linkedin || "#"} className="p-3 text-gray-600 hover:text-[#0077b5] transition-colors" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a href={footerData?.socialMedia?.youtube || "#"} className="text-gray-600 hover:text-[#CD201F] transition-colors" aria-label="YouTube">
+              <a href={footerData?.socialMedia?.youtube || "#"} className="p-3 text-gray-600 hover:text-[#CD201F] transition-colors" aria-label="YouTube">
                 <Youtube className="h-5 w-5" />
               </a>
-              <a href={footerData?.socialMedia?.facebook || "#"} className="text-gray-600 hover:text-[#316FF6] transition-colors" aria-label="Facebook">
+              <a href={footerData?.socialMedia?.facebook || "#"} className="p-3 text-gray-600 hover:text-[#316FF6] transition-colors" aria-label="Facebook">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href={footerData?.socialMedia?.instagram || "#"} className="text-gray-600 hover:text-[#E1306C] transition-colors" aria-label="Instagram">
+              <a href={footerData?.socialMedia?.instagram || "#"} className="p-3 text-gray-600 hover:text-[#E1306C] transition-colors" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
             </div>

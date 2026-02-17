@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export default defineType({
   name: 'homePageSettings',
@@ -25,13 +25,13 @@ export default defineType({
               type: 'string',
               options: {
                 list: [
-                  {title: 'Hero Section', value: 'hero'},
-                  {title: 'Features/Gallery Section', value: 'features'},
-                  {title: 'How We Work', value: 'howWeWork'},
-                  {title: 'Testimonials', value: 'testimonials'},
-                  {title: 'CTA Section', value: 'cta'},
-                  {title: 'Stats Section', value: 'stats'},
-                  {title: 'Why Choose Us', value: 'whyChoose'},
+                  { title: 'Hero Section', value: 'hero' },
+                  { title: 'Features/Gallery Section', value: 'features' },
+                  { title: 'Applications Stats', value: 'applications' },
+                  { title: 'How We Work', value: 'howWeWork' },
+                  { title: 'Testimonials', value: 'testimonials' },
+                  { title: 'CTA Section', value: 'cta' },
+                  { title: 'Why Choose Us', value: 'whyChoose' },
                 ],
               },
               validation: (rule) => rule.required(),
@@ -55,7 +55,7 @@ export default defineType({
               order: 'order',
               isVisible: 'isVisible',
             },
-            prepare({sectionType, order, isVisible}) {
+            prepare({ sectionType, order, isVisible }) {
               return {
                 title: `${order}. ${sectionType || 'Section'}`,
                 subtitle: isVisible ? 'Visible' : 'Hidden',
@@ -83,7 +83,7 @@ export default defineType({
       title: 'title',
       isActive: 'isActive',
     },
-    prepare({title, isActive}) {
+    prepare({ title, isActive }) {
       return {
         title: title || 'Home Page Settings',
         subtitle: isActive ? 'Active' : 'Inactive',

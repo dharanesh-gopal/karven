@@ -142,49 +142,49 @@ export function Navbar() {
                   <Link
                     href="/"
                     onClick={() => setOpen(false)}
-                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-3"
                   >
                     Home
                   </Link>
                   <Link
                     href="/about"
                     onClick={() => setOpen(false)}
-                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-3"
                   >
                     About
                   </Link>
                   <Link
                     href="/services"
                     onClick={() => setOpen(false)}
-                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-3"
                   >
                     Services
                   </Link>
                   <Link
                     href="/training"
                     onClick={() => setOpen(false)}
-                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-3"
                   >
                     Training
                   </Link>
                   <Link
                     href="/blog"
                     onClick={() => setOpen(false)}
-                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-3"
                   >
                     Blog
                   </Link>
                   <Link
                     href="/careers"
                     onClick={() => setOpen(false)}
-                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-3"
                   >
                     Careers
                   </Link>
                   <Link
                     href="/contact"
                     onClick={() => setOpen(false)}
-                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-1"
+                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors px-2 py-3"
                   >
                     Contact
                   </Link>

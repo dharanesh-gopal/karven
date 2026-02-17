@@ -20,25 +20,28 @@ export const structure: StructureResolver = (S) =>
                 .title('1. Hero Section (Top of Page)')
                 .child(S.documentTypeList('heroSection').title('Hero Section')),
               S.listItem()
-                .title('2. Stats Section')
-                .child(S.documentTypeList('stats').title('Stats')),
+                .title('2. Applications Section Settings')
+                .child(S.document().schemaType('applicationsSection').documentId('applicationsSection')),
               S.listItem()
-                .title('3. How We Work Section')
+                .title('3. Application Statistics')
+                .child(S.documentTypeList('applicationItem').title('Application Statistics')),
+              S.listItem()
+                .title('4. How We Work Section')
                 .child(S.document().schemaType('howWeWorkSection').documentId('howWeWorkSection')),
               S.listItem()
-                .title('4. Process Steps')
+                .title('5. Process Steps')
                 .child(S.documentTypeList('processStep').title('Process Steps')),
               S.listItem()
-                .title('5. Testimonials Section Settings')
+                .title('6. Testimonials Section Settings')
                 .child(S.document().schemaType('testimonialsSection').documentId('testimonialsSection')),
               S.listItem()
-                .title('6. Testimonials (Individual Reviews)')
+                .title('7. Testimonials (Individual Reviews)')
                 .child(S.documentTypeList('testimonial').title('Testimonials')),
               S.listItem()
-                .title('7. Gallery Section')
+                .title('8. Gallery Section')
                 .child(S.documentTypeList('gallerySection').title('Gallery Section')),
               S.listItem()
-                .title('8. CTA Section (Call to Action)')
+                .title('9. CTA Section (Call to Action)')
                 .child(S.documentTypeList('ctaSection').title('CTA Section')),
             ])
         ),

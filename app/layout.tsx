@@ -37,8 +37,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
   // Ensure title is between 50-60 characters
   const siteName = settings?.siteName || "Karvensen"
-  const defaultTitle = "Karvensen | AI Drone Tech & Software Solutions"
-  const title = settings?.siteName && settings.siteName.length > 20
+  const defaultTitle = "Karvensen | AI Drone Tech & Enterprise Software Solutions"
+  const title = settings?.siteName && settings.siteName.length >= 50 && settings.siteName.length <= 60
     ? settings.siteName
     : defaultTitle
 
@@ -64,10 +64,10 @@ export async function generateMetadata(): Promise<Metadata> {
       telephone: false,
     },
     alternates: {
-      canonical: "/",
+      canonical: siteUrl,
       languages: {
-        'en-IN': '/',
-        'x-default': '/',
+        'en-IN': siteUrl,
+        'x-default': siteUrl,
       },
     },
     openGraph: {

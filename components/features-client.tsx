@@ -9,10 +9,9 @@ interface FeaturesClientProps {
   subtitle: string
   images: { src: string; alt: string }[]
   autoplayInterval: number
-  stats: Array<{ _id: string; label: string; value: string }>
 }
 
-export function FeaturesClient({ title, subtitle, images, autoplayInterval, stats }: FeaturesClientProps) {
+export function FeaturesClient({ title, subtitle, images, autoplayInterval }: FeaturesClientProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
@@ -95,47 +94,6 @@ export function FeaturesClient({ title, subtitle, images, autoplayInterval, stat
           </div>
         </div>
 
-        <div className="max-w-5xl mx-auto py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 md:divide-x divide-gray-700">
-            <div className="space-y-8 px-6">
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
-                  {stats[0]?.value || '50,000+'}
-                </div>
-                <div className="text-sm sm:text-base text-gray-300">
-                  {stats[0]?.label || 'Acres Scanned & Analyzed'}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
-                  {stats[1]?.value || '5TB+'}
-                </div>
-                <div className="text-sm sm:text-base text-gray-300">
-                  {stats[1]?.label || 'Aerial Data Processed'}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-8 px-6">
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
-                  {stats[2]?.value || '98%'}
-                </div>
-                <div className="text-sm sm:text-base text-gray-300">
-                  {stats[2]?.label || 'Accuracy in Defect Detection'}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
-                  {stats[3]?.value || '500+'}
-                </div>
-                <div className="text-sm sm:text-base text-gray-300">
-                  {stats[3]?.label || 'AI Models Deployed'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   )

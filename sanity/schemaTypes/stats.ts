@@ -1,47 +1,36 @@
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
-  name: 'stats',
-  title: 'Statistics',
-  type: 'document',
-  fields: [
-    defineField({
-      name: 'label',
-      title: 'Label',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'value',
-      title: 'Value',
-      type: 'string',
-      description: 'e.g., "500+", "15", "99%"',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'order',
-      title: 'Display Order',
-      type: 'number',
-      validation: (Rule) => Rule.required().min(0),
-    }),
-    defineField({
-      name: 'isActive',
-      title: 'Active',
-      type: 'boolean',
-      initialValue: true,
-    }),
-  ],
-  preview: {
-    select: {
-      title: 'label',
-      subtitle: 'value',
-    },
-  },
-  orderings: [
-    {
-      title: 'Display Order',
-      name: 'orderAsc',
-      by: [{ field: 'order', direction: 'asc' }],
-    },
-  ],
+    name: 'stats',
+    title: 'Statistics (Old - Do Not Use)',
+    type: 'document',
+    // Hide from the "New Document" menu and effectively disable
+    // @ts-ignore
+    __experimental_actions: ['update', 'publish', 'delete'],
+    fields: [
+        defineField({
+            name: 'label',
+            title: 'Label',
+            type: 'string',
+            readOnly: true,
+        }),
+        defineField({
+            name: 'value',
+            title: 'Value',
+            type: 'string',
+            readOnly: true,
+        }),
+        defineField({
+            name: 'order',
+            title: 'Display Order',
+            type: 'number',
+            readOnly: true,
+        }),
+        defineField({
+            name: 'isActive',
+            title: 'Active',
+            type: 'boolean',
+            readOnly: true,
+        }),
+    ],
 })

@@ -68,6 +68,8 @@ import leadershipMember from './leadershipMember'
 import boardMember from './boardMember'
 import aboutContactForm from './aboutContactForm'
 import seoObject from './seoObject'
+import applicationsSection from './applicationsSection'
+import applicationItem from './applicationItem'
 
 // Rich Content Blocks
 import {
@@ -137,6 +139,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     stats,
     processStep,
     ctaSection,
+    applicationsSection,
+    applicationItem,
 
     // About Page
     aboutTagline,
