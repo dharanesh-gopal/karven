@@ -29,7 +29,6 @@ import teamMember from './teamMember'
 import award from './award'
 import partner from './partner'
 import groupCompany from './groupCompany'
-import serviceItem from './serviceItem'
 import servicesPage from './servicesPage'
 import upcomingProgram from './upcomingProgram'
 import trainingHero from './trainingHero'
@@ -172,9 +171,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     groupCompany,
 
 
-    // Services Page
     servicesPage,
-    serviceItem,
 
     // Training Page
     trainingPageSettings,

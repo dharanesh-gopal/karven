@@ -18,7 +18,7 @@ export const structure: StructureResolver = (S) =>
             .items([
               S.listItem()
                 .title('1. Hero Section (Top of Page)')
-                .child(S.documentTypeList('heroSection').title('Hero Section')),
+                .child(S.document().schemaType('heroSection').documentId('heroSection')),
               S.listItem()
                 .title('2. Applications Section Settings')
                 .child(S.document().schemaType('applicationsSection').documentId('applicationsSection')),
@@ -154,9 +154,6 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title('1. Service Detail Pages')
                 .child(S.documentTypeList('serviceDetailPage').title('Service Detail Pages')),
-              S.listItem()
-                .title('2. Service Items (Grid Items)')
-                .child(S.documentTypeList('serviceItem').title('Service Items')),
             ])
         ),
 

@@ -58,7 +58,13 @@ export function generateSEOMetadata({
     title,
     description,
     keywords: seo?.keywords,
-    alternates: canonical ? { canonical } : undefined,
+    alternates: canonical ? {
+      canonical,
+      languages: {
+        'en-IN': canonical,
+        'x-default': canonical,
+      },
+    } : undefined,
     robots,
     openGraph: {
       title: ogTitle,
@@ -67,13 +73,13 @@ export function generateSEOMetadata({
       siteName: 'KarVenSen',
       images: ogImageUrl
         ? [
-            {
-              url: ogImageUrl,
-              width: 1200,
-              height: 630,
-              alt: seo?.ogImage?.alt || title,
-            },
-          ]
+          {
+            url: ogImageUrl,
+            width: 1200,
+            height: 630,
+            alt: seo?.ogImage?.alt || title,
+          },
+        ]
         : undefined,
       locale: 'en_US',
       type: 'website',

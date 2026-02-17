@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Script from "next/script"
 import { Button } from "@/components/ui/button"
 import {
   Cpu,
@@ -36,7 +37,7 @@ import { generateSEOMetadata, generateServiceStructuredData, generateBreadcrumbS
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const pageContent = await getServicesPageContent()
-    
+
     return generateSEOMetadata({
       seo: pageContent?.seo,
       fallbackTitle: "Our Services | KarVenSen - AI & Drone Solutions",
@@ -148,49 +149,14 @@ const defaultDroneServices = [
     slug: { current: "survey-mapping" },
     icon: "Camera",
     title: "Drone Survey and Mapping",
-    description: "High-precision aerial surveys and 3D mapping solutions for construction, mining, and land management.",
-    category: "drone"
-  },
-  {
-    slug: { current: "surveillance" },
-    icon: "Video",
-    title: "Drone Surveillance and Videography",
-    description: "Professional aerial surveillance and cinematography services for security, events, and media production.",
+    description: "Our drone survey and mapping services revolutionize traditional surveying methods. We provide high-precision aerial data collection, processing, and analysis for various industries including construction, agriculture, mining, and urban planning.",
     category: "drone"
   },
   {
     slug: { current: "precision-spraying" },
     icon: "Sprout",
     title: "Precision Spraying",
-    description: "Advanced agricultural drone spraying systems for efficient crop protection and fertilization.",
-    category: "drone"
-  },
-  {
-    slug: { current: "delivery" },
-    icon: "Package",
-    title: "Drone Delivery",
-    description: "Innovative drone delivery solutions for last-mile logistics and emergency medical supplies.",
-    category: "drone"
-  },
-  {
-    slug: { current: "hardware-software" },
-    icon: "Microchip",
-    title: "Hardware, Software & Firmware",
-    description: "Custom drone hardware design, software development, and firmware optimization services.",
-    category: "drone"
-  },
-  {
-    slug: { current: "drone-in-box" },
-    icon: "Box",
-    title: "Drone-In-A-Box & Tethered Systems",
-    description: "Automated drone deployment systems and tethered solutions for continuous monitoring.",
-    category: "drone"
-  },
-  {
-    slug: { current: "data-gis" },
-    icon: "BarChart3",
-    title: "Data, GIS & Digital Solutions",
-    description: "Comprehensive data processing, GIS analysis, and digital twin solutions from drone imagery.",
+    description: "Our precision drone spraying services deliver targeted application of pesticides, fertilizers, and nutrients. Using advanced GPS and sensor technology, we ensure optimal coverage with minimal waste and environmental impact.",
     category: "drone"
   },
 ]
@@ -201,15 +167,7 @@ const defaultSoftwareServices = [
     icon: "Cpu",
     title: "AI Software Development",
     description:
-      "Custom AI and machine learning solutions tailored to your business needs. From predictive analytics to natural language processing, we build AI systems that drive real business value.",
-    category: "software"
-  },
-  {
-    slug: { current: "cloud-services" },
-    icon: "Cloud",
-    title: "Cloud Services",
-    description:
-      "Comprehensive cloud computing solutions for businesses of all sizes. From cloud migration to infrastructure management, we provide secure, scalable, and cost-effective cloud services.",
+      "Our AI software development services leverage cutting-edge machine learning algorithms and deep learning techniques to solve complex business problems. We create custom AI solutions that integrate seamlessly with your existing systems.",
     category: "software"
   },
   {
@@ -217,7 +175,7 @@ const defaultSoftwareServices = [
     icon: "BookOpen",
     title: "Learning Management Systems",
     description:
-      "Comprehensive LMS solutions for educational institutions and corporate training. Engage learners with interactive content, assessments, and progress tracking.",
+      "We develop comprehensive Learning Management Systems that make online education engaging and effective. Our platforms support live classes, recorded content, assessments, and detailed analytics.",
     category: "software"
   },
 ]
@@ -228,7 +186,7 @@ const defaultEducationServices = [
     icon: "GraduationCap",
     title: "Educational Programs",
     description:
-      "Hands-on workshops and awareness programs about drone technology, AI, and emerging technologies for schools, colleges, and professionals.",
+      "We offer comprehensive training programs designed to build practical skills in drone operations, AI/ML, and modern technology. Our courses combine theoretical knowledge with hands-on experience, industry certifications, and real-world project exposure.",
     category: "education"
   },
 ]
@@ -242,43 +200,6 @@ export default async function ServicesPage() {
   const softwareServicesFromDetailPages = await getServiceDetailPagesByCategory('software')
   const educationServicesFromDetailPages = await getServiceDetailPagesByCategory('education')
 
-  // Fetch service items from Sanity (legacy support)
-  const droneServicesData = await fetchSanityData<ServiceItemData[]>(
-    `*[_type == "serviceItem" && category == "drone" && isActive == true] | order(order asc){
-      title,
-      slug,
-      category,
-      icon,
-      description
-    }`,
-    {},
-    []
-  )
-
-  const softwareServicesData = await fetchSanityData<ServiceItemData[]>(
-    `*[_type == "serviceItem" && category == "software" && isActive == true] | order(order asc){
-      title,
-      slug,
-      category,
-      icon,
-      description
-    }`,
-    {},
-    []
-  )
-
-  const educationServicesData = await fetchSanityData<ServiceItemData[]>(
-    `*[_type == "serviceItem" && category == "education" && isActive == true] | order(order asc){
-      title,
-      slug,
-      category,
-      icon,
-      description
-    }`,
-    {},
-    []
-  )
-
   // Transform serviceDetailPage data to match ServiceItemData interface
   const transformDetailPageToServiceItem = (detailPage: any): ServiceItemData => ({
     title: detailPage.title,
@@ -288,28 +209,20 @@ export default async function ServicesPage() {
     description: detailPage.overview?.description || detailPage.hero?.subtitle || ''
   })
 
-  // Merge service detail pages with service items (detail pages take priority)
-  const droneDetailPagesList = droneServicesFromDetailPages?.map(transformDetailPageToServiceItem) || []
-  const softwareDetailPagesList = softwareServicesFromDetailPages?.map(transformDetailPageToServiceItem) || []
-  const educationDetailPagesList = educationServicesFromDetailPages?.map(transformDetailPageToServiceItem) || []
+  // Normalize data from Sanity
+  const droneServices = droneServicesFromDetailPages?.length
+    ? droneServicesFromDetailPages.map(transformDetailPageToServiceItem)
+    : defaultDroneServices
 
-  // Use detail pages if available, otherwise fall back to service items, then defaults
+  const aiSoftwareServices = softwareServicesFromDetailPages?.length
+    ? softwareServicesFromDetailPages.map(transformDetailPageToServiceItem)
+    : defaultSoftwareServices
+
+  const educationalServices = educationServicesFromDetailPages?.length
+    ? educationServicesFromDetailPages.map(transformDetailPageToServiceItem)
+    : defaultEducationServices
+
   const content = pageContent || defaultPageContent
-  const droneServices = droneDetailPagesList.length > 0 
-    ? droneDetailPagesList 
-    : (droneServicesData && droneServicesData.length > 0) 
-      ? droneServicesData 
-      : defaultDroneServices
-  const aiSoftwareServices = softwareDetailPagesList.length > 0 
-    ? softwareDetailPagesList 
-    : (softwareServicesData && softwareServicesData.length > 0) 
-      ? softwareServicesData 
-      : defaultSoftwareServices
-  const educationalServices = educationDetailPagesList.length > 0 
-    ? educationDetailPagesList 
-    : (educationServicesData && educationServicesData.length > 0) 
-      ? educationServicesData 
-      : defaultEducationServices
 
   // Generate slug map from service slugs
   const generateSlugMap = (services: ServiceItemData[]): Record<string, string> => {
@@ -334,25 +247,25 @@ export default async function ServicesPage() {
   const DroneBadge1Icon = getSectionIcon(droneBadge1IconName, "Drone")
   const droneBadge2IconName = content.droneSection?.badge2Icon || "CheckCircle2"
   const DroneBadge2Icon = getSectionIcon(droneBadge2IconName, "CheckCircle2")
-  
+
   const softwareTitleIconName = content.softwareSection?.titleIcon || "Cpu"
   const SoftwareTitleIcon = getSectionIcon(softwareTitleIconName, "Cpu")
   const softwareBadge1IconName = content.softwareSection?.badge1Icon || "Cpu"
   const SoftwareBadge1Icon = getSectionIcon(softwareBadge1IconName, "Cpu")
   const softwareBadge2IconName = content.softwareSection?.badge2Icon || "CheckCircle2"
   const SoftwareBadge2Icon = getSectionIcon(softwareBadge2IconName, "CheckCircle2")
-  
+
   const educationTitleIconName = content.educationSection?.titleIcon || "GraduationCap"
   const EducationTitleIcon = getSectionIcon(educationTitleIconName, "GraduationCap")
   const educationBadge1IconName = content.educationSection?.badge1Icon || "GraduationCap"
   const EducationBadge1Icon = getSectionIcon(educationBadge1IconName, "GraduationCap")
   const educationBadge2IconName = content.educationSection?.badge2Icon || "CheckCircle2"
   const EducationBadge2Icon = getSectionIcon(educationBadge2IconName, "CheckCircle2")
-  
+
   // CTA Section Icon
   const ctaIconName = content.ctaSection?.ctaIcon || "Drone"
   const CtaSectionIcon = getSectionIcon(ctaIconName, "Drone")
-  
+
   const droneImage = content.droneSection?.image
     ? urlFor(content.droneSection.image).width(800).height(600).url()
     : 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&h=600&fit=crop'
@@ -459,9 +372,9 @@ export default async function ServicesPage() {
                     {content.droneSection?.imageTitle || "Premier Consultancy for Drone Projects"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-red-300 transition-colors">
-                      <span className="font-semibold">{content.droneSection?.learnMoreText || "Learn More"}</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                    </div>
+                    <span className="font-semibold">{content.droneSection?.learnMoreText || "Learn More"}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                  </div>
                 </div>
 
                 {/* Animated Border Effect */}
@@ -561,9 +474,9 @@ export default async function ServicesPage() {
                     {content.softwareSection?.imageTitle || "Cutting-Edge AI & Software Solutions"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-blue-300 transition-colors">
-                      <span className="font-semibold">{content.softwareSection?.learnMoreText || "Learn More"}</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                    </div>
+                    <span className="font-semibold">{content.softwareSection?.learnMoreText || "Learn More"}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                  </div>
                 </div>
 
                 {/* Animated Border Effect */}
@@ -663,9 +576,9 @@ export default async function ServicesPage() {
                     {content.educationSection?.imageTitle || "Empowering Through Education & Training"}
                   </h3>
                   <div className="inline-flex items-center gap-2 text-white group-hover:text-purple-300 transition-colors">
-                      <span className="font-semibold">{content.educationSection?.learnMoreText || "Learn More"}</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
-                    </div>
+                    <span className="font-semibold">{content.educationSection?.learnMoreText || "Learn More"}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                  </div>
                 </div>
 
                 {/* Animated Border Effect */}
@@ -751,8 +664,10 @@ export default async function ServicesPage() {
       </section>
 
       {/* Structured Data for SEO */}
-      <script
+      <Script
+        id="breadcrumb-jsonld"
         type="application/ld+json"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             generateBreadcrumbStructuredData([
@@ -762,8 +677,10 @@ export default async function ServicesPage() {
           ),
         }}
       />
-      <script
+      <Script
+        id="service-jsonld"
         type="application/ld+json"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             generateServiceStructuredData({

@@ -1129,37 +1129,76 @@ export default function AboutPage() {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto">
-            {(industryCards && industryCards.length > 0 ? industryCards : [
-              { title: "Defence", image: null },
-              { title: "Infrastructure", image: null },
-              { title: "Energy", image: null },
-              { title: "Agriculture", image: null },
-              { title: "Education", image: null },
-              { title: "Urban Planning", image: null },
-              { title: "Mining", image: null },
-              { title: "Security", image: null },
-            ]).map((industry, index) => (
-              <div key={index} className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-                {industry.image ? (
-                  <Image
-                    src={urlFor(industry.image).url()}
-                    alt={industry.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                ) : (
-                  <img
-                    src="/dron in agri land.png"
-                    alt={industry.title}
-                    className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                )}
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-2xl font-bold mb-2">{industry.title}</h3>
-                </div>
-              </div>
-            ))}
+            {(() => {
+              const localIndustries = [
+                { title: "Defense & Security", image: "/defence img.jpeg" },
+                { title: "Agriculture", image: "/agri img.jpeg" },
+                { title: "Construction", image: "/construction img.jpeg" },
+                { title: "Education", image: "/edu img.jpeg" },
+                { title: "Energy & Utilities", image: "/energy img.jpeg" },
+                { title: "Mining", image: "/mining img.jpeg" },
+                { title: "Real Estate", image: "/real-estate img.jpeg" },
+                { title: "Manufacturing", image: "/manufacturing img.jpeg" },
+              ];
+
+              const industryFallbackImages: Record<string, string> = {
+                "Defense & Security": "/defence img.jpeg",
+                "Defence": "/defence img.jpeg",
+                "Agriculture": "/agri img.jpeg",
+                "Construction": "/construction img.jpeg",
+                "Infrastructure": "/construction img.jpeg",
+                "Education": "/edu img.jpeg",
+                "Energy & Utilities": "/energy img.jpeg",
+                "Energy": "/energy img.jpeg",
+                "Mining": "/mining img.jpeg",
+                "Real Estate": "/real-estate img.jpeg",
+                "Urban Planning": "/real-estate img.jpeg",
+                "Manufacturing": "/manufacturing img.jpeg",
+                "Security": "/defence img.jpeg"
+              };
+
+              const items = (industryCards && industryCards.length > 0) ? industryCards : localIndustries;
+
+              return items.map((industry, index) => {
+                // Determine which image to show
+                let imageSrc = "/dron in agri land.png"; // Default fallback
+
+                if (typeof industry.image === 'string') {
+                  imageSrc = industry.image;
+                } else if (industry.image) {
+                  imageSrc = urlFor(industry.image).url();
+                } else {
+                  // Smart fallback based on title if Sanity image is missing
+                  imageSrc = industryFallbackImages[industry.title] || "/dron in agri land.png";
+                }
+
+                return (
+                  <div key={index} className="group relative h-[280px] rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
+                    {imageSrc.startsWith('/') ? (
+                      <Image
+                        src={imageSrc}
+                        alt={industry.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      />
+                    ) : (
+                      <Image
+                        src={imageSrc}
+                        alt={industry.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      />
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                      <h3 className="text-2xl font-bold mb-2">{industry.title}</h3>
+                    </div>
+                  </div>
+                );
+              });
+            })()}
           </div>
         </div>
       </section>
