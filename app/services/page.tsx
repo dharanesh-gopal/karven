@@ -664,10 +664,8 @@ export default async function ServicesPage() {
       </section>
 
       {/* Structured Data for SEO */}
-      <Script
-        id="breadcrumb-jsonld"
+      <script
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             generateBreadcrumbStructuredData([
@@ -677,10 +675,8 @@ export default async function ServicesPage() {
           ),
         }}
       />
-      <Script
-        id="service-jsonld"
+      <script
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             generateServiceStructuredData({
