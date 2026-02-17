@@ -109,6 +109,9 @@ export async function generateMetadata(): Promise<Metadata> {
       shortcut: faviconUrl,
       apple: faviconUrl,
     },
+    verification: {
+      google: "EihR4vRpE0QvZkkm5KSJWeueJpmLGh4o6PY5i9uhBqI",
+    },
   }
 }
 
