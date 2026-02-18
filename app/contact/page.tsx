@@ -7,6 +7,7 @@ import { Mail, Phone, MapPin, Send, Loader2, ArrowLeft, Linkedin, Youtube, Faceb
 import dynamic from "next/dynamic"
 import { motion } from "framer-motion"
 import { useSanityData } from "@/hooks/useSanityData"
+import { useToast } from "@/hooks/use-toast"
 
 // Dynamically import LeafletMap to avoid SSR issues
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
@@ -102,6 +103,7 @@ function ContactPageContent() {
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   const searchParams = useSearchParams()
+  const { toast } = useToast()
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -247,6 +249,10 @@ function ContactPageContent() {
       const result = await response.json()
 
       if (result.success) {
+        toast({
+          title: "Success",
+          description: "Message sent successfully!",
+        })
         setIsSubmitted(true)
         setFormData({
           fullName: "",
@@ -258,11 +264,19 @@ function ContactPageContent() {
           message: "",
         })
       } else {
-        alert(result.message || "Failed to send message.")
+        toast({
+          title: "Error",
+          description: result.message || "Failed to send message.",
+          variant: "destructive",
+        })
       }
     } catch (error) {
       console.error("Submission error:", error)
-      alert("Something went wrong. Please try again later.")
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive",
+      })
     } finally {
       setIsLoading(false)
     }
