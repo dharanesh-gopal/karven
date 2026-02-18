@@ -8,8 +8,9 @@ import NotificationButton from "./notification-button"
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isStudio = pathname?.startsWith("/studio")
+  const isXmlOrTxt = pathname?.endsWith(".xml") || pathname?.endsWith(".txt")
 
-  if (isStudio) {
+  if (isStudio || isXmlOrTxt) {
     return <>{children}</>
   }
 
