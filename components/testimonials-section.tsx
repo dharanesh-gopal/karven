@@ -95,7 +95,7 @@ export async function TestimonialsSection() {
     }`,
     {},
     { title: "Trusted by Organizations Nationwide" },
-    { tags: ['testimonials-section'], revalidate: 300 }
+    { tags: ['testimonials-section'], revalidate: 60 }
   )
 
   const testimonialsData = await fetchSanityData<Testimonial[]>(
@@ -122,11 +122,11 @@ export async function TestimonialsSection() {
         }`,
     {},
     fallbackTestimonials,
-    { tags: ['testimonials'], revalidate: 300 }
+    { tags: ['testimonials'], revalidate: 60 }
   )
 
   const testimonials = (testimonialsData && testimonialsData.length > 0) ? testimonialsData : fallbackTestimonials
-  
+
   // Process testimonials with image URLs
   const processedTestimonials = testimonials.map(t => ({
     _id: t._id,
@@ -134,13 +134,13 @@ export async function TestimonialsSection() {
     role: t.role,
     company: t.company,
     content: t.content,
-    imageSrc: t.image?.asset 
+    imageSrc: t.image?.asset
       ? urlFor(t.image.asset).width(80).height(80).url()
       : t.avatar
   }))
 
   return (
-    <TestimonialsClient 
+    <TestimonialsClient
       title={sectionData?.title || "Trusted by Organizations Nationwide"}
       subtitle={sectionData?.subtitle}
       testimonials={processedTestimonials}

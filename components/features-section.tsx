@@ -51,7 +51,7 @@ export async function FeaturesSection() {
     }`,
     {},
     fallbackData,
-    { tags: ['gallery'], revalidate: 300 }
+    { tags: ['gallery'], revalidate: 60 }
   )
 
   // Process images

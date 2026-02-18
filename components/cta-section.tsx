@@ -46,14 +46,14 @@ export async function CTASection() {
     }`,
     {},
     fallbackData,
-    { tags: ['cta'], revalidate: 300 }
+    { tags: ['cta'], revalidate: 60 }
   )
 
   const videoUrl = ctaData?.backgroundVideo?.asset ? getFileUrl(ctaData.backgroundVideo.asset) : "/drone%20video%202.mp4"
   const imageUrl = ctaData?.backgroundImage?.asset ? urlFor(ctaData.backgroundImage.asset).width(1920).url() : undefined
 
   return (
-    <CTAClient 
+    <CTAClient
       title={ctaData?.title || "Ready to Innovate with Karvensen?"}
       description={ctaData?.description || "Let's discuss how our AI-driven solutions and drone technology can transform your operations. Join the future of intelligent automation."}
       buttonText={ctaData?.buttonText || "Schedule a Consultation"}

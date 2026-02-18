@@ -28,6 +28,7 @@ export default defineType({
                   { title: 'Hero Section', value: 'hero' },
                   { title: 'Features/Gallery Section', value: 'features' },
                   { title: 'Applications Stats', value: 'applications' },
+                  { title: 'Industry Insights', value: 'industryInsights' },
                   { title: 'How We Work', value: 'howWeWork' },
                   { title: 'Testimonials', value: 'testimonials' },
                   { title: 'CTA Section', value: 'cta' },

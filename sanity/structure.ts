@@ -26,22 +26,28 @@ export const structure: StructureResolver = (S) =>
                 .title('3. Application Statistics')
                 .child(S.documentTypeList('applicationItem').title('Application Statistics')),
               S.listItem()
-                .title('4. How We Work Section')
+                .title('4. Industry Insights Section Settings')
+                .child(S.document().schemaType('industryInsightsSection').documentId('industryInsightsSection')),
+              S.listItem()
+                .title('5. Industry Insights Tabs')
+                .child(S.documentTypeList('industryInsightItem').title('Industry Insights Tabs')),
+              S.listItem()
+                .title('6. How We Work Section')
                 .child(S.document().schemaType('howWeWorkSection').documentId('howWeWorkSection')),
               S.listItem()
-                .title('5. Process Steps')
+                .title('7. Process Steps')
                 .child(S.documentTypeList('processStep').title('Process Steps')),
               S.listItem()
-                .title('6. Testimonials Section Settings')
+                .title('8. Testimonials Section Settings')
                 .child(S.document().schemaType('testimonialsSection').documentId('testimonialsSection')),
               S.listItem()
-                .title('7. Testimonials (Individual Reviews)')
+                .title('9. Testimonials (Individual Reviews)')
                 .child(S.documentTypeList('testimonial').title('Testimonials')),
               S.listItem()
-                .title('8. Gallery Section')
+                .title('10. Gallery Section')
                 .child(S.documentTypeList('gallerySection').title('Gallery Section')),
               S.listItem()
-                .title('9. CTA Section (Call to Action)')
+                .title('11. CTA Section (Call to Action)')
                 .child(S.documentTypeList('ctaSection').title('CTA Section')),
             ])
         ),

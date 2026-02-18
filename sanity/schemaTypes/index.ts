@@ -69,6 +69,9 @@ import aboutContactForm from './aboutContactForm'
 import seoObject from './seoObject'
 import applicationsSection from './applicationsSection'
 import applicationItem from './applicationItem'
+import industryInsightsSection from './industryInsightsSection'
+import industryInsightItem from './industryInsightItem'
+
 
 // Rich Content Blocks
 import {
@@ -140,6 +143,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     ctaSection,
     applicationsSection,
     applicationItem,
+    industryInsightsSection,
+    industryInsightItem,
 
     // About Page
     aboutTagline,

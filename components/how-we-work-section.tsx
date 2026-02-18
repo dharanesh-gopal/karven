@@ -67,24 +67,24 @@ export async function HowWeWorkSection() {
     }`,
     {},
     fallbackSectionData,
-    { tags: ['how-we-work'], revalidate: 300 }
+    { tags: ['how-we-work'], revalidate: 60 }
   )
 
   const data = await fetchSanityData<ProcessStep[]>(
     '*[_type == "processStep" && isActive == true] | order(stepNumber asc)',
     {},
     fallbackSteps,
-    { tags: ['process-steps'], revalidate: 300 }
+    { tags: ['process-steps'], revalidate: 60 }
   )
 
   const processSteps = (data && data.length > 0) ? data : fallbackSteps
-  
-  const imageSrc = sectionData?.image?.asset 
+
+  const imageSrc = sectionData?.image?.asset
     ? urlFor(sectionData.image.asset).width(800).url()
     : "/new k logo with services.png"
 
   return (
-    <HowWeWorkClient 
+    <HowWeWorkClient
       sectionTitle={sectionData?.sectionTitle || "How We Work"}
       mainHeading={sectionData?.mainHeading || "Intelligent Integration: From Insight to Impact"}
       description={sectionData?.description || "We follow a rigorous, data-driven methodology to ensure that every drone deployment is backed by powerful AI intelligence."}

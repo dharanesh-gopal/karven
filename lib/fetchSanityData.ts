@@ -39,7 +39,7 @@ export async function fetchSanityData<T>(
                 // Next.js cache options
                 next: {
                     tags: options?.tags,
-                    revalidate: options?.revalidate,
+                    revalidate: options?.revalidate !== undefined ? options.revalidate : 60,
                 },
             }
         )
