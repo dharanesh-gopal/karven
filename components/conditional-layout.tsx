@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 import { Navbar } from "./navbar"
 import { Footer } from "./footer"
 import NotificationButton from "./notification-button"
+import { Toaster } from "@/components/ui/toaster"
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -20,6 +21,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
       <main className="min-h-screen bg-white dark:bg-gray-950">{children}</main>
       <Footer />
       <NotificationButton />
+      <Toaster />
     </>
   )
 }

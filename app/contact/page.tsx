@@ -189,9 +189,9 @@ function ContactPageContent() {
     fullName: { label: 'Full Name', placeholder: 'Your Full Name', required: true },
     phone: { label: 'Phone Number', placeholder: '+91 98765 43210', required: true },
     email: { label: 'Email', placeholder: 'your.email@company.com', required: true },
-    enquiryType: { 
-      label: 'Enquiry About', 
-      placeholder: 'Select enquiry type', 
+    enquiryType: {
+      label: 'Enquiry About',
+      placeholder: 'Select enquiry type',
       required: true,
       options: [
         { label: 'Services', value: 'services' },
@@ -204,9 +204,9 @@ function ContactPageContent() {
         { label: 'General Inquiry', value: 'general' },
       ]
     },
-    country: { 
-      label: 'Country', 
-      placeholder: 'Select Country', 
+    country: {
+      label: 'Country',
+      placeholder: 'Select Country',
       required: true,
       options: ['India', 'USA', 'UK', 'Canada', 'Australia', 'Germany', 'Other']
     },
@@ -233,19 +233,39 @@ function ContactPageContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsLoading(false)
-    setIsSubmitted(true)
-    setFormData({
-      fullName: "",
-      phone: "",
-      email: "",
-      country: "",
-      city: "",
-      enquiryType: "",
-      message: "",
-    })
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          source: 'Main Contact Page'
+        })
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setIsSubmitted(true)
+        setFormData({
+          fullName: "",
+          phone: "",
+          email: "",
+          country: "",
+          city: "",
+          enquiryType: "",
+          message: "",
+        })
+      } else {
+        alert(result.message || "Failed to send message.")
+      }
+    } catch (error) {
+      console.error("Submission error:", error)
+      alert("Something went wrong. Please try again later.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -537,7 +557,7 @@ function ContactPageContent() {
               {/* Map Section */}
               <div className="rounded-2xl overflow-hidden shadow-lg h-full min-h-[400px] border border-gray-200 relative">
                 <LeafletMap locations={locations} />
-Data
+                Data
                 {/* Map Overlay Instruction */}
                 <div className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm text-gray-700 pointer-events-none">
                   Interact to explore locations

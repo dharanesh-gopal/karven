@@ -6,6 +6,7 @@ import { Target, Eye, Award, Users, Plane, Lightbulb, Shield, TrendingUp, Buildi
 import Image from "next/image"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
+import { useToast } from "@/hooks/use-toast"
 
 interface AboutTaglineData {
   mainText: string
@@ -254,6 +255,9 @@ export default function AboutPage() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isContactFormOpen, setIsContactFormOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [aboutFormData, setAboutFormData] = useState({ name: "", email: "", message: "" })
+  const { toast } = useToast()
   const heroRef = useInView()
   const purposeRef = useInView()
   const valuesRef = useInView()
@@ -667,8 +671,8 @@ export default function AboutPage() {
 
 
   // Get gallery images from Sanity or use fallback
-  const galleryImages = galleryData?.images?.length > 0
-    ? galleryData.images.map(img => ({
+  const galleryImages = (galleryData?.images && galleryData.images.length > 0)
+    ? galleryData.images.map((img: any) => ({
       src: img.asset ? urlFor(img.asset).url() : "",
       alt: img.alt || "KarVenSen team member",
       caption: img.caption
@@ -1751,11 +1755,47 @@ export default function AboutPage() {
 
             {/* Form Content - White Background */}
             <div className="bg-white rounded-t-3xl p-8">
-              <form onSubmit={(e) => {
+              <form onSubmit={async (e) => {
                 e.preventDefault()
-                // Handle form submission here
-                alert('Form submitted! We will get back to you soon.')
-                setIsContactFormOpen(false)
+                setIsSubmitting(true)
+
+                try {
+                  const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      fullName: aboutFormData.name,
+                      email: aboutFormData.email,
+                      message: aboutFormData.message,
+                      source: 'About Page Modal'
+                    })
+                  })
+
+                  const result = await response.json()
+
+                  if (result.success) {
+                    toast({
+                      title: "Success",
+                      description: "Form submitted! We will get back to you soon.",
+                    })
+                    setAboutFormData({ name: "", email: "", message: "" })
+                    setIsContactFormOpen(false)
+                  } else {
+                    toast({
+                      title: "Error",
+                      description: result.message || "Something went wrong.",
+                      variant: "destructive"
+                    })
+                  }
+                } catch (error) {
+                  toast({
+                    title: "Error",
+                    description: "Failed to send message.",
+                    variant: "destructive"
+                  })
+                } finally {
+                  setIsSubmitting(false)
+                }
               }}>
                 {/* Name Field */}
                 <div className="mb-4">
@@ -1763,7 +1803,9 @@ export default function AboutPage() {
                     type="text"
                     placeholder={contactFormData?.namePlaceholder || "* Name"}
                     required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50"
+                    value={aboutFormData.name}
+                    onChange={(e) => setAboutFormData({ ...aboutFormData, name: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50 text-gray-900"
                   />
                 </div>
 
@@ -1773,7 +1815,9 @@ export default function AboutPage() {
                     type="email"
                     placeholder={contactFormData?.emailPlaceholder || "* Email"}
                     required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50"
+                    value={aboutFormData.email}
+                    onChange={(e) => setAboutFormData({ ...aboutFormData, email: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50 text-gray-900"
                   />
                 </div>
 
@@ -1783,17 +1827,20 @@ export default function AboutPage() {
                     placeholder={contactFormData?.messagePlaceholder || "* Message"}
                     required
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent resize-none bg-gray-50"
+                    value={aboutFormData.message}
+                    onChange={(e) => setAboutFormData({ ...aboutFormData, message: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent resize-none bg-gray-50 text-gray-900"
                   />
                 </div>
 
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 mb-6"
+                  disabled={isSubmitting}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 mb-6 disabled:opacity-50"
                 >
-                  <Send className="h-5 w-5" />
-                  {contactFormData?.submitButtonText || "Send Message"}
+                  <Send className={`h-5 w-5 ${isSubmitting ? 'animate-pulse' : ''}`} />
+                  {isSubmitting ? "Sending..." : (contactFormData?.submitButtonText || "Send Message")}
                 </button>
 
                 {/* Footer Icons */}
