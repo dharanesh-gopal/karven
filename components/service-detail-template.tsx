@@ -23,9 +23,6 @@ export default function ServiceDetailPageTemplate({ slug }: ServiceDetailPagePro
       overview,
       solutions[] | order(order asc),
       keyFeatures,
-      useCases,
-      process,
-      technologies,
       cta,
       seo
     }`,
@@ -67,9 +64,6 @@ export default function ServiceDetailPageTemplate({ slug }: ServiceDetailPagePro
   const overview = serviceData.overview || {}
   const solutions = serviceData.solutions || []
   const keyFeatures = serviceData.keyFeatures || {}
-  const useCases = serviceData.useCases || {}
-  const process = serviceData.process || {}
-  const technologies = serviceData.technologies || {}
   const cta = serviceData.cta || {}
 
   return (
@@ -87,7 +81,7 @@ export default function ServiceDetailPageTemplate({ slug }: ServiceDetailPagePro
             />
           </div>
         )}
-        
+
         <div className="container mx-auto px-8 md:px-12 lg:px-16 xl:px-20 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             {hero.badge && (
@@ -179,36 +173,6 @@ export default function ServiceDetailPageTemplate({ slug }: ServiceDetailPagePro
                     <Icon className="h-10 w-10 text-blue-600 mb-4" />
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
                     <p className="text-gray-600">{feature.description}</p>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Process Section */}
-      {process.title && process.steps?.length > 0 && (
-        <section className="py-20">
-          <div className="container mx-auto px-8 md:px-12 lg:px-16 xl:px-20">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {process.title}
-              </h2>
-              {process.subtitle && (
-                <p className="text-lg text-gray-600">{process.subtitle}</p>
-              )}
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {process.steps.map((step: any, index: number) => {
-                const Icon = getIcon(step.icon)
-                return (
-                  <div key={index} className="text-center">
-                    <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                      {step.number}
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h3>
-                    <p className="text-sm text-gray-600">{step.description}</p>
                   </div>
                 )
               })}

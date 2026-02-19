@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import emailjs from "@emailjs/browser"
 
 interface ConsultationFormProps {
   isOpen: boolean
@@ -28,37 +27,33 @@ export function ConsultationForm({ isOpen, onClose }: ConsultationFormProps) {
     setSubmitMessage("")
 
     try {
-      // Send email using EmailJS
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "",
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "",
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone,
-          sector: formData.sector,
-          service: formData.service,
-          requirements: formData.requirements,
-          to_email: "info@karvensen.com", // Your email
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ""
-      )
-
-      setSubmitMessage("Thank you for your time! We'll get back to you soon.")
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        sector: "",
-        service: "",
-        requirements: "",
+      const response = await fetch('/api/consultation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       })
-      setTimeout(() => {
-        onClose()
-        setSubmitMessage("")
-      }, 3000)
+
+      const result = await response.json()
+
+      if (result.success) {
+        setSubmitMessage("Thank you for your time! We'll get back to you soon.")
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          sector: "",
+          service: "",
+          requirements: "",
+        })
+        setTimeout(() => {
+          onClose()
+          setSubmitMessage("")
+        }, 3000)
+      } else {
+        setSubmitMessage("Failed to send. Please try again.")
+      }
     } catch (error) {
-      console.error("EmailJS error:", error)
+      console.error("Submission error:", error)
       setSubmitMessage("Failed to send. Please try again.")
     } finally {
       setIsSubmitting(false)
@@ -202,11 +197,10 @@ export function ConsultationForm({ isOpen, onClose }: ConsultationFormProps) {
             {/* Success/Error Message */}
             {submitMessage && (
               <div
-                className={`text-center py-2 px-4 rounded-lg ${
-                  submitMessage.includes("Thank you")
+                className={`text-center py-2 px-4 rounded-lg ${submitMessage.includes("Thank you")
                     ? "bg-green-50 text-green-700"
                     : "bg-red-50 text-red-700"
-                }`}
+                  }`}
               >
                 {submitMessage}
               </div>

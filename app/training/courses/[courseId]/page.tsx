@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { CheckCircle, Clock, Calendar, Users, Award, ArrowLeft, DollarSign, X, Medal, Trophy, BadgeCheck, ShieldCheck, Star } from "lucide-react"
+import { CheckCircle, Clock, Calendar, Users, Award, ArrowLeft, IndianRupee, X, Medal, Trophy, BadgeCheck, ShieldCheck, Star } from "lucide-react"
 import { notFound } from "next/navigation"
 import { useSanityData } from "@/hooks/useSanityData"
 import { urlFor } from "@/sanity/lib/image"
@@ -339,7 +339,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   })
 
   // Fetch course data from CMS
-  const { data: courses, isLoading: sanityLoading } = useSanityData<any[]>(
+  const { data: courses, loading: sanityLoading } = useSanityData<any[]>(
     `*[_type == "trainingCourse" && slug.current == $slug && isActive == true]{
       title,
       subtitle,
@@ -369,11 +369,11 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
       enrollNowLink
     }`,
     { slug: courseId },
-    null
+    []
   )
 
   // Fetch enrollment page data from CMS
-  const { data: enrollPageData } = useSanityData<any[]>(
+  const { data: enrollPageData } = useSanityData<any>(
     `*[_type == "enrollPage" && isActive == true][0]{
       title,
       subtitle,
@@ -401,16 +401,16 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
       successNote
     }`,
     {},
-    null
+    undefined
   )
 
   // Get course data - prioritize Sanity data, then fallback to hardcoded
-  const course = (courses && courses.length > 0) 
+  const course: any = (courses && courses.length > 0)
     ? courses[0]
     : coursesData[courseId as keyof typeof coursesData]
 
   // Get enrollment page data with fallbacks
-  const enrollData = enrollPageData || {
+  const enrollData: any = enrollPageData || {
     title: 'Enroll in Course',
     subtitle: 'Fill out the form below to enroll in this course',
     fullNameLabel: 'Full Name',
@@ -443,10 +443,10 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
     messageLabel: 'Additional Information (Optional)',
     messagePlaceholder: 'Any special requirements or questions?',
     submitButtonText: 'Submit Enrollment',
-    sucessTitle: 'Enrollment Submitted!',
+    successTitle: 'Enrollment Submitted!',
     successMessage: 'Our team will contact you shortly with payment details and further instructions.',
     successNote: '* Our team will contact you with payment details and further instructions',
-  }
+  } as any
 
   // Get the certification icon component
   const CertificationIcon = course ? (iconMap[course.certificationIcon] || Award) : Award
@@ -480,49 +480,67 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    // For development: Just show success message
-    // Later you can integrate payment gateway here (Razorpay, Stripe, etc.)
-    console.log('Enrollment Data:', formData)
-    console.log('Course:', course.title)
-    console.log('Price:', course.price)
-    
-    setFormSubmitted(true)
-    
-    // Reset after 3 seconds
-    setTimeout(() => {
-      setShowEnrollForm(false)
-      setFormSubmitted(false)
-      setFormData({
-        fullName: '',
-        email: '',
-        phone: '',
-        address: '',
-        city: '',
-        state: '',
-        pincode: '',
-        education: '',
-        experience: '',
-        message: ''
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          courseTitle: course.title,
+          price: course.price
+        })
       })
-    }, 3000)
+
+      const result = await response.json()
+
+      if (result.success) {
+        setFormSubmitted(true)
+        // Reset form data after success
+        setTimeout(() => {
+          setShowEnrollForm(false)
+          setFormSubmitted(false)
+          setFormData({
+            fullName: '',
+            email: '',
+            phone: '',
+            address: '',
+            city: '',
+            state: '',
+            pincode: '',
+            education: '',
+            experience: '',
+            message: ''
+          })
+        }, 3000)
+      } else {
+        alert(result.message || "Failed to submit enrollment. Please try again.")
+      }
+    } catch (error) {
+      console.error("Submission error:", error)
+      alert("Something went wrong. Please try again later.")
+    } finally {
+      setIsLoading(false)
+    }
   }
+
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
         <div className="container mx-auto px-4">
-          <Link 
+          <Link
             href="/training"
             className="inline-flex items-center gap-2 text-white/90 hover:text-white mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Training
           </Link>
-          
+
           <div className="max-w-4xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               {course.title}
@@ -530,7 +548,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
             <p className="text-xl md:text-2xl text-blue-100 mb-6">
               {course.subtitle}
             </p>
-            
+
             <div className="flex flex-wrap gap-6 text-sm">
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5" />
@@ -545,7 +563,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                 <span>{course.level}</span>
               </div>
               <div className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5" />
+                <IndianRupee className="w-5 h-5" />
                 <span className="text-xl font-bold">{course.price}</span>
               </div>
             </div>
@@ -589,7 +607,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">{course.highlightsTitle || "What You'll Learn"}</h2>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {course.highlights.map((highlight, index) => (
+                  {course.highlights.map((highlight: string, index: number) => (
                     <div key={index} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
                       <span className="text-gray-700">{highlight}</span>
@@ -602,13 +620,13 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">{course.curriculumTitle || 'Course Curriculum'}</h2>
                 <div className="space-y-4">
-                  {course.curriculum.map((section, index) => (
+                  {course.curriculum.map((section: any, index: number) => (
                     <div key={index} className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         {section.session}: {section.title}
                       </h3>
                       <ul className="space-y-2">
-                        {section.topics.map((topic, topicIndex) => (
+                        {section.topics.map((topic: string, topicIndex: number) => (
                           <li key={topicIndex} className="flex items-start gap-2 text-gray-600">
                             <span className="text-blue-600 mt-1">•</span>
                             <span>{topic}</span>
@@ -624,7 +642,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">{course.prerequisitesTitle || 'Prerequisites'}</h2>
                 <ul className="space-y-2">
-                  {course.prerequisites.map((prerequisite, index) => (
+                  {course.prerequisites.map((prerequisite: string, index: number) => (
                     <li key={index} className="flex items-start gap-3 text-gray-700">
                       <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-1" />
                       <span>{prerequisite}</span>
@@ -643,7 +661,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                     <p className="text-gray-600 mb-2">Course Fee</p>
                     <p className="text-4xl font-bold text-gray-900">{course.price}</p>
                   </div>
-                  
+
                   <button
                     onClick={() => setShowEnrollForm(true)}
                     className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-lg font-semibold transition-colors"
@@ -656,7 +674,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                 <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                   <h3 className="font-semibold text-gray-900 mb-4">{course.includedTitle || "What's Included"}</h3>
                   <ul className="space-y-3">
-                    {course.included.map((item, index) => (
+                    {course.included.map((item: string, index: number) => (
                       <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
                         <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
                         <span>{item}</span>

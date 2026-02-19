@@ -116,9 +116,9 @@ export default defineType({
             { name: 'icon', type: 'string', title: 'Icon Name (Lucide)' },
             { name: 'title', type: 'string', title: 'Title' },
             { name: 'description', type: 'text', title: 'Description' },
-            { 
-              name: 'features', 
-              type: 'array', 
+            {
+              name: 'features',
+              type: 'array',
               of: [{ type: 'string' }],
               title: 'Feature List'
             },
@@ -144,94 +144,6 @@ export default defineType({
                 { name: 'icon', type: 'string', title: 'Icon Name' },
                 { name: 'title', type: 'string', title: 'Feature Title' },
                 { name: 'description', type: 'text', title: 'Description' }
-              ]
-            }
-          ]
-        }
-      ]
-    }),
-    defineField({
-      name: 'useCases',
-      title: 'Use Cases Section',
-      type: 'object',
-      fields: [
-        { name: 'title', type: 'string', title: 'Section Title' },
-        {
-          name: 'cases',
-          type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                { name: 'title', type: 'string', title: 'Use Case Title' },
-                { name: 'description', type: 'text', title: 'Description' },
-                { name: 'image', type: 'image', title: 'Image' }
-              ]
-            }
-          ]
-        }
-      ]
-    }),
-    defineField({
-      name: 'process',
-      title: 'Process/Workflow Section',
-      type: 'object',
-      fields: [
-        { name: 'title', type: 'string', title: 'Section Title' },
-        { name: 'subtitle', type: 'string', title: 'Subtitle' },
-        {
-          name: 'steps',
-          type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                { name: 'number', type: 'number', title: 'Step Number' },
-                { name: 'title', type: 'string', title: 'Step Title' },
-                { name: 'description', type: 'text', title: 'Description' },
-                { name: 'icon', type: 'string', title: 'Icon Name' }
-              ]
-            }
-          ]
-        }
-      ]
-    }),
-    defineField({
-      name: 'technologies',
-      title: 'Technologies Section',
-      type: 'object',
-      fields: [
-        { name: 'title', type: 'string', title: 'Section Title' },
-        {
-          name: 'items',
-          type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                { name: 'name', type: 'string', title: 'Technology Name' },
-                { name: 'description', type: 'text', title: 'Description' }
-              ]
-            }
-          ]
-        }
-      ]
-    }),
-    defineField({
-      name: 'crops',
-      title: 'Crops Section',
-      type: 'object',
-      fields: [
-        { name: 'title', type: 'string', title: 'Section Title' },
-        {
-          name: 'items',
-          type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                { name: 'name', type: 'string', title: 'Crop Name' },
-                { name: 'icon', type: 'string', title: 'Icon (Emoji or Lucide Name)' }
               ]
             }
           ]

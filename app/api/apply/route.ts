@@ -1,7 +1,4 @@
 import { NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
-
-const MAX_RESUME_BYTES = 5 * 1024 * 1024
 
 export async function POST(request: Request) {
   try {
@@ -16,61 +13,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Missing required fields.' }, { status: 400 })
     }
 
-    if (resume.size > MAX_RESUME_BYTES) {
-      return NextResponse.json({ success: false, message: 'Resume file is too large. Please upload under 5MB.' }, { status: 400 })
-    }
+    // Prepare FormData for SubmitBox
+    const submitboxData = new FormData()
+    submitboxData.append('firstName', firstName)
+    submitboxData.append('lastName', lastName)
+    submitboxData.append('email', email)
+    submitboxData.append('jobTitle', jobTitle)
+    submitboxData.append('resume', resume)
+    submitboxData.append('_subject', `New Application: ${jobTitle} - ${firstName} ${lastName}`)
 
-    const resumeBuffer = Buffer.from(await resume.arrayBuffer())
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
+    const response = await fetch('https://submitbox.app/api/f/d4a317f3-c4e7-4e06-a296-a7ef282f0458', {
+      method: "POST",
+      body: submitboxData,
     })
 
-    const mailOptionsHR = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
-      subject: `New Application: ${jobTitle} - ${firstName} ${lastName}`,
-      html: `
-        <h2>New Job Application</h2>
-        <p><strong>Role:</strong> ${jobTitle}</p>
-        <p><strong>Candidate:</strong> ${firstName} ${lastName}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p>The candidate's resume is attached.</p>
-      `,
-      attachments: [
-        {
-          filename: resume.name || 'resume',
-          content: resumeBuffer,
-          contentType: resume.type || 'application/octet-stream',
-        },
-      ],
+    if (!response.ok) {
+      throw new Error('Failed to submit to SubmitBox')
     }
 
-    const mailOptionsCandidate = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Application Received - KarVenSen',
-      html: `
-        <h2>Hi ${firstName},</h2>
-        <p>Thanks for applying to the <strong>${jobTitle}</strong> position at KarVenSen.</p>
-        <p>Our team is reviewing your profile and will reach out if there is a match.</p>
-        <br>
-        <p>Best,<br>KarVenSen Recruiting Team</p>
-      `,
-    }
-
-    await Promise.all([
-      transporter.sendMail(mailOptionsHR),
-      transporter.sendMail(mailOptionsCandidate),
-    ])
-
-    return NextResponse.json({ success: true, message: 'Email sent successfully' }, { status: 200 })
+    return NextResponse.json({ success: true, message: 'Application submitted successfully' }, { status: 200 })
   } catch (error) {
-    console.error('Email Error:', error)
-    return NextResponse.json({ success: false, message: 'Failed to send email' }, { status: 500 })
+    console.error('SubmitBox Error:', error)
+    return NextResponse.json({ success: false, message: 'Failed to submit application' }, { status: 500 })
   }
 }

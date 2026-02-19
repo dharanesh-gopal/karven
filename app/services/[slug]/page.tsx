@@ -27,7 +27,7 @@ export async function generateStaticParams() {
   const services = await client.fetch(
     `*[_type == "serviceDetailPage" && isActive == true]{ "slug": slug.current }`
   )
-  
+
   return services.map((service: any) => ({
     slug: service.slug,
   }))
@@ -97,32 +97,6 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           description
         }
       },
-      useCases{
-        title,
-        cases[]{
-          title,
-          description,
-          image
-        }
-      },
-      process{
-        title,
-        subtitle,
-        steps[]{
-          number,
-          title,
-          description,
-          icon
-        }
-      },
-      technologies{
-        title,
-        items[]{
-          name,
-          icon,
-          description
-        }
-      },
       cta{
         title,
         description,
@@ -165,24 +139,37 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   const colors = colorSchemes[service.category as keyof typeof colorSchemes] || colorSchemes.drone
   const HeroIcon = getIcon(service.icon || 'Camera')
 
-  const heroImage = service.hero?.backgroundImage
-    ? urlFor(service.hero.backgroundImage).width(1920).height(600).url()
-    : 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=1920&h=600&fit=crop'
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className={`relative py-20 bg-gradient-to-br ${colors.gradient} text-white overflow-hidden`}>
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="absolute top-10 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-10 right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float-delayed" />
-        
+      <section className={`relative py-32 ${service.hero?.backgroundImage ? 'bg-slate-900' : `bg-gradient-to-br ${colors.gradient}`} text-white overflow-hidden flex items-center min-h-[60vh]`}>
+        {/* Background Image - Full Visibility */}
+        {service.hero?.backgroundImage ? (
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={urlFor(service.hero.backgroundImage).url()}
+              alt={service.hero.title || service.title}
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Subtle dark gradient overlay ONLY for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          </div>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:40px_40px] z-0" />
+            <div className="absolute top-10 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float z-0" />
+            <div className="absolute bottom-10 right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-float-delayed z-0" />
+          </>
+        )}
+
         <div className="container mx-auto px-4 relative z-10">
           <Link href="/services" className={`inline-flex items-center gap-2 text-white/80 hover:text-white mb-8 transition-colors group`}>
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Services
           </Link>
-          
+
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-3 mb-6">
               {service.hero?.badge && (
