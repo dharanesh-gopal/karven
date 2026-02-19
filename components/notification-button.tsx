@@ -16,7 +16,7 @@ interface Notification {
 export default function NotificationButton() {
   const [isOpen, setIsOpen] = useState(false)
   const [readNotifications, setReadNotifications] = useState<Set<string>>(new Set())
-  
+
   // Fetch notifications from Sanity
   const { data: sanityNotifications } = useSanityData<Notification[]>(
     `*[_type == "notification" && isActive == true] | order(publishedAt desc) {
@@ -105,7 +105,7 @@ export default function NotificationButton() {
       {/* Notification Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-24 right-8 z-50 bg-gradient-to-br from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 group"
+        className="fixed top-32 right-8 z-50 bg-gradient-to-br from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 group"
         aria-label="Notifications"
       >
         <Bell className="w-6 h-6 group-hover:animate-pulse" />
@@ -163,21 +163,20 @@ export default function NotificationButton() {
                   {notifications.map((notification) => (
                     <div
                       key={notification._id}
-                      className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer ${
-                        notification.isNew ? 'bg-blue-50/50' : ''
-                      }`}
+                      className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer ${notification.isNew ? 'bg-blue-50/50' : ''
+                        }`}
                       onClick={() => markAsRead(notification._id)}
                     >
                       <div className="flex items-start gap-3">
                         {/* Type Indicator */}
                         <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${getTypeColor(notification.type)}`} />
-                        
+
                         <div className="flex-1 min-w-0">
                           {/* Type Badge */}
                           <span className={`inline-block px-2 py-1 rounded text-xs font-semibold mb-2 ${getTypeColor(notification.type)} text-white`}>
                             {getTypeLabel(notification.type)}
                           </span>
-                          
+
                           {/* Title */}
                           <h4 className="font-semibold text-gray-900 mb-1 flex items-center gap-2">
                             {notification.title}
@@ -185,12 +184,12 @@ export default function NotificationButton() {
                               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                             )}
                           </h4>
-                          
+
                           {/* Message */}
                           <p className="text-sm text-gray-600 mb-2">
                             {notification.message}
                           </p>
-                          
+
                           {/* Timestamp */}
                           <p className="text-xs text-gray-400">
                             {formatTimestamp(notification.publishedAt)}

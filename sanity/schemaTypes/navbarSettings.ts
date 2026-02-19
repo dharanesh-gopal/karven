@@ -39,6 +39,30 @@ export default defineType({
       ],
       validation: (Rule) => Rule.required()
     }),
+    defineField({
+      name: 'menuItems',
+      title: 'Menu Items',
+      type: 'array',
+      description: 'Navigation links for the navbar',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'label', type: 'string', title: 'Label' },
+            { name: 'href', type: 'string', title: 'URL Path' }
+          ]
+        }
+      ],
+      initialValue: [
+        { label: 'Home', href: '/' },
+        { label: 'About', href: '/about' },
+        { label: 'Services', href: '/services' },
+        { label: 'Training', href: '/training' },
+        { label: 'Blog', href: '/blog' },
+        { label: 'Careers', href: '/careers' },
+        { label: 'Contact', href: '/contact' }
+      ]
+    }),
   ],
   preview: {
     select: {

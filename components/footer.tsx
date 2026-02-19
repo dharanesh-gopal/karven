@@ -40,8 +40,8 @@ interface FooterData {
 const fallbackFooterData: FooterData = {
   companyName: "KarVenSen",
   tagline: "AI-Driven Drone & Software Solutions",
-  phone: "+91 123 456 7890",
-  email: "info@karvensen.com",
+  phone: "+91 9655451302",
+  email: "hr@karvensen.com",
   socialMedia: {
     twitter: "#",
     linkedin: "#",
@@ -59,14 +59,12 @@ const fallbackFooterData: FooterData = {
     services: [
       { label: "AI Software Development", href: "/services/ai-software-development" },
       { label: "Drone Services", href: "/services" },
-      { label: "Cloud Services", href: "/services/cloud-services" },
       { label: "Educational Programs", href: "/services/educational-programs" },
-      { label: "Data & GIS Solutions", href: "/services/data-gis-digital-solutions" },
       { label: "Learning Management Systems", href: "/services/learning-management-systems" },
     ],
     training: [
       { label: "Training Programs", href: "/training" },
-      { label: "View All Courses", href: "/training/courses" },
+      { label: "View All Courses", href: "/training" },
     ],
     resources: [
       { label: "Blog", href: "/blog" },
@@ -76,6 +74,14 @@ const fallbackFooterData: FooterData = {
       { label: "About Us", href: "/about" },
       { label: "Careers", href: "/careers" },
     ],
+  },
+  legalLinks: {
+    contactUsText: "Contact Us",
+    contactUsUrl: "/contact",
+    termsText: "Terms of Service",
+    termsUrl: "/terms",
+    privacyText: "Privacy Policy",
+    privacyUrl: "/privacy",
   }
 }
 
@@ -225,8 +231,11 @@ export function Footer() {
                   <Link href="https://karventech.com" className="hover:text-gray-900 transition-colors">
                     KarvenTech Solutions
                   </Link>
-                  <Link href="https://vensentech.com" className="hover:text-gray-900 transition-colors">
-                    VenSen Innovations
+                  <Link href="#" className="hover:text-gray-900 transition-colors">
+                    Murgdur
+                  </Link>
+                  <Link href="#" className="hover:text-gray-900 transition-colors">
+                    Veldursen
                   </Link>
                 </>
               )}

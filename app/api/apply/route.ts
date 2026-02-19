@@ -20,9 +20,10 @@ export async function POST(request: Request) {
     submitboxData.append('email', email)
     submitboxData.append('jobTitle', jobTitle)
     submitboxData.append('resume', resume)
+    submitboxData.append('source', 'Careers Application')
     submitboxData.append('_subject', `New Application: ${jobTitle} - ${firstName} ${lastName}`)
 
-    const response = await fetch('https://submitbox.app/api/f/d4a317f3-c4e7-4e06-a296-a7ef282f0458', {
+    const response = await fetch('https://submitbox.app/api/f/6cec5b09-8e63-4f71-906c-948317a7ac97', {
       method: "POST",
       body: submitboxData,
     })

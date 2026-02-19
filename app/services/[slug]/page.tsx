@@ -297,8 +297,11 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               {service.cta.description || 'Contact us today to learn more about how we can help.'}
             </p>
             <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
-              <Link href={service.cta.buttonLink || '/contact'}>
-                {service.cta.buttonText || 'Contact Us'}
+              <Link href={service.cta?.buttonLink || `/contact?enquiry=${service.category === 'drone' ? 'drone-services' :
+                  service.category === 'software' ? 'software-development' :
+                    service.category === 'education' ? 'training' : 'services'
+                }`}>
+                {service.cta?.buttonText || 'Contact Us'}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

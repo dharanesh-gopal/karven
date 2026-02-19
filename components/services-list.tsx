@@ -108,7 +108,16 @@ export function ServicesList({ services, colorScheme, categorySlugMap }: Service
       {services.map((service) => {
         const ServiceIcon = getServiceIcon(service.icon)
         const serviceId = typeof service.slug === 'string' ? service.slug : service.slug?.current
-        const serviceLink = categorySlugMap?.[serviceId || ''] || `/contact`
+
+        // Define enquiry mapping based on category
+        const categoryEnquiryMap: Record<string, string> = {
+          'drone': 'drone-services',
+          'software': 'software-development',
+          'education': 'training'
+        }
+
+        const enquiryParam = categoryEnquiryMap[service.category] || 'services'
+        const serviceLink = categorySlugMap?.[serviceId || ''] || `/contact?enquiry=${enquiryParam}`
 
         return (
           <Link
@@ -120,20 +129,18 @@ export function ServicesList({ services, colorScheme, categorySlugMap }: Service
           >
             <div className="flex-shrink-0 mt-1">
               <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3 ${
-                  selectedService === serviceId
+                className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3 ${selectedService === serviceId
                     ? `${color.bg} text-white shadow-lg ${color.shadow}`
                     : `bg-gray-100 text-gray-600 ${color.hoverBg} group-hover:text-white group-hover:shadow-lg ${color.hoverShadow}`
-                }`}
+                  }`}
               >
                 <ServiceIcon className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
               </div>
             </div>
             <div className="flex-1">
               <h3
-                className={`text-lg font-semibold mb-1 transition-colors duration-300 flex items-center gap-2 ${
-                  selectedService === serviceId ? color.text : `text-gray-900 ${color.hoverText}`
-                }`}
+                className={`text-lg font-semibold mb-1 transition-colors duration-300 flex items-center gap-2 ${selectedService === serviceId ? color.text : `text-gray-900 ${color.hoverText}`
+                  }`}
               >
                 {service.title}
                 <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300" />

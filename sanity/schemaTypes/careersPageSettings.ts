@@ -1,21 +1,20 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export default defineType({
   name: 'careersPageSettings',
   title: 'Careers Page - All Sections',
   type: 'document',
   groups: [
-    {name: 'hero', title: '1. Hero Section'},
-    {name: 'values', title: '2. Where Technology Meets'},
-    {name: 'opportunities', title: '3. Career Opportunities'},
-    {name: 'jobs', title: '4. Job Openings'},
-    {name: 'companyValues', title: '5. Company Values'},
-    {name: 'benefits', title: '6. Employee Benefits'},
-    {name: 'culture', title: '7. Culture Gallery'},
-    {name: 'hiring', title: '8. Hiring Process'},
-    {name: 'testimonials', title: '9. Employee Testimonials'},
-    {name: 'cta', title: '10. Talent Network CTA'},
-    {name: 'seo', title: 'SEO & Settings'},
+    { name: 'hero', title: '1. Hero Section' },
+    { name: 'values', title: '2. Where Technology Meets' },
+    { name: 'opportunities', title: '3. Career Opportunities' },
+    { name: 'jobs', title: '4. Job Openings' },
+    { name: 'companyValues', title: '5. Company Values' },
+    { name: 'benefits', title: '6. Employee Benefits' },
+    { name: 'culture', title: '7. Culture Gallery' },
+    { name: 'hiring', title: '8. Hiring Process' },
+    { name: 'testimonials', title: '9. Employee Testimonials' },
+    { name: 'seo', title: 'SEO & Settings' },
   ],
   fields: [
     // ============================================
@@ -26,7 +25,7 @@ export default defineType({
       title: 'Hero Section - Top Banner',
       type: 'object',
       group: 'hero',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'badge',
@@ -70,7 +69,7 @@ export default defineType({
           name: 'backgroundImage',
           title: 'Background Image',
           type: 'image',
-          options: {hotspot: true},
+          options: { hotspot: true },
         },
       ],
     }),
@@ -83,7 +82,7 @@ export default defineType({
       title: 'Where Technology Meets Section',
       type: 'object',
       group: 'values',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'title',
@@ -109,13 +108,13 @@ export default defineType({
           name: 'decorativeImage1',
           title: 'Decorative Image 1 (Large)',
           type: 'image',
-          options: {hotspot: true},
+          options: { hotspot: true },
         },
         {
           name: 'decorativeImage2',
           title: 'Decorative Image 2 (Small)',
           type: 'image',
-          options: {hotspot: true},
+          options: { hotspot: true },
         },
       ],
     }),
@@ -128,7 +127,7 @@ export default defineType({
       title: 'Career Opportunities Section',
       type: 'object',
       group: 'opportunities',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'opportunities',
@@ -162,10 +161,10 @@ export default defineType({
                   type: 'string',
                   options: {
                     list: [
-                      {title: 'Blue', value: 'blue'},
-                      {title: 'Green', value: 'green'},
-                      {title: 'Red', value: 'red'},
-                      {title: 'Purple', value: 'purple'},
+                      { title: 'Blue', value: 'blue' },
+                      { title: 'Green', value: 'green' },
+                      { title: 'Red', value: 'red' },
+                      { title: 'Purple', value: 'purple' },
                     ],
                   },
                   initialValue: 'blue',
@@ -197,7 +196,7 @@ export default defineType({
       title: 'Job Openings Section',
       type: 'object',
       group: 'jobs',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'badge',
@@ -250,10 +249,10 @@ export default defineType({
                   type: 'string',
                   options: {
                     list: [
-                      {title: 'Engineering', value: 'Engineering'},
-                      {title: 'Flight Operations', value: 'Flight Operations'},
-                      {title: 'Product', value: 'Product'},
-                      {title: 'Business', value: 'Business'},
+                      { title: 'Engineering', value: 'Engineering' },
+                      { title: 'Flight Operations', value: 'Flight Operations' },
+                      { title: 'Product', value: 'Product' },
+                      { title: 'Business', value: 'Business' },
                     ],
                   },
                   validation: (Rule) => Rule.required(),
@@ -270,12 +269,12 @@ export default defineType({
                   type: 'string',
                   options: {
                     list: [
-                      {title: 'Full-time', value: 'Full-time'},
-                      {title: 'Part-time', value: 'Part-time'},
-                      {title: 'Contract', value: 'Contract'},
-                      {title: 'On-site', value: 'On-site'},
-                      {title: 'Remote', value: 'Remote'},
-                      {title: 'Hybrid', value: 'Hybrid'},
+                      { title: 'Full-time', value: 'Full-time' },
+                      { title: 'Part-time', value: 'Part-time' },
+                      { title: 'Contract', value: 'Contract' },
+                      { title: 'On-site', value: 'On-site' },
+                      { title: 'Remote', value: 'Remote' },
+                      { title: 'Hybrid', value: 'Hybrid' },
                     ],
                   },
                 },
@@ -302,14 +301,14 @@ export default defineType({
                   name: 'responsibilities',
                   title: 'Key Responsibilities',
                   type: 'array',
-                  of: [{type: 'string'}],
+                  of: [{ type: 'string' }],
                   validation: (Rule) => Rule.required(),
                 },
                 {
                   name: 'requirements',
                   title: 'Requirements',
                   type: 'array',
-                  of: [{type: 'string'}],
+                  of: [{ type: 'string' }],
                   validation: (Rule) => Rule.required(),
                 },
                 {
@@ -328,7 +327,7 @@ export default defineType({
                   location: 'location',
                   isActive: 'isActive',
                 },
-                prepare({title, department, location, isActive}) {
+                prepare({ title, department, location, isActive }) {
                   return {
                     title,
                     subtitle: `${department} • ${location} ${!isActive ? '(Inactive)' : ''}`,
@@ -349,7 +348,7 @@ export default defineType({
       title: 'Company Values Section',
       type: 'object',
       group: 'companyValues',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'values',
@@ -404,7 +403,7 @@ export default defineType({
       title: 'Employee Benefits Section',
       type: 'object',
       group: 'benefits',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'title',
@@ -458,9 +457,9 @@ export default defineType({
                   type: 'string',
                   options: {
                     list: [
-                      {title: 'Engineering Ecosystem', value: 'Engineering Ecosystem'},
-                      {title: 'Compensation & IP', value: 'Compensation & IP'},
-                      {title: 'Global Lifestyle', value: 'Global Lifestyle'},
+                      { title: 'Engineering Ecosystem', value: 'Engineering Ecosystem' },
+                      { title: 'Compensation & IP', value: 'Compensation & IP' },
+                      { title: 'Global Lifestyle', value: 'Global Lifestyle' },
                     ],
                   },
                   validation: (Rule) => Rule.required(),
@@ -531,15 +530,15 @@ export default defineType({
                         {
                           type: 'object',
                           fields: [
-                            {name: 'label', title: 'Label', type: 'string'},
-                            {name: 'value', title: 'Value', type: 'text', rows: 2},
+                            { name: 'label', title: 'Label', type: 'string' },
+                            { name: 'value', title: 'Value', type: 'text', rows: 2 },
                           ],
                         },
                       ],
                     },
                   ],
                   preview: {
-                    select: {title: 'title'},
+                    select: { title: 'title' },
                   },
                 },
               ],
@@ -563,7 +562,7 @@ export default defineType({
       title: 'Culture Gallery Section',
       type: 'object',
       group: 'culture',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'cultureImages',
@@ -585,10 +584,10 @@ export default defineType({
                   type: 'string',
                   options: {
                     list: [
-                      {title: 'Teamwork', value: 'Teamwork'},
-                      {title: 'Innovation', value: 'Innovation'},
-                      {title: 'Learning', value: 'Learning'},
-                      {title: 'Office', value: 'Office'},
+                      { title: 'Teamwork', value: 'Teamwork' },
+                      { title: 'Innovation', value: 'Innovation' },
+                      { title: 'Learning', value: 'Learning' },
+                      { title: 'Office', value: 'Office' },
                     ],
                   },
                 },
@@ -596,7 +595,7 @@ export default defineType({
                   name: 'image',
                   title: 'Image',
                   type: 'image',
-                  options: {hotspot: true},
+                  options: { hotspot: true },
                   validation: (Rule) => Rule.required(),
                 },
                 {
@@ -627,7 +626,7 @@ export default defineType({
       title: 'Hiring Process Section',
       type: 'object',
       group: 'hiring',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'title',
@@ -694,7 +693,7 @@ export default defineType({
       title: 'Employee Testimonials Section',
       type: 'object',
       group: 'testimonials',
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
       fields: [
         {
           name: 'title',
@@ -739,7 +738,7 @@ export default defineType({
                   name: 'image',
                   title: 'Profile Image',
                   type: 'image',
-                  options: {hotspot: true},
+                  options: { hotspot: true },
                 },
                 {
                   name: 'isActive',
@@ -761,38 +760,6 @@ export default defineType({
       ],
     }),
 
-    // ============================================
-    // 10. TALENT NETWORK CTA SECTION
-    // ============================================
-    defineField({
-      name: 'talentNetworkCTA',
-      title: 'Talent Network CTA Section',
-      type: 'object',
-      group: 'cta',
-      options: {collapsible: true, collapsed: false},
-      fields: [
-        {
-          name: 'title',
-          title: 'CTA Title',
-          type: 'string',
-          initialValue: "Don't see your perfect role?",
-        },
-        {
-          name: 'description',
-          title: 'Description',
-          type: 'text',
-          rows: 2,
-          initialValue:
-            "We are always looking for exceptional talent. Send us your resume and we'll keep you on our radar for future missions.",
-        },
-        {
-          name: 'buttonText',
-          title: 'Button Text',
-          type: 'string',
-          initialValue: 'Join Talent Network',
-        },
-      ],
-    }),
 
     // ============================================
     // SEO & SETTINGS

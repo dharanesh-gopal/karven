@@ -7,8 +7,7 @@ import {
   Heart, Coffee, Globe, ChevronLeft, ChevronRight,
   Quote, Star, Cpu, CheckCircle, FileText, UserCheck,
   Terminal, ShieldCheck, Briefcase, TrendingUp, Sparkles,
-  Wallet, Clock, Laptop, Baby, Monitor, Lightbulb, X, Send,
-  Loader2, CheckCircle2 // Added these for the dynamic modal
+  Wallet, Clock, Laptop, Baby, Monitor, Lightbulb, X
 } from "lucide-react"
 import { JOBS_DATA } from "./data"
 import { useSanityData } from "@/hooks/useSanityData"
@@ -267,144 +266,6 @@ const BenefitsModal = ({ isOpen, onClose, policyData }: { isOpen: boolean; onClo
   );
 };
 
-// 2. TALENT NETWORK MODAL (UPDATED - DYNAMIC)
-// --- UPDATED: TALENT NETWORK MODAL (Connected to Backend) ---
-const TalentNetworkModal = ({ isOpen, onClose, modalData }: { isOpen: boolean; onClose: () => void; modalData: any }) => {
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-
-  // CMS data with fallbacks
-  const modalTitle = status === "success"
-    ? (modalData?.successTitle || "Application Received")
-    : (modalData?.modalTitle || "Join Talent Network");
-  const modalSubtitle = status === "success"
-    ? (modalData?.successSubtitle || "Welcome to the fleet. Check your inbox.")
-    : (modalData?.modalSubtitle || "Leave your details and we will contact you for future roles.");
-  const successConfirmation = modalData?.successConfirmation || "You're on the list!";
-  const successDescription = modalData?.successDescription || "We've sent a confirmation email to your inbox.";
-  const submitText = modalData?.submitButtonText || "Join Network";
-  const submittingText = modalData?.submittingText || "Sending...";
-  const errorText = modalData?.errorMessage || "Something went wrong. Please try again.";
-  const closeText = modalData?.closeButtonText || "Close Window";
-
-  // Reset state when modal is closed/opened
-  useEffect(() => {
-    if (isOpen) setStatus("idle");
-  }, [isOpen]);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus("submitting");
-
-    const formData = new FormData(e.currentTarget);
-
-    try {
-      // Call the API we created in Step 1
-      const response = await fetch('/api/talent', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        setStatus("success");
-      } else {
-        setStatus("error");
-      }
-    } catch (error) {
-      setStatus("error");
-    }
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
-      ></div>
-
-      <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden border border-slate-200">
-
-        {/* Header */}
-        <div className="bg-slate-900 p-8 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/20 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-          <div className="relative z-10">
-            <h2 className="text-2xl font-bold tracking-tight">
-              {modalTitle}
-            </h2>
-            <p className="text-slate-400 text-sm mt-2">
-              {modalSubtitle}
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors cursor-pointer z-50"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div className="p-8 bg-white min-h-[340px] flex items-center justify-center">
-
-          {status === "success" ? (
-            <div className="text-center w-full animate-in fade-in zoom-in duration-500">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle2 className="w-10 h-10 text-green-600" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">{successConfirmation}</h3>
-              <p className="text-slate-500 mb-8">{successDescription}</p>
-              <button onClick={onClose} className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all">
-                {closeText}
-              </button>
-            </div>
-          ) : (
-            <form className="space-y-5 w-full" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-2 gap-5">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">First Name</label>
-                  <input name="firstName" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition-all" placeholder="Jane" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Last Name</label>
-                  <input name="lastName" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition-all" placeholder="Doe" />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
-                <input name="email" required type="email" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition-all" placeholder="jane@example.com" />
-              </div>
-
-              {status === "error" && (
-                <p className="text-red-500 text-sm text-center">{errorText}</p>
-              )}
-
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  className="w-full py-4 bg-sky-600 text-white rounded-xl font-bold hover:bg-sky-700 transition-all shadow-lg shadow-sky-200 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {status === "submitting" ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      {submittingText}
-                    </>
-                  ) : (
-                    <>
-                      {submitText} <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // --- 4. SUB-COMPONENTS (IN-PAGE) ---
 
@@ -589,7 +450,6 @@ const HeroSection = ({ cultureData, heroData }: { cultureData: any[]; heroData: 
 export default function CareersPage() {
   const [activeTab, setActiveTab] = useState("Engineering Ecosystem");
   const [isPolicyModalOpen, setIsPolicyModalOpen] = useState(false);
-  const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
 
   // Fetch all careers page data from unified schema
   const { data: careersData } = useSanityData<any>(
@@ -606,8 +466,7 @@ export default function CareersPage() {
       benefitsSection,
       cultureSection,
       hiringProcessSection,
-      testimonialsSection,
-      talentNetworkCTA
+      testimonialsSection
     }`,
     {},
     null
@@ -662,15 +521,15 @@ export default function CareersPage() {
     ? cmsSteps.map((s: any) => ({ ...s, desc: s.description, icon: getIconComponent(s.icon) }))
     : HIRING_STEPS
   const TESTIMONIALS_DATA = (cmsTestimonials && cmsTestimonials.length > 0)
-    ? cmsTestimonials.map(t => ({ ...t, image: (t.image && typeof t.image === 'object') ? urlFor(t.image).url() : (t.image || TESTIMONIALS.find(ft => ft.name === t.name)?.image) }))
+    ? cmsTestimonials.map((t: any) => ({ ...t, image: (t.image && typeof t.image === 'object') ? urlFor(t.image).url() : (t.image || TESTIMONIALS.find((ft: any) => ft.name === t.name)?.image) }))
     : TESTIMONIALS
   const CULTURE_DATA = (cmsCulture && cmsCulture.length > 0)
-    ? cmsCulture.map(c => ({ ...c, url: (c.image && typeof c.image === 'object') ? urlFor(c.image).url() : (c.url || CULTURE_IMAGES.find(fc => fc.title === c.title)?.url) }))
+    ? cmsCulture.map((c: any) => ({ ...c, url: (c.image && typeof c.image === 'object') ? urlFor(c.image).url() : (c.url || CULTURE_IMAGES.find((fc: any) => fc.title === c.title)?.url) }))
     : CULTURE_IMAGES
 
   // Group benefits by category
   const BENEFITS_BY_CATEGORY = (cmsBenefits && cmsBenefits.length > 0)
-    ? cmsBenefits.map((b: any) => ({ ...b, desc: b.description, icon: getIconComponent(b.icon) })).reduce((acc, benefit) => {
+    ? cmsBenefits.map((b: any) => ({ ...b, desc: b.description, icon: getIconComponent(b.icon) })).reduce((acc: any, benefit: any) => {
       if (!acc[benefit.category]) acc[benefit.category] = []
       acc[benefit.category].push(benefit)
       return acc
@@ -680,11 +539,9 @@ export default function CareersPage() {
   // Use CMS jobs or fallback
   const JOBS = (cmsJobs && cmsJobs.length > 0) ? cmsJobs : JOBS_DATA
 
-  // Placeholder for talent modal - can be integrated later
-  const cmsTalentModal = null
 
   // Group JOBS by Department for Section 6
-  const groupedJobs = JOBS.reduce((acc, job) => {
+  const groupedJobs = JOBS.reduce((acc: any, job: any) => {
     if (!acc[job.department]) acc[job.department] = [];
     acc[job.department].push(job);
     return acc;
@@ -823,10 +680,6 @@ export default function CareersPage() {
 
       {/* SECTION 6: JOB PORTAL (Categorized & Expanded) */}
       <section id="jobs" className="py-24 bg-slate-50 relative border-t border-slate-200">
-
-        {/* MODAL (Now controlled by state) */}
-        <TalentNetworkModal isOpen={isTalentModalOpen} onClose={() => setIsTalentModalOpen(false)} modalData={cmsTalentModal} />
-
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#475569 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
         <div className="container mx-auto px-6 max-w-6xl relative z-10">
           <div className="text-center mb-20">
@@ -869,25 +722,6 @@ export default function CareersPage() {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="mt-24 bg-slate-900 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-sky-600/20 rounded-full blur-[80px]"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-600/20 rounded-full blur-[80px]"></div>
-            <div className="relative z-10">
-              <h3 className="text-3xl font-bold text-white mb-4">
-                {cmsSectionHeaders?.talentNetworkCTA?.title || "Don't see your perfect role?"}
-              </h3>
-              <p className="text-slate-400 mb-8 max-w-xl mx-auto text-lg">
-                {cmsSectionHeaders?.talentNetworkCTA?.description || "We are always looking for exceptional talent. Send us your resume and we'll keep you on our radar for future missions."}
-              </p>
-
-              {/* BUTTON CONNECTED TO STATE */}
-              <button onClick={() => setIsTalentModalOpen(true)} className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold hover:bg-sky-50 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform duration-200">
-                {cmsSectionHeaders?.talentNetworkCTA?.buttonText || "Join Talent Network"}
-              </button>
-
-            </div>
           </div>
         </div>
       </section>

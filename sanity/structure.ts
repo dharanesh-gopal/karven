@@ -139,9 +139,6 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title('26. Group Companies')
                 .child(S.documentTypeList('groupCompany').title('Group Companies')),
-              S.listItem()
-                .title('27. Contact Form Settings (Floating Button)')
-                .child(S.document().schemaType('aboutContactForm').documentId('aboutContactForm')),
             ])
         ),
 

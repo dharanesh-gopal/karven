@@ -144,15 +144,7 @@ interface AboutVideoSectionData {
   videoUrl: string
 }
 
-interface AboutContactFormData {
-  headerText: string
-  namePlaceholder: string
-  emailPlaceholder: string
-  messagePlaceholder: string
-  submitButtonText: string
-  floatingButtonText: string
-  poweredByText: string
-}
+// Removed AboutContactFormData interface
 
 
 interface AboutJoinUsSectionData {
@@ -254,9 +246,6 @@ export default function AboutPage() {
   const [playAnimation, setPlayAnimation] = useState(false)
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isContactFormOpen, setIsContactFormOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [aboutFormData, setAboutFormData] = useState({ name: "", email: "", message: "" })
   const { toast } = useToast()
   const heroRef = useInView()
   const purposeRef = useInView()
@@ -624,27 +613,7 @@ export default function AboutPage() {
     }
   )
 
-  const { data: contactFormData } = useSanityData<AboutContactFormData>(
-    `*[_type == "aboutContactForm" && isActive == true][0]{
-      headerText,
-      namePlaceholder,
-      emailPlaceholder,
-      messagePlaceholder,
-      submitButtonText,
-      floatingButtonText,
-      poweredByText
-    }`,
-    {},
-    {
-      headerText: 'Please fill out the form below and we will get back to you as soon as possible.',
-      namePlaceholder: '* Name',
-      emailPlaceholder: '* Email',
-      messagePlaceholder: '* Message',
-      submitButtonText: 'Send Message',
-      floatingButtonText: 'Send message',
-      poweredByText: 'Powered by tawk.to'
-    }
-  )
+  // Removed contactFormData fetching
 
   const { data: leadershipMembers } = useSanityData<LeadershipMemberData[]>(
     `*[_type == "leadershipMember" && isActive == true] | order(order asc){
@@ -754,13 +723,6 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen pt-16">
-      {/* Fixed Send Message Button - Bottom Right */}
-      <button
-        onClick={() => setIsContactFormOpen(true)}
-        className="fixed bottom-8 right-8 z-50 bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-md shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-      >
-        {contactFormData?.floatingButtonText || "Send message"}
-      </button>
 
       {/* Tagline Section */}
       <section className="relative py-12 bg-gradient-to-r from-gray-900 to-gray-800 text-white overflow-hidden">
@@ -1735,149 +1697,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Contact Form Modal */}
-      {isContactFormOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-md bg-red-600 rounded-2xl shadow-2xl animate-scale-in overflow-hidden">
-            {/* Red Header */}
-            <div className="bg-red-600 text-white p-6 relative">
-              <button
-                onClick={() => setIsContactFormOpen(false)}
-                className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
-                aria-label="Close modal"
-              >
-                <X className="h-6 w-6" />
-              </button>
-              <p className="text-lg font-normal text-center pr-8">
-                {contactFormData?.headerText || "Please fill out the form below and we will get back to you as soon as possible."}
-              </p>
-            </div>
-
-            {/* Form Content - White Background */}
-            <div className="bg-white rounded-t-3xl p-8">
-              <form onSubmit={async (e) => {
-                e.preventDefault()
-                setIsSubmitting(true)
-
-                try {
-                  const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      fullName: aboutFormData.name,
-                      email: aboutFormData.email,
-                      message: aboutFormData.message,
-                      source: 'About Page Modal'
-                    })
-                  })
-
-                  const result = await response.json()
-
-                  if (result.success) {
-                    toast({
-                      title: "Success",
-                      description: "Form submitted! We will get back to you soon.",
-                    })
-                    setAboutFormData({ name: "", email: "", message: "" })
-                    setIsContactFormOpen(false)
-                  } else {
-                    toast({
-                      title: "Error",
-                      description: result.message || "Something went wrong.",
-                      variant: "destructive"
-                    })
-                  }
-                } catch (error) {
-                  toast({
-                    title: "Error",
-                    description: "Failed to send message.",
-                    variant: "destructive"
-                  })
-                } finally {
-                  setIsSubmitting(false)
-                }
-              }}>
-                {/* Name Field */}
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    placeholder={contactFormData?.namePlaceholder || "* Name"}
-                    required
-                    value={aboutFormData.name}
-                    onChange={(e) => setAboutFormData({ ...aboutFormData, name: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50 text-gray-900"
-                  />
-                </div>
-
-                {/* Email Field */}
-                <div className="mb-4">
-                  <input
-                    type="email"
-                    placeholder={contactFormData?.emailPlaceholder || "* Email"}
-                    required
-                    value={aboutFormData.email}
-                    onChange={(e) => setAboutFormData({ ...aboutFormData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent bg-gray-50 text-gray-900"
-                  />
-                </div>
-
-                {/* Message Field */}
-                <div className="mb-6">
-                  <textarea
-                    placeholder={contactFormData?.messagePlaceholder || "* Message"}
-                    required
-                    rows={4}
-                    value={aboutFormData.message}
-                    onChange={(e) => setAboutFormData({ ...aboutFormData, message: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent resize-none bg-gray-50 text-gray-900"
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 mb-6 disabled:opacity-50"
-                >
-                  <Send className={`h-5 w-5 ${isSubmitting ? 'animate-pulse' : ''}`} />
-                  {isSubmitting ? "Sending..." : (contactFormData?.submitButtonText || "Send Message")}
-                </button>
-
-                {/* Footer Icons */}
-                <div className="flex items-center justify-center gap-8 mb-4">
-                  <button
-                    type="button"
-                    className="text-red-600 hover:text-red-700 transition-colors"
-                    aria-label="Home"
-                  >
-                    <Home className="h-6 w-6" />
-                  </button>
-                  <button
-                    type="button"
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
-                    aria-label="Messages"
-                  >
-                    <MessageCircle className="h-6 w-6" />
-                  </button>
-                </div>
-
-                {/* Powered by tawk.to */}
-                <div className="text-center">
-                  <a
-                    href="https://www.tawk.to"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-                  >
-                    <span className="text-green-600">🔒</span>
-                    <span>{contactFormData?.poweredByText || "Powered by tawk.to"}</span>
-                  </a>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Video Modal */}
       {isVideoPlaying && videoSection?.videoUrl && (

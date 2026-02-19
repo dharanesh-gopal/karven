@@ -57,6 +57,7 @@ export async function CTASection() {
       title={ctaData?.title || "Ready to Innovate with Karvensen?"}
       description={ctaData?.description || "Let's discuss how our AI-driven solutions and drone technology can transform your operations. Join the future of intelligent automation."}
       buttonText={ctaData?.buttonText || "Schedule a Consultation"}
+      buttonLink={ctaData?.buttonLink || "/contact"}
       videoUrl={videoUrl}
       imageUrl={imageUrl}
     />

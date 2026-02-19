@@ -182,9 +182,9 @@ function UpcomingProgramsGrid() {
                 <div className="absolute top-4 left-4">
                   <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold rounded-full">
                     {event.category === 'farmer' ? 'Farmer Training' :
-                     event.category === 'school' ? 'School Workshop' :
-                     event.category === 'professional' ? 'Professional Course' :
-                     event.category === 'online' ? 'Online Course' : event.category}
+                      event.category === 'school' ? 'School Workshop' :
+                        event.category === 'professional' ? 'Professional Course' :
+                          event.category === 'online' ? 'Online Course' : event.category}
                   </span>
                 </div>
               )}
@@ -196,23 +196,23 @@ function UpcomingProgramsGrid() {
                 <div className="absolute top-4 left-4">
                   <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold rounded-full">
                     {event.category === 'farmer' ? 'Farmer Training' :
-                     event.category === 'school' ? 'School Workshop' :
-                     event.category === 'professional' ? 'Professional Course' :
-                     event.category === 'online' ? 'Online Course' : event.category}
+                      event.category === 'school' ? 'School Workshop' :
+                        event.category === 'professional' ? 'Professional Course' :
+                          event.category === 'online' ? 'Online Course' : event.category}
                   </span>
                 </div>
               )}
             </div>
           )}
-          
+
           {/* Content */}
           <div className="p-6">
             <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-red-600 transition-colors">{event.title}</h3>
-            
+
             {event.description && (
               <p className="text-sm text-gray-600 mb-4 line-clamp-2">{event.description}</p>
             )}
-            
+
             <div className="space-y-2 mb-4">
               <div className="flex items-center gap-2 text-sm text-gray-700">
                 <MapPin className="h-4 w-4 text-gray-400" />
@@ -229,7 +229,7 @@ function UpcomingProgramsGrid() {
                 </div>
               )}
             </div>
-            
+
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="px-3 py-1 bg-red-50 text-red-700 text-xs font-medium rounded-full border border-red-200">
                 {event.spots}
@@ -240,7 +240,7 @@ function UpcomingProgramsGrid() {
                 </span>
               )}
             </div>
-            
+
             {event.registrationLink ? (
               <a
                 href={event.registrationLink}
@@ -267,9 +267,71 @@ function UpcomingProgramsGrid() {
   )
 }
 
+// Fallback Data definitions
+const fallbackFaqs: TrainingFaqData[] = [
+  {
+    question: "Do I need prior experience with drones?",
+    answer: "No prior experience required! Our programs are designed for beginners and cover everything from basics to advanced operations.",
+  },
+  {
+    question: "Are certifications provided?",
+    answer: "Yes, we provide DGCA-recognized certifications for pilot training programs and course completion certificates for all other programs.",
+  },
+  {
+    question: "Can schools book bulk workshops?",
+    answer: "Absolutely! We offer customized workshop packages for educational institutions. Contact us for group bookings and special pricing.",
+  },
+]
+
+const fallbackCourses: TrainingCourseData[] = [
+  {
+    title: "Course A | Small Class Drone Pilot Training",
+    subtitle: "Introduction to Drone Flying",
+    description: "A comprehensive program designed to offer a blend of theoretical education and hands-on practical experience.",
+    image: null,
+    duration: "8 Days",
+    slug: { current: "course-a" },
+  },
+  {
+    title: "Course B | Small and Medium Class Drone Training",
+    subtitle: "Mastery in Drone Flying",
+    description: "For those looking to master both small and medium drones, this course offers in-depth training in both theory and practice.",
+    image: null,
+    duration: "13 days",
+    slug: { current: "course-b" },
+  },
+  {
+    title: "Course C | Educational Drone Workshop",
+    subtitle: "STEM & Robotics for Students",
+    description: "Designed for schools and colleges, this workshop introduces students to drone technology, coding, and practical applications.",
+    image: null,
+    duration: "3-5 Days",
+    slug: { current: "course-c" },
+  },
+  {
+    title: "Course D | Agricultural Drone Operations",
+    subtitle: "Precision Agriculture Training",
+    description: "Specialized training for farmers and agriculture professionals on using drones for crop monitoring, spraying, and field analysis.",
+    image: null,
+    duration: "6 Days",
+    slug: { current: "course-d" },
+  },
+]
+
+const fallbackCareerOpportunities: CareerOpportunityData[] = [
+  { iconName: 'Users', iconColor: 'blue', title: 'Tailored Job Placement Support', description: 'Connect with top agricultural and tech companies actively hiring certified drone pilots and AI specialists.' },
+  { iconName: 'Award', iconColor: 'blue', title: 'Exclusive Drone Pilot Opportunities', description: 'Access to exclusive job openings in precision agriculture, infrastructure inspection, and aerial surveying.' },
+  { iconName: 'GraduationCap', iconColor: 'blue', title: 'Expert Mentorship Programs', description: 'Ongoing guidance from industry experts to help you launch your career or start your own drone business.' },
+]
+
 export default function TrainingPage() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [mounted, setMounted] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // CMS Data Hooks
   const { data: heroData } = useSanityData<TrainingHeroData>(
@@ -320,8 +382,10 @@ export default function TrainingPage() {
       answer
     }`,
     {},
-    []
+    fallbackFaqs
   )
+
+  const activeFaqs = (faqsData && faqsData.length > 0) ? faqsData : fallbackFaqs
 
   const { data: coursesData } = useSanityData<TrainingCourseData[]>(
     `*[_type == "trainingCourse" && isActive == true] | order(order asc){
@@ -333,8 +397,16 @@ export default function TrainingPage() {
       slug
     }`,
     {},
-    []
+    fallbackCourses
   )
+
+  // Use fallback courses if Sanity data is empty OR if courses don't have correct slugs
+  const validSlugs = ['course-a', 'course-b', 'course-c', 'course-d']
+  const hasValidCourses = coursesData &&
+    coursesData.length > 0 &&
+    coursesData.every(c => c.slug?.current && validSlugs.includes(c.slug.current))
+
+  const activeCourses = hasValidCourses ? coursesData : fallbackCourses
 
   // On-Field Action Media
   const { data: onFieldActionData } = useSanityData<OnFieldActionData[]>(
@@ -406,78 +478,8 @@ export default function TrainingPage() {
       "image": image.asset
     }`,
     {},
-    []
+    fallbackCareerOpportunities
   )
-  
-  // Fallback FAQs
-  const fallbackFaqs: TrainingFaqData[] = [
-    {
-      question: "Who can enroll in the training programs?",
-      answer: "Our programs are designed for various audiences - farmers for agriculture programs, students from class 8 onwards for school workshops, and graduates or working professionals for skill development courses. Each program has specific eligibility criteria mentioned in the details.",
-    },
-    {
-      question: "Are the certifications recognized?",
-      answer: "Yes, our certifications are industry-recognized. For drone pilot certification, we prepare candidates for DGCA (Directorate General of Civil Aviation) examinations. Our technical certifications are valued by employers in the IT industry.",
-    },
-    {
-      question: "Do you conduct programs at our location?",
-      answer: "We offer on-site training for farmer awareness programs and school workshops. For larger groups or organizations, we can customize programs and conduct them at your preferred location.",
-    },
-    {
-      question: "What is the cost of the programs?",
-      answer: "Program costs vary based on duration, content, and format. We also partner with government bodies and CSR initiatives to offer subsidized or free programs for certain communities. Contact us for detailed pricing.",
-    },
-    {
-      question: "Is financial assistance available?",
-      answer: "We work with various government schemes and NGOs to provide subsidized training for eligible participants. We also offer flexible payment options for our professional certification programs.",
-    },
-  ]
-
-  const activeFaqs = (faqsData && faqsData.length > 0) ? faqsData : fallbackFaqs
-
-  const fallbackCourses: TrainingCourseData[] = [
-    {
-      title: "Course A | Small Class Drone Pilot Training",
-      subtitle: "Introduction to Drone Flying",
-      description: "A comprehensive program designed to offer a blend of theoretical education and hands-on practical experience.",
-      image: null,
-      duration: "8 Days",
-      slug: { current: "course-a" },
-    },
-    {
-      title: "Course B | Small and Medium Class Drone Training",
-      subtitle: "Mastery in Drone Flying",
-      description: "For those looking to master both small and medium drones, this course offers in-depth training in both theory and practice.",
-      image: null,
-      duration: "13 days",
-      slug: { current: "course-b" },
-    },
-    {
-      title: "Course C | Educational Drone Workshop",
-      subtitle: "STEM & Robotics for Students",
-      description: "Designed for schools and colleges, this workshop introduces students to drone technology, coding, and practical applications.",
-      image: null,
-      duration: "3-5 Days",
-      slug: { current: "course-c" },
-    },
-    {
-      title: "Course D | Agricultural Drone Operations",
-      subtitle: "Precision Agriculture Training",
-      description: "Specialized training for farmers and agriculture professionals on using drones for crop monitoring, spraying, and field analysis.",
-      image: null,
-      duration: "6 Days",
-      slug: { current: "course-d" },
-    },
-  ]
-
-  // Use fallback courses if Sanity data is empty OR if courses don't have correct slugs
-  // Only accept courses with slugs matching: course-a, course-b, course-c, course-d
-  const validSlugs = ['course-a', 'course-b', 'course-c', 'course-d']
-  const hasValidCourses = coursesData && 
-    coursesData.length > 0 && 
-    coursesData.every(c => c.slug?.current && validSlugs.includes(c.slug.current))
-  
-  const activeCourses = hasValidCourses ? coursesData : fallbackCourses
 
   // Debug: Check what courses are being used
   useEffect(() => {
@@ -506,23 +508,23 @@ export default function TrainingPage() {
   ]
 
   // Transform Sanity data to match the expected format
-  const mediaItems = (onFieldActionData && onFieldActionData.length > 0) 
+  const mediaItems = (onFieldActionData && onFieldActionData.length > 0)
     ? onFieldActionData.map(item => ({
-        mediaType: item.mediaType,
-        image: item.image,
-        video: item.video,
-      }))
+      mediaType: item.mediaType,
+      image: item.image,
+      video: item.video,
+    }))
     : fallbackMediaItems
 
   // Fallback trusted partners
-  const fallbackPartners = [
-    { name: 'TCS' }, { name: 'Infosys' }, { name: 'Wipro' },
-    { name: 'Cognizant' }, { name: 'Tech Mahindra' }, { name: 'HCL Technologies' },
-    { name: 'Microsoft' }, { name: 'Google' }, { name: 'Amazon' }, { name: 'IBM' },
+  const fallbackPartners: TrustedPartnerData[] = [
+    { name: 'TCS', logo: null }, { name: 'Infosys', logo: null }, { name: 'Wipro', logo: null },
+    { name: 'Cognizant', logo: null }, { name: 'Tech Mahindra', logo: null }, { name: 'HCL Technologies', logo: null },
+    { name: 'Microsoft', logo: null }, { name: 'Google', logo: null }, { name: 'Amazon', logo: null }, { name: 'IBM', logo: null },
   ]
 
-  const trustedPartners = (trustedPartnersData && trustedPartnersData.length > 0) 
-    ? trustedPartnersData 
+  const trustedPartners = (trustedPartnersData && trustedPartnersData.length > 0)
+    ? trustedPartnersData
     : fallbackPartners
 
   // Fallback why learn items
@@ -551,13 +553,6 @@ export default function TrainingPage() {
   const whyTrainImage = whyTrainData?.sectionImage
   const setsApartImage = setsApartData?.sectionImage
 
-  // Fallback career opportunities
-  const fallbackCareerOpportunities = [
-    { iconName: 'Users', iconColor: 'blue', title: 'Tailored Job Placement Support', description: 'Connect with top agricultural and tech companies actively hiring certified drone pilots and AI specialists.' },
-    { iconName: 'Award', iconColor: 'blue', title: 'Exclusive Drone Pilot Opportunities', description: 'Access to exclusive job openings in precision agriculture, infrastructure inspection, and aerial surveying.' },
-    { iconName: 'GraduationCap', iconColor: 'blue', title: 'Expert Mentorship Programs', description: 'Ongoing guidance from industry experts to help you launch your career or start your own drone business.' },
-  ]
-
   const careerOpportunities = (careerOpportunitiesData && careerOpportunitiesData.length > 0)
     ? careerOpportunitiesData
     : fallbackCareerOpportunities
@@ -580,7 +575,7 @@ export default function TrainingPage() {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + mediaItems.length) % mediaItems.length)
   }
-// Auto-scroll animation for partners
+  // Auto-scroll animation for partners
   useEffect(() => {
     const scrollContainer = scrollRef.current
     if (!scrollContainer) return
@@ -592,7 +587,7 @@ export default function TrainingPage() {
       scrollPosition += 0.5
       if (scrollContainer) {
         scrollContainer.scrollLeft = scrollPosition
-        
+
         // Reset to start when reaching halfway (because we duplicated the logos)
         if (scrollPosition >= scrollContainer.scrollWidth / 2) {
           scrollPosition = 0
@@ -606,13 +601,13 @@ export default function TrainingPage() {
     return () => cancelAnimationFrame(animationId)
   }, [])
 
-  
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[90vh] flex items-center border-b border-gray-200">
         {/* Background Video */}
-        <video 
+        <video
           className="absolute inset-0 w-full h-full object-cover"
           autoPlay
           loop
@@ -621,10 +616,10 @@ export default function TrainingPage() {
         >
           <source src="/cenimatic montage.mp4" type="video/mp4" />
         </video>
-        
+
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/50"></div>
-        
+
         <div className="relative container mx-auto px-4 py-20 z-10">
           <div className="max-w-3xl mx-auto text-center">
             <div className="mb-4 inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
@@ -642,7 +637,7 @@ export default function TrainingPage() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">{pageSettings?.onFieldActionTitle || 'On-Field Action'}</h2>
-          
+
           <div className="max-w-5xl mx-auto">
             <div className="relative bg-white rounded-lg overflow-hidden shadow-xl">
               {/* Media Container */}
@@ -683,7 +678,7 @@ export default function TrainingPage() {
                     >
                       <ChevronLeft className="w-6 h-6" />
                     </button>
-                    
+
                     <button
                       onClick={nextSlide}
                       className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-800 text-white p-3 rounded-lg transition-colors"
@@ -702,9 +697,8 @@ export default function TrainingPage() {
                     <button
                       key={index}
                       onClick={() => setCurrentSlide(index)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        currentSlide === index ? 'bg-blue-600' : 'bg-gray-300'
-                      }`}
+                      className={`w-2 h-2 rounded-full transition-colors ${currentSlide === index ? 'bg-blue-600' : 'bg-gray-300'
+                        }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />
                   ))}
@@ -719,7 +713,7 @@ export default function TrainingPage() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">{pageSettings?.coursesTitle || 'Our Training Courses'}</h2>
-          
+
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
             {activeCourses.map((course, index) => (
               <div key={index} className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow">
@@ -735,9 +729,9 @@ export default function TrainingPage() {
                     <img
                       src={
                         index === 0 ? "/train-1.jpeg" :
-                        index === 1 ? "/train-2.jpeg" :
-                        index === 2 ? "/edu drone.png" :
-                        "/dron in agri land.png"
+                          index === 1 ? "/train-2.jpeg" :
+                            index === 2 ? "/edu drone.png" :
+                              "/dron in agri land.png"
                       }
                       alt={course.title}
                       className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
@@ -757,21 +751,21 @@ export default function TrainingPage() {
                       <span className="font-semibold">Duration:</span> {course.duration}
                     </p>
                     {course.slug?.current ? (
-                      <Link 
+                      <Link
                         href={`/training/courses/${course.slug.current}`}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
                       >
                         Learn More
                       </Link>
                     ) : course.detailsLink ? (
-                      <Link 
+                      <Link
                         href={course.detailsLink}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors"
                       >
                         Learn More
                       </Link>
                     ) : (
-                      <button 
+                      <button
                         disabled
                         className="bg-gray-400 text-white px-6 py-2 rounded-full text-sm font-medium cursor-not-allowed"
                         title="Course link not configured"
@@ -795,10 +789,10 @@ export default function TrainingPage() {
             <p className="text-gray-600 max-w-2xl mx-auto">{pageSettings?.trustedPartnersSubtitle || 'Our training programs are recognized and trusted by top companies and institutions across India'}</p>
           </div>
         </div>
-        
+
         {/* Full-width dark background container for logos */}
         <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 py-12 overflow-hidden">
-          <div 
+          <div
             ref={scrollRef}
             className="flex gap-16 overflow-x-hidden"
             style={{ scrollBehavior: 'auto' }}
@@ -822,7 +816,7 @@ export default function TrainingPage() {
                 )}
               </div>
             ))}
-            
+
             {/* Duplicate set for seamless loop */}
             {trustedPartners.map((partner, index) => (
               <div
@@ -860,16 +854,16 @@ export default function TrainingPage() {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6 pr-6">
                 <h3 className="text-3xl font-bold text-gray-900 mb-6">
-                  {whyTrainItems[0]?.sectionTitle || 'Why Train With Us?'}
+                  {whyTrainData?.sectionTitle || 'Why Train With Us?'}
                 </h3>
-                
+
                 {whyTrainItems.map((item, index) => {
                   const IconComponent = item.iconName === 'Award' ? Award :
-                                       item.iconName === 'Users' ? Users :
-                                       item.iconName === 'CheckCircle' ? CheckCircle :
-                                       item.iconName === 'Tractor' ? Tractor :
-                                       item.iconName === 'GraduationCap' ? GraduationCap : Award
-                  
+                    item.iconName === 'Users' ? Users :
+                      item.iconName === 'CheckCircle' ? CheckCircle :
+                        item.iconName === 'Tractor' ? Tractor :
+                          item.iconName === 'GraduationCap' ? GraduationCap : Award
+
                   return (
                     <div key={index} className="flex items-start gap-4">
                       <div className={`flex-shrink-0 w-12 h-12 bg-${item.iconColor}-100 rounded-lg flex items-center justify-center`}>
@@ -883,7 +877,7 @@ export default function TrainingPage() {
                   )
                 })}
               </div>
-              
+
               <div className="relative pl-6">
                 {whyTrainImage ? (
                   <Image
@@ -922,19 +916,19 @@ export default function TrainingPage() {
                   />
                 )}
               </div>
-              
+
               <div className="space-y-6 pl-6">
                 <h3 className="text-3xl font-bold text-gray-900 mb-6">
-                  {setsApartItems[0]?.sectionTitle || 'What Sets Us Apart?'}
+                  {setsApartData?.sectionTitle || 'What Sets Us Apart?'}
                 </h3>
-                
+
                 {setsApartItems.map((item, index) => {
                   const IconComponent = item.iconName === 'Award' ? Award :
-                                       item.iconName === 'Users' ? Users :
-                                       item.iconName === 'CheckCircle' ? CheckCircle :
-                                       item.iconName === 'Tractor' ? Tractor :
-                                       item.iconName === 'GraduationCap' ? GraduationCap : Award
-                  
+                    item.iconName === 'Users' ? Users :
+                      item.iconName === 'CheckCircle' ? CheckCircle :
+                        item.iconName === 'Tractor' ? Tractor :
+                          item.iconName === 'GraduationCap' ? GraduationCap : Award
+
                   return (
                     <div key={index} className="flex items-start gap-4">
                       <div className={`flex-shrink-0 w-12 h-12 bg-${item.iconColor}-100 rounded-lg flex items-center justify-center`}>
@@ -967,11 +961,11 @@ export default function TrainingPage() {
             <div className="space-y-6">
               {careerOpportunities.map((opportunity, index) => {
                 const IconComponent = opportunity.iconName === 'Award' ? Award :
-                                     opportunity.iconName === 'Users' ? Users :
-                                     opportunity.iconName === 'CheckCircle' ? CheckCircle :
-                                     opportunity.iconName === 'Tractor' ? Tractor :
-                                     opportunity.iconName === 'GraduationCap' ? GraduationCap : Users
-                
+                  opportunity.iconName === 'Users' ? Users :
+                    opportunity.iconName === 'CheckCircle' ? CheckCircle :
+                      opportunity.iconName === 'Tractor' ? Tractor :
+                        opportunity.iconName === 'GraduationCap' ? GraduationCap : Users
+
                 return (
                   <div key={index} className="bg-white rounded-lg shadow-md p-6 flex items-start gap-4 hover:shadow-xl transition-shadow">
                     <div className={`flex-shrink-0 w-12 h-12 bg-${opportunity.iconColor}-100 rounded-lg flex items-center justify-center`}>
@@ -1043,14 +1037,28 @@ export default function TrainingPage() {
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-4">{pageSettings?.faqTitle || 'Frequently Asked Questions'}</h2>
               <p className="text-gray-600">{pageSettings?.faqSubtitle || 'Common questions about our training programs'}</p>
             </div>
-            <Accordion type="single" collapsible className="w-full">
-              {activeFaqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left text-gray-900">{faq.question}</AccordionTrigger>
-                  <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            {mounted ? (
+              <Accordion type="single" collapsible className="w-full">
+                {activeFaqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionTrigger className="text-left text-gray-900">{faq.question}</AccordionTrigger>
+                    <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            ) : (
+              /* Static placeholder to prevent layout shift during hydration */
+              <div className="w-full space-y-4">
+                {activeFaqs.map((faq, index) => (
+                  <div key={index} className="border-b border-gray-200 py-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-left text-gray-900 font-medium text-sm">{faq.question}</span>
+                      <ChevronRight className="w-4 h-4 text-gray-400 rotate-90" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>

@@ -2,20 +2,20 @@
 
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageSquare } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
-import { ConsultationForm } from "@/components/consultation-form"
+import { useEffect, useRef } from "react"
+import Link from "next/link"
 
 interface CTAClientProps {
   title: string
   description: string
   buttonText: string
+  buttonLink?: string
   videoUrl?: string
   imageUrl?: string
 }
 
-export function CTAClient({ title, description, buttonText, videoUrl, imageUrl }: CTAClientProps) {
+export function CTAClient({ title, description, buttonText, buttonLink, videoUrl, imageUrl }: CTAClientProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [isFormOpen, setIsFormOpen] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
@@ -63,6 +63,11 @@ export function CTAClient({ title, description, buttonText, videoUrl, imageUrl }
     }
   }, [videoUrl])
 
+  // If buttonText is "Schedule a Consultation", we force the enquiry type to "general"
+  const finalButtonLink = buttonText === "Schedule a Consultation"
+    ? "/contact?enquiry=general"
+    : (buttonLink || "/contact")
+
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-800 text-white relative overflow-hidden">
       {videoUrl ? (
@@ -96,18 +101,18 @@ export function CTAClient({ title, description, buttonText, videoUrl, imageUrl }
         </p>
         <div className="flex items-center justify-center">
           <Button
-            onClick={() => setIsFormOpen(true)}
+            asChild
             size="lg"
             className="bg-white text-gray-900 hover:bg-gray-100 group"
           >
-            <MessageSquare className="mr-2 h-4 w-4" />
-            {buttonText}
-            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <Link href={finalButtonLink}>
+              <MessageSquare className="mr-2 h-4 w-4" />
+              {buttonText}
+              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </Button>
         </div>
       </div>
-
-      <ConsultationForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </section>
   )
 }

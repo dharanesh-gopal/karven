@@ -115,7 +115,7 @@ const defaultPageContent = {
     sectionTitle: "AI & Software Services",
     imageAlt: "AI and Software Development",
     imageTitle: "Cutting-Edge AI & Software Solutions",
-    imageLink: "/contact",
+    imageLink: "/contact?enquiry=software-development",
     badge1Label: "Advanced",
     badge1Text: "AI Solutions",
     badge2Label: "Proven",
@@ -125,7 +125,7 @@ const defaultPageContent = {
     sectionTitle: "Educational Programs",
     imageAlt: "Educational Programs and Training",
     imageTitle: "Empowering Through Education & Training",
-    imageLink: "/contact",
+    imageLink: "/contact?enquiry=training",
     badge1Label: "Expert",
     badge1Text: "Training",
     badge2Label: "Certified",
@@ -309,7 +309,7 @@ export default async function ServicesPage() {
             {/* Left Column - Image */}
             <div className="relative">
               {/* Premium Decorative Elements Above Image */}
-              <div className="absolute -top-50 left-0 right-0 flex items-center justify-center gap-6 z-10">
+              <div className="absolute -top-20 left-0 right-0 flex items-center justify-center gap-6 z-10">
                 {/* Floating Badge 1 */}
                 <div className="relative animate-float">
                   <div className="absolute inset-0 bg-red-600/30 blur-2xl rounded-full" />
@@ -454,7 +454,7 @@ export default async function ServicesPage() {
               </div>
 
               <Link
-                href={content.softwareSection?.imageLink || "/contact"}
+                href={content.softwareSection?.imageLink || "/contact?enquiry=software-development"}
                 className="block relative rounded-2xl overflow-hidden shadow-2xl group cursor-pointer"
               >
                 <Image
@@ -556,7 +556,7 @@ export default async function ServicesPage() {
               </div>
 
               <Link
-                href={content.educationSection?.imageLink || "/contact"}
+                href={content.educationSection?.imageLink || "/contact?enquiry=training"}
                 className="block relative rounded-2xl overflow-hidden shadow-2xl group cursor-pointer"
               >
                 <Image

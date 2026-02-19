@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         }
 
         // Send to SubmitBox
-        const response = await fetch('https://submitbox.app/api/f/d4a317f3-c4e7-4e06-a296-a7ef282f0458', {
+        const response = await fetch('https://submitbox.app/api/f/468236fe-4d8a-4a56-8a86-6635694e3c75', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
