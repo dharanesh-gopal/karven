@@ -139,7 +139,7 @@ export function generateOrganizationStructuredData() {
     name: 'KarVenSen',
     alternateName: 'KarVenSen Technologies',
     url: 'https://karvensen.com',
-    logo: 'https://karvensen.com/karvensen favicon logo.jpeg',
+    logo: 'https://karvensen.com/favicon.jpg',
     description:
       'KarVenSen is an AI-first IT software services company specializing in Artificial Intelligence, Drone-based solutions, LMS, ERP, Cloud services, and technical awareness programs.',
     contactPoint: {

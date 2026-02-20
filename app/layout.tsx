@@ -33,8 +33,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
   // Get favicon URL from Sanity, fallback to local file
   const faviconUrl = settings?.favicon
-    ? urlFor(settings.favicon).width(32).height(32).format('png').url()
-    : '/karvensen favicon logo.jpeg'
+    ? urlFor(settings.favicon).width(48).height(48).format('png').url()
+    : '/favicon.jpg'
 
   // Ensure title is between 50-60 characters
   const siteName = settings?.siteName || "Karvensen"
@@ -120,7 +120,7 @@ const jsonLd = {
   "@type": "Organization",
   "name": "Karvensen",
   "url": "https://karvensen.com",
-  "logo": "https://karvensen.com/karvensen favicon logo.jpeg",
+  "logo": "https://karvensen.com/favicon.jpg",
   "sameAs": [
     "https://www.linkedin.com/company/karvensen/",
   ],
