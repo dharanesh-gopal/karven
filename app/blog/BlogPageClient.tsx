@@ -88,8 +88,8 @@ export default function BlogPage() {
   )
 
   // Filter posts by category
-  const filteredPosts = activeCategory === "All" 
-    ? allPosts 
+  const filteredPosts = activeCategory === "All"
+    ? allPosts
     : allPosts?.filter(post => post.category === activeCategory)
 
   return (
@@ -120,7 +120,7 @@ export default function BlogPage() {
                 <span>{pageSettings.heroBadgeText}</span>
               </div>
             )}
-            
+
             {/* Main Heading with Green & Black */}
             <h1 className="text-6xl md:text-7xl font-bold mb-8 leading-tight">
               <span className="text-white">{pageSettings?.heroTitle?.split(' ')[0] || 'The'} </span>
@@ -129,7 +129,7 @@ export default function BlogPage() {
                 {pageSettings?.heroTitle?.split(' ').slice(2).join(' ') || 'Blog'}
               </span>
             </h1>
-            
+
             {/* Enhanced Description */}
             <p className="text-xl md:text-2xl text-gray-100 leading-relaxed max-w-3xl mx-auto">
               {pageSettings?.heroSubtitle}
@@ -139,18 +139,17 @@ export default function BlogPage() {
       </section>
 
       {/* Filter Categories */}
-      <section className="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
+      <section className="border-b border-gray-200 bg-white sticky top-[64px] z-40">
         <div className="container mx-auto px-4">
           <div className="flex overflow-x-auto gap-2 py-6 scrollbar-hide">
             {pageSettings?.categories?.map((category) => (
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`px-6 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-300 ${
-                  activeCategory === category
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md"
-                }`}
+                className={`px-6 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-300 ${activeCategory === category
+                  ? "bg-emerald-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
               >
                 {category}
               </button>
@@ -171,71 +170,72 @@ export default function BlogPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredPosts.map((post) => {
                 const fallbackImage = categoryFallbacks[post.category] || defaultBlogImage
-                const imageSrc = post.heroImage?.asset 
-                  ? urlFor(post.heroImage).width(600).height(400).url() 
+                const imageSrc = post.heroImage?.asset
+                  ? urlFor(post.heroImage).width(600).height(400).url()
                   : fallbackImage
-                
-                return (
-                <Link
-                  key={post._id}
-                  href={"/blog/" + post.slug.current}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-                >
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden bg-gradient-to-br from-emerald-400 to-teal-500">
-                    <Image
-                      src={imageSrc}
-                      alt={post.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-white bg-opacity-95 backdrop-blur-sm text-gray-900 px-4 py-[0.375rem] rounded-full text-xs font-bold shadow-lg">
-                        {post.category}
-                      </span>
-                    </div>
-                  </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    {/* Branch Tag */}
-                    {post.branch && (
-                      <div className="mb-3">
-                        <span className="inline-block bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold">
-                          {post.branch}
+                return (
+                  <Link
+                    key={post._id}
+                    href={"/blog/" + post.slug.current}
+                    className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+                  >
+                    {/* Image */}
+                    <div className="relative h-56 overflow-hidden bg-gradient-to-br from-emerald-400 to-teal-500">
+                      <Image
+                        src={imageSrc}
+                        alt={post.title}
+                        width={600}
+                        height={400}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      {/* Category Badge */}
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-white bg-opacity-95 backdrop-blur-sm text-gray-900 px-4 py-[0.375rem] rounded-full text-xs font-bold shadow-lg">
+                          {post.category}
                         </span>
                       </div>
-                    )}
-
-                    {/* Title */}
-                    <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-emerald-600 transition-colors">
-                      {post.title}
-                    </h2>
-
-                    {/* Excerpt */}
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-
-                    {/* Meta Info */}
-                    <div className="flex items-center justify-between text-xs text-gray-500 pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-[0.875rem] w-[0.875rem]" />
-                          <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-[0.875rem] w-[0.875rem]" />
-                          <span>{post.readTime}</span>
-                        </div>
-                      </div>
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-emerald-600" />
                     </div>
-                  </div>
-                </Link>
-              )})}
+
+                    {/* Content */}
+                    <div className="p-6">
+                      {/* Branch Tag */}
+                      {post.branch && (
+                        <div className="mb-3">
+                          <span className="inline-block bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold">
+                            {post.branch}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Title */}
+                      <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-emerald-600 transition-colors">
+                        {post.title}
+                      </h2>
+
+                      {/* Excerpt */}
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                        {post.excerpt}
+                      </p>
+
+                      {/* Meta Info */}
+                      <div className="flex items-center justify-between text-xs text-gray-500 pt-4 border-t border-gray-100">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-[0.875rem] w-[0.875rem]" />
+                            <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-[0.875rem] w-[0.875rem]" />
+                            <span>{post.readTime}</span>
+                          </div>
+                        </div>
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-emerald-600" />
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
           ) : (
             <div className="text-center py-20">
